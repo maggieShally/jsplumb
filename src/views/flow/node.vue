@@ -2,6 +2,7 @@
   <div
     :key="node.id"
     :id="node.id"
+    @click="clickNode"
     class="flow-item"
     :style="nodeContainerStyle"
   >
@@ -19,7 +20,9 @@ export default {
     node: Object,
   },
 
-  setup(props) {
+  emits: ['clickNode'],
+
+  setup(props, context) {
     // 计算node的定位
     console.log(props.node);
     const nodeContainerStyle = computed(() => {
@@ -28,8 +31,14 @@ export default {
         top: props.node.top,
       };
     });
+
+    const clickNode = () => {
+      context.emit('clickNode', props.node.id)
+    }
+
     return {
       nodeContainerStyle,
+      clickNode
     };
   },
 };

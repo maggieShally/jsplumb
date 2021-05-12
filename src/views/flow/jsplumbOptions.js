@@ -1,25 +1,13 @@
-export const  jsplumbSourceOptions = {
-  // 设置可以拖拽的类名，只要鼠标移动到该类名上的DOM，就可以拖拽连线
-  filter: '.flow-node-drag',
-  filterExclude: false,
-  anchor: 'Continuous',
-  // 是否允许自己连接自己
-  allowLoopback: true,
-  maxConnections: -1,
-  onMaxConnections: function (info, e) {
-      console.log(`超过了最大值连线: ${info.maxConnections}`)
-  }
-}
 
 export const jsplumbSetting = {
   // 动态锚点、位置自适应
   Anchors: ['Top', 'TopCenter', 'TopRight', 'TopLeft', 'Right', 'RightMiddle', 'Bottom', 'BottomCenter', 'BottomRight', 'BottomLeft', 'Left', 'LeftMiddle'],
   // 容器ID
-  Container: 'efContainer',
+  Container: 'container',
   // 连线的样式，直线或者曲线等，可选值:  StateMachine、Flowchart，Bezier、Straight
-  Connector: ['Bezier', {curviness: 100}],
+  // Connector: ['Bezier', {curviness: 100}],
   // Connector: ['Straight', {stub: 20, gap: 1}],
-  // Connector: ['Flowchart', {stub: 30, gap: 1, alwaysRespectStubs: false, midpoint: 0.5, cornerRadius: 10}],
+  Connector: ['Flowchart', {stub: 30, gap: 1, alwaysRespectStubs: false, midpoint: 0.5, cornerRadius: 10}],
   // Connector: ['StateMachine', {margin: 5, curviness: 10, proximityLimit: 80}],
   // 鼠标不能拖动删除线
   ConnectionsDetachable: false,
@@ -101,6 +89,19 @@ export const jsplumbSetting = {
   Scope: 'jsPlumb_DefaultScope' // 范围，具有相同scope的点才可连接
 }
 
+export const  jsplumbSourceOptions = {
+  // 设置可以拖拽的类名，只要鼠标移动到该类名上的DOM，就可以拖拽连线
+  filter: '.flow-node-drag',
+  filterExclude: false,
+  anchor: 'Continuous',
+  // 是否允许自己连接自己
+  allowLoopback: true,
+  maxConnections: -1,
+  onMaxConnections: function (info, e) {
+      console.log(`超过了最大值连线: ${info.maxConnections}`)
+  }
+}
+
 export const jsplumbTargetOptions ={
   // 设置可以拖拽的类名，只要鼠标移动到该类名上的DOM，就可以拖拽连线
   filter: '.flow-node-drag',
@@ -120,7 +121,6 @@ export const  jsplumbConnectOptions =  {
   labelStyle: {
       cssClass: 'flowLabel'
   },
-  // 修改了jsplumb 源码，支持label 为空传入自定义style
   emptyLabelStyle: {
       cssClass: 'emptyFlowLabel'
   }
