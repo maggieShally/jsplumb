@@ -1,7 +1,7 @@
 <template>
   <div class="menu-container">
     <ul class="menu-list">
-      <draggable v-model="menuList" @start="move" @end="end"  item-key="id">
+      <draggable v-model="menuList" @start="move" @end="end" item-key="id">
         <template #item="{ element }">
           <li :type="element.type">
             <el-button type="default" :icon="element.icon">{{ element.name }}</el-button>
@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
-import draggable from "vuedraggable";
+import { reactive, toRefs } from 'vue'
+import draggable from 'vuedraggable'
 
 export default {
   components: { draggable },
@@ -26,16 +26,16 @@ export default {
           id: 1,
           name: '数据接入',
           type: 'add',
-          icon: 'el-icon-s-marketing'
+          icon: 'el-icon-s-marketing',
         },
         {
           id: 2,
           name: '接口调用',
           type: 'api',
-          icon: 'el-icon-s-help'
+          icon: 'el-icon-s-help',
         },
       ],
-    });
+    })
     let nodeMenu
 
     const move = evt => {
@@ -55,10 +55,10 @@ export default {
     return {
       ...toRefs(state),
       move,
-      end
-    };
+      end,
+    }
   },
-};
+}
 </script>
 
 <style lang="less">
@@ -70,7 +70,6 @@ export default {
     li {
       margin: 10px 0;
     }
-
   }
 }
 </style>

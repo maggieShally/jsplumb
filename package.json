@@ -3,17 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "d3": "^7.0.0",
     "element-plus": "^1.0.2-beta.41",
     "jsplumb": "^2.15.5",
     "lodash": "^4.17.21",
     "vue": "^3.0.0",
     "vue-codemirror": "^4.0.6",
+    "vue-router": "^4.0.10",
+    "vue-seamless-scroll": "^1.1.23",
+    "vue3-seamless-scroll": "^1.0.6",
     "vuedraggable": "^4.0.1"
   },
   "devDependencies": {

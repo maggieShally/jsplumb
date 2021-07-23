@@ -11,11 +11,7 @@
       </div>
     </div>
     <div class="warp-right">
-      <nodeFrom
-        ref="nodeFrom"
-        @setLineLabel="setLineLabel"
-        @repaintEverything="repaintEverything"
-      />
+      <nodeFrom ref="nodeFrom" @setLineLabel="setLineLabel" @repaintEverything="repaintEverything" />
     </div>
   </div>
 </template>
@@ -28,213 +24,213 @@ import {
   toRefs,
   nextTick,
   ref,
-} from "vue";
-import { ElMessage } from "element-plus";
-import lodash from "lodash";
+} from 'vue'
+import { ElMessage } from 'element-plus'
+import lodash from 'lodash'
 import {
   jsplumbSourceOptions,
   jsplumbSetting,
   jsplumbTargetOptions,
   jsplumbConnectOptions,
-} from "./jsplumbOptions";
+} from './jsplumbOptions'
 
-import nodeMenu from "./node-nemu";
-import nodeFrom from "./node-from";
-import flowNode from "./node";
-import { getDataA } from "./data.js";
+import nodeMenu from './node-nemu'
+import nodeFrom from './node-from'
+import flowNode from './node'
+import { getDataA } from './data.js'
 
 export default {
-  name: "el-flows",
+  name: 'el-flows',
   components: { nodeMenu, flowNode, nodeFrom },
   setup() {
-    const { proxy } = getCurrentInstance();
-    const container = ref(null);
-    const nodeFrom = ref(null);
+    const { proxy } = getCurrentInstance()
+    const container = ref(null)
+    const nodeFrom = ref(null)
 
     const state = reactive({
-      jsPlumb: "",
+      jsPlumb: '',
       data: {},
       // 是否加载完毕标志位
       loadEasyFlowFinish: false,
       activeElement: {},
-    });
+    })
 
-    let jsPlumb;
+    let jsPlumb
 
     // 加载流程图
     const loadEasyFlow = async () => {
       const {
         data: { nodeList, lineList },
-      } = state;
+      } = state
       for (let i = 0; i < nodeList.length; i++) {
-        const node = nodeList[i];
-        jsPlumb.makeSource(node.id, lodash.merge(jsplumbSourceOptions, {}));
-        jsPlumb.makeTarget(node.id, jsplumbTargetOptions);
+        const node = nodeList[i]
+        jsPlumb.makeSource(node.id, lodash.merge(jsplumbSourceOptions, {}))
+        jsPlumb.makeTarget(node.id, jsplumbTargetOptions)
         if (!node.viewOnly) {
           jsPlumb.draggable(node.id, {
-            containment: "parent",
+            containment: 'parent',
             stop: function (el) {
               // 拖拽节点结束后的对调
-              console.log("拖拽结束: ", el);
+              console.log('拖拽结束: ', el)
             },
-          });
+          })
         }
       }
 
       for (let i = 0; i < lineList.length; i++) {
-        let line = lineList[i];
+        let line = lineList[i]
         var connParam = {
           source: line.from,
           target: line.to,
-          label: line.label ? line.label : "",
-          connector: line.connector ? line.connector : "",
+          label: line.label ? line.label : '',
+          connector: line.connector ? line.connector : '',
           anchors: line.anchors ? line.anchors : undefined,
           paintStyle: line.paintStyle ? line.paintStyle : undefined,
           overlays: [
-            [ "Label", { label:"foo", id:"label", cssClass: "flowLabel" } ]
-          ]
-        };
-        console.log(connParam);
-        jsPlumb.connect(connParam, jsplumbConnectOptions);
+            ['Label', { label: 'foo', id: 'label', cssClass: 'flowLabel' }],
+          ],
+        }
+        console.log(connParam)
+        jsPlumb.connect(connParam, jsplumbConnectOptions)
       }
-      await nextTick();
-      state.loadEasyFlowFinish = true;
-    };
+      await nextTick()
+      state.loadEasyFlowFinish = true
+    }
 
     const jsPlumbInit = () => {
       jsPlumb.ready(() => {
         // 修改jsplumb默认配置
-        jsPlumb.importDefaults(jsplumbSetting);
+        jsPlumb.importDefaults(jsplumbSetting)
         // 会使整个jsPlumb立即重绘。
-        jsPlumb.setSuspendDrawing(false, true);
-        jsPlumb.setContainer("container");
-        loadEasyFlow();
+        jsPlumb.setSuspendDrawing(false, true)
+        jsPlumb.setContainer('container')
+        loadEasyFlow()
 
         // 点击连接线
-        jsPlumb.bind("click", (evt) => {
-          console.log(evt);
-          state.activeElement.type = "line";
-          state.activeElement.sourceId = evt.sourceId;
-          state.activeElement.targetId = evt.targetId;
+        jsPlumb.bind('click', evt => {
+          console.log(evt)
+          state.activeElement.type = 'line'
+          state.activeElement.sourceId = evt.sourceId
+          state.activeElement.targetId = evt.targetId
 
           nodeFrom.value.lineInit({
             from: evt.sourceId,
             to: evt.targetId,
             label: evt.getLabel(),
-          });
-        });
+          })
+        })
 
         // 连线成功后
-        jsPlumb.bind("connection", (evt) => {
-          console.log(evt);
-          const from = evt.sourceId;
-          const to = evt.targetId;
+        jsPlumb.bind('connection', evt => {
+          console.log(evt)
+          const from = evt.sourceId
+          const to = evt.targetId
           // 存储line数据
           if (state.loadEasyFlowFinish) {
-            state.data.lineList.push({ from, to });
-            console.log(state.data.lineList);
+            state.data.lineList.push({ from, to })
+            console.log(state.data.lineList)
           }
-        });
+        })
 
         // 连线前的判断
-        jsPlumb.bind("beforeDrop", (evt) => {
-          const from = evt.sourceId;
-          const to = evt.targetId;
+        jsPlumb.bind('beforeDrop', evt => {
+          const from = evt.sourceId
+          const to = evt.targetId
           if (from === to) {
-            ElMessage.warning("不能连自己");
-            return false;
+            ElMessage.warning('不能连自己')
+            return false
           }
           if (
             state.data.lineList.some(
-              (item) => item.from === from && item.to === to
+              item => item.from === from && item.to === to
             )
           ) {
-            ElMessage.warning("同一个不能连两次");
-            return false;
+            ElMessage.warning('同一个不能连两次')
+            return false
           }
-          return true;
-        });
-      });
-    };
+          return true
+        })
+      })
+    }
 
-    const clickNode = (nodeId) => {
-      state.activeElement.type = "node";
-      state.activeElement.nodeId = nodeId;
+    const clickNode = nodeId => {
+      state.activeElement.type = 'node'
+      state.activeElement.nodeId = nodeId
       const node = lodash.cloneDeep(
-        state.data.nodeList.find((item) => item.id === nodeId)
-      );
-      nodeFrom.value.nodeInit(node);
-    };
+        state.data.nodeList.find(item => item.id === nodeId)
+      )
+      nodeFrom.value.nodeInit(node)
+    }
 
     // 修改条件
     const setLineLabel = ({ from, to, label }) => {
       let conn = jsPlumb.getConnections({
         source: from,
         target: to,
-      })[0];
+      })[0]
 
       console.log(conn.getOverlay('label'))
       conn.getOverlay('label').setLabel(label)
 
-      if (!label || label === "") {
-        conn.removeClass("flowLabel");
-        conn.addClass("emptyFlowLabel");
+      if (!label || label === '') {
+        conn.removeClass('flowLabel')
+        conn.addClass('emptyFlowLabel')
       } else {
-        conn.removeClass("emptyFlowLabel");
-        conn.addClass("flowLabel");
-      } 
+        conn.removeClass('emptyFlowLabel')
+        conn.addClass('flowLabel')
+      }
 
-      state.data.lineList.forEach((item) => {
+      state.data.lineList.forEach(item => {
         if (item.from === from && item.to === to) {
-          item.label = label;
+          item.label = label
         }
-      });
-    };
+      })
+    }
 
     // 修改节点, 后要重绘
-    const repaintEverything = async (node) => {
-      state.data.nodeList.forEach((item) => {
+    const repaintEverything = async node => {
+      state.data.nodeList.forEach(item => {
         if (item.id === node.id) {
-          item.name = node.name;
-          item.ico = node.ico;
+          item.name = node.name
+          item.ico = node.ico
         }
-      });
+      })
       // await nextTick();
       // jsPlumb.repaint()
-    };
+    }
 
     const addNode = async (evt, nodeMenu) => {
       const screenX = evt.originalEvent.clientX,
-        screenY = evt.originalEvent.clientY;
-      const containerRect = container.value.getBoundingClientRect();
+        screenY = evt.originalEvent.clientY
+      const containerRect = container.value.getBoundingClientRect()
       let left = screenX,
-        top = screenY;
+        top = screenY
 
-      (left = left - containerRect.x), (top = top - containerRect.y);
-      const nodeId = getUUID();
+      ;(left = left - containerRect.x), (top = top - containerRect.y)
+      const nodeId = getUUID()
 
       // 生成名字
-      const originName = nodeMenu.name;
-      let nodeName = originName;
-      let index = 1;
+      const originName = nodeMenu.name
+      let nodeName = originName
+      let index = 1
 
       const {
         data: { nodeList },
-      } = state;
+      } = state
       while (index < 30) {
-        let repeat = false;
+        let repeat = false
         for (let i = 0; i < nodeList.length; i++) {
-          let node = nodeList[i];
+          let node = nodeList[i]
           if (node.name === nodeName) {
-            nodeName = originName + index;
-            repeat = true;
+            nodeName = originName + index
+            repeat = true
           }
         }
         if (repeat) {
-          index++;
-          continue;
+          index++
+          continue
         }
-        break;
+        break
       }
 
       // 定义要添加的 节点
@@ -242,42 +238,42 @@ export default {
         id: nodeId,
         name: nodeName,
         type: nodeMenu.type,
-        left: left + "px",
-        top: top + "px",
+        left: left + 'px',
+        top: top + 'px',
         ico: nodeMenu.icon,
-      };
+      }
 
-      state.data.nodeList.push(node);
+      state.data.nodeList.push(node)
 
-      await nextTick();
-      jsPlumb.makeSource(nodeId, lodash.merge(jsplumbSourceOptions, {}));
-      jsPlumb.makeTarget(nodeId, jsplumbTargetOptions);
+      await nextTick()
+      jsPlumb.makeSource(nodeId, lodash.merge(jsplumbSourceOptions, {}))
+      jsPlumb.makeTarget(nodeId, jsplumbTargetOptions)
       jsPlumb.draggable(nodeId, {
-        containment: "parent",
+        containment: 'parent',
         stop: function (el) {
-          console.log(el);
+          console.log(el)
         },
-      });
-    };
+      })
+    }
 
-    const dataReload = async (data) => {
-      state.data = lodash.cloneDeep(data);
-      await nextTick();
-      jsPlumb = proxy.$jsPlumb.jsPlumb;
-      console.log(jsPlumb);
-      await nextTick();
-      jsPlumbInit();
-    };
+    const dataReload = async data => {
+      state.data = lodash.cloneDeep(data)
+      await nextTick()
+      jsPlumb = proxy.$jsPlumb.jsPlumb
+      console.log(jsPlumb)
+      await nextTick()
+      jsPlumbInit()
+    }
 
     onMounted(async () => {
-      jsPlumb = proxy.$jsPlumb.jsPlumb;
-      await nextTick();
-      dataReload(getDataA());
-    });
+      jsPlumb = proxy.$jsPlumb.jsPlumb
+      await nextTick()
+      dataReload(getDataA())
+    })
 
     // 返回唯一标识
     function getUUID() {
-      return Math.random().toString(36).substr(3, 10);
+      return Math.random().toString(36).substr(3, 10)
     }
 
     return {
@@ -288,9 +284,9 @@ export default {
       nodeFrom,
       clickNode,
       repaintEverything,
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="less">

@@ -1,11 +1,11 @@
+<!--
+ * @Description: 
+ * @Date: 2021-05-08 16:54:41
+ * @LastEditTime: 2021-06-29 15:29:22
+ * @FilePath: \jsplumb-test\src\views\flow\node.vue
+-->
 <template>
-  <div
-    :key="node.id"
-    :id="node.id"
-    @click="clickNode"
-    class="flow-item"
-    :style="nodeContainerStyle"
-  >
+  <div :key="node.id" :id="node.id" @click="clickNode" class="flow-item" :style="nodeContainerStyle">
     <el-button type="default">
       <i class="flow-node-drag flow-item-icon" :class="node.ico"></i>
       <span>{{ node.name }} </span>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed } from 'vue'
 export default {
   props: {
     node: Object,
@@ -24,13 +24,13 @@ export default {
 
   setup(props, context) {
     // 计算node的定位
-    console.log(props.node);
+    console.log(props.node)
     const nodeContainerStyle = computed(() => {
       return {
         left: props.node.left,
         top: props.node.top,
-      };
-    });
+      }
+    })
 
     const clickNode = () => {
       context.emit('clickNode', props.node.id)
@@ -38,10 +38,10 @@ export default {
 
     return {
       nodeContainerStyle,
-      clickNode
-    };
+      clickNode,
+    }
   },
-};
+}
 </script>
 
 <style lang="less">

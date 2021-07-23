@@ -1,13 +1,7 @@
 <template>
   <span class="node-form-title">编辑 </span>
   <div class="node-form-content">
-    <el-form
-      :model="node"
-      ref="dataForm"
-      :line="true"
-      label-width="60px"
-      v-if="type === 'node'"
-    >
+    <el-form :model="node" ref="dataForm" :line="true" label-width="60px" v-if="type === 'node'">
       <el-form-item label="类型" prop="type">
         <el-input v-model="node.type" :disabled="true" />
       </el-form-item>
@@ -28,13 +22,7 @@
         <el-button type="primary" @click="handleSaveNode">保存</el-button>
       </el-form-item>
     </el-form>
-    <el-form
-      :model="line"
-      :line="true"
-      ref="dataForm"
-      label-width="60px"
-      v-if="type === 'line'"
-    >
+    <el-form :model="line" :line="true" ref="dataForm" label-width="60px" v-if="type === 'line'">
       <el-form-item label="条件" prop="label">
         <el-input v-model="line.label" />
       </el-form-item>
@@ -47,53 +35,53 @@
 </template>
 
 <script>
-import { reactive, toRefs, ref } from "vue";
-import lodash from "lodash";
+import { reactive, toRefs, ref } from 'vue'
+import lodash from 'lodash'
 
 export default {
-  emits: ["setLineLabel", "repaintEverything"],
+  emits: ['setLineLabel', 'repaintEverything'],
   setup(_, context) {
-    const dataForm = ref(null);
+    const dataForm = ref(null)
     const state = reactive({
       tempData: {},
       node: {
-        type: "",
-        name: "",
-        left: "",
-        top: "",
-        ico: "",
+        type: '',
+        name: '',
+        left: '',
+        top: '',
+        ico: '',
       },
       line: {
-        from: "",
-        label: "",
-        to: "",
+        from: '',
+        label: '',
+        to: '',
       },
-      type: "node",
-    });
+      type: 'node',
+    })
 
-    const lineInit = (data) => {
-      state.line = lodash.cloneDeep(data);
-      state.tempData = lodash.cloneDeep(data);
-      state.type = "line";
-    };
+    const lineInit = data => {
+      state.line = lodash.cloneDeep(data)
+      state.tempData = lodash.cloneDeep(data)
+      state.type = 'line'
+    }
 
-    const nodeInit = (data) => {
-      state.type = "node";
-      state.tempData = lodash.cloneDeep(data);
-      state.node = lodash.cloneDeep(data);
-    };
+    const nodeInit = data => {
+      state.type = 'node'
+      state.tempData = lodash.cloneDeep(data)
+      state.node = lodash.cloneDeep(data)
+    }
 
     const handleResetForm = () => {
       state[state.type] = lodash.cloneDeep(state.tempData)
-    };
+    }
 
     const handleSaveLine = () => {
-      context.emit("setLineLabel", state.line);
-    };
+      context.emit('setLineLabel', state.line)
+    }
 
     const handleSaveNode = () => {
-      context.emit("repaintEverything", state.node);
-    };
+      context.emit('repaintEverything', state.node)
+    }
 
     return {
       dataForm,
@@ -103,9 +91,9 @@ export default {
       handleSaveNode,
       handleSaveLine,
       handleResetForm,
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="less">
