@@ -24,6 +24,8 @@ import {
   toRefs,
   nextTick,
   ref,
+  inject,
+  provide
 } from 'vue'
 import { ElMessage } from 'element-plus'
 import lodash from 'lodash'
@@ -55,7 +57,12 @@ export default {
       activeElement: {},
     })
 
-    let jsPlumb
+    
+    let jsPlb = inject('jsPlumb')
+
+    let jsPlumb = jsPlb.jsPlumb
+
+
 
     // 加载流程图
     const loadEasyFlow = async () => {
@@ -259,14 +266,13 @@ export default {
     const dataReload = async data => {
       state.data = lodash.cloneDeep(data)
       await nextTick()
-      jsPlumb = proxy.$jsPlumb.jsPlumb
+      jsPlumb = jsPlb.jsPlumb
       console.log(jsPlumb)
       await nextTick()
       jsPlumbInit()
     }
 
     onMounted(async () => {
-      jsPlumb = proxy.$jsPlumb.jsPlumb
       await nextTick()
       dataReload(getDataA())
     })
@@ -289,7 +295,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .warp {
   display: flex;
   align-items: stretch;

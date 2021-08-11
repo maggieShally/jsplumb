@@ -1,45 +1,96 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2021-07-21 15:53:10
+ * @LastEditTime: 2021-08-11 09:27:17
  * @FilePath: \jsplumb-test\src\App.vue
 -->
 <template>
-  <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-  <router-link to="/flow">Go to Foo</router-link>
-  <router-link to="/d3">Go to 3d</router-link>
-  <router-link to="/scroll">Go to /scroll</router-link>
-  <router-link to="/canvas/clock">canvas clock</router-link>
-  <router-link to="/canvas/guaguaka">canvas guaguaka</router-link>
-  <router-link to="/canvas/canvasImg">Go to canvasImg</router-link>
-  <router-view></router-view>
+  <el-container>
+    <el-header>Header</el-header>
+    <el-container>
+      <el-aside width="200px">
+        <BaseNav />
+      </el-aside>
+      <el-main>
+        <div class="content-wrap">
+          <router-view></router-view>
+        </div>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-// import FlowPanel from './views/ef/panel'
-// import FlowPanel from './views/flow/index.vue'
+import { provide } from 'vue'
+import * as echarts from 'echarts'
+import jsPlumb from 'jsplumb'
+
+import BaseNav from '@/components/BaseNav'
 
 export default {
   name: 'App',
   components: {
-    // HelloWorld
-    // FlowPanel
+    BaseNav,
+  },
+  setup() {
+    provide('ec', echarts)
+    provide('jsPlumb', jsPlumb)
   },
 }
 </script>
 
 <style>
+@import './assets/main.less';
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 a {
   margin: 0 5px;
+}
+
+.el-aside {
+  overflow-x: hidden !important;
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+}
+
+.el-header {
+  background-color: #2c3e50;
+}
+
+.el-main {
+  margin: 0 0 0 200px;
+  
+}
+
+.content-wrap {
+  margin: 0px;
+  padding: 20px;
+  background-color: #ccc;
+  background: #fff;
+  border-radius: 12px;
+  overflow-x: hidden;
+  min-height: 800px;
 }
 </style>

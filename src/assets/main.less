@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+}
+
+.media {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid #ddd;
+  height: 100%;
+
+  .media-left {
+    width: 200px;
+  }
+
+  .media-content {
+    flex: 1;
+    min-height: 500px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    position: relative;
+    overflow: auto;
+  }
+
+  .media-right {
+    width: 300px;
+  }
+}
