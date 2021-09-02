@@ -1,7 +1,7 @@
 <!--
  * @Description: echart组件封装 学习
  * @Date: 2021-08-04 15:09:25
- * @LastEditTime: 2021-08-09 11:04:44
+ * @LastEditTime: 2021-09-01 11:36:38
  * @FilePath: \jsplumb-test\src\components\echart_pie\Echart_pie.vue
 -->
 
@@ -32,8 +32,6 @@ export default {
   setup(props, context) {
     const ec = inject('ec')
 
-    const propSeriesData = computed(() => props.seriesData)
-
     let chart
 
     const handleWindowResize = () => {
@@ -43,9 +41,10 @@ export default {
 
     // merge option配置项
     const assembleDataToOption = () => {
+      console.log(props.seriesData)
       return merge(
         {},
-        BASIC_OPTION,
+        // BASIC_OPTION,
         {
           ...props.seriesData,
         },
@@ -71,13 +70,17 @@ export default {
       })
     }
 
-    watch(propSeriesData, () => {
-      console.log(12)
-      updateChartView()
-    }, {deep: true})
+    watch(
+      () => props.seriesData,
+      () => {
+        console.log(12)
+        updateChartView()
+        addChartResizeListener()
+      },
+      { deep: true }
+    )
 
     onMounted(() => {
-      console.log(document.querySelector(`#${props.name}_chart`))
       chart = ec.init(document.querySelector(`#${props.name}_chart`))
       updateChartView()
       window.addEventListener('resize', handleWindowResize)

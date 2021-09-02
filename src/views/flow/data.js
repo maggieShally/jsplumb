@@ -1,3 +1,15 @@
+/*
+ * @Description: 
+ * @Date: 2021-05-10 10:03:18
+ * @LastEditTime: 2021-08-17 14:29:53
+ * @FilePath: \jsplumb-test\src\views\flow\data.js
+ */
+/**
+ * @description: 
+ * @param {*}
+ * @return {*}
+ */
+
 export const getDataA = function() {
   return {
     nodeList: [

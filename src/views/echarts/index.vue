@@ -1,80 +1,103 @@
 <!--
  * @Description: 
  * @Date: 2021-08-04 15:56:51
- * @LastEditTime: 2021-08-09 11:55:10
+ * @LastEditTime: 2021-08-25 14:30:51
  * @FilePath: \jsplumb-test\src\views\Echarts\index.vue
 -->
 <template>
   <div class="echart-pie-wrap media">
     <div class="media-left">
-      <el-button type="primary" @click="handleSelect">切换数据</el-button>
+      <NodeMenu @addNode="addNode" />
+      <!-- <el-button type="primary" @click="addNode">切换数据</el-button> -->
     </div>
     <div class="media-content">
-      <div class="echart-panel-wrap">
-        <div v-for="(seriesItem, index) in dataList" :key="index">
-          <echart-pie v-if="seriesItem.seriesData" :series-data="seriesItem.seriesData" :extra-option="extraOption" :name="`demo${index}`" @onClicked="() => handleOnClick(index)" @onDragStop="handleDragStop" @onDelItem="() => handleDelItem(index)" />
-        </div>
+      <div class="echart-panel-wrap" ref="container">
+        <template v-for="(seriesItem, index) in dataList" :key="index">
+          <echart-pie
+            v-if="seriesItem.seriesData"
+            :position="dataInfoList[index]"
+            :parentPos="{
+              width: 1220,
+              height: 700
+            }"
+            :emptyImg="seriesItem.emptyImg"
+            :series-data="seriesItem.seriesData"
+            :extra-option="extraOption"
+            :name="`demo${index}`"
+            @onClicked="() => handleOnClick(index)"
+            @onDragStop="handleDragStop"
+            @onDelItem="() => handleDelItem(index)"
+          />
+        </template>
       </div>
     </div>
     <div class="media-right">
-      <el-button type="primary" @click="handleSave">保 存</el-button>
+      <NodeSetting :data="activeNode" @getOptions="handleGetOptons" />
     </div>
   </div>
 </template>
 
 <script>
 import EchartPie from '@/components/echart_pie'
-import { nextTick, reactive, toRefs } from 'vue'
+import { computed, ref, reactive, toRefs } from 'vue'
+import { merge } from 'lodash'
 
-import { chartDefaultOption } from './utils'
+import NodeSetting from './node-setting.vue'
+import NodeMenu from './node-menu.vue'
 
 export default {
   name: 'EchartTemplate',
-  components: { EchartPie },
+  components: { EchartPie, NodeSetting, NodeMenu },
   setup() {
+    const container = ref(null)
     const state = reactive({
-      dataList: [
-        // {
-        //   seriesData: {
-        //     yAxis: {
-        //       type: 'value',
-        //     },
-        //     xAxis: {
-        //       type: 'category',
-        //       data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        //     },
-        //     series: [
-        //       {
-        //         name: '苹果销量',
-        //         type: 'bar',
-        //         data: [120, 200, 150, 80, 70, 110, 130],
-        //       },
-        //       {
-        //         name: '草莓销量',
-        //         type: 'line',
-        //         data: [220, 20, 50, 80, 90, 150, 230],
-        //       },
-        //     ],
-        //   },
-        // },
-      ],
-
+      dataList: [],
       extraOption: {
         color: ['#fe883a', '#2d90d1', '#f75981', '#90e2a9'],
       },
       dataInfoList: [],
-      activeIndex: 0,
+      activeIndex: '',
       key: 0,
     })
 
-    const handleSelect = () => {
+    const activeNode = computed(() => {
+      return state.dataList[state.activeIndex]?.seriesData
+    })
+
+    const addNode = (evt, nodeMenu) => {
+      const screenX = evt.originalEvent.clientX,
+        screenY = evt.originalEvent.clientY
+
+      const containerRect = container.value.getBoundingClientRect()
+      let left = screenX,
+        top = screenY
+
+      console.log(containerRect)
+      left = left - containerRect.x
+      top = top - containerRect.y
+
       state.dataInfoList[state.key] = {
-        left: 0,
-        top: 0,
+        left: left,
+        top: top,
         width: 400,
         height: 400,
       }
-      state.dataList[state.key] = chartDefaultOption
+      state.dataList[state.key] = {
+        seriesData: {
+          tooltip: {
+            trigger: 'axis',
+          },
+          yAxis: [
+            {
+              type: "value",
+            },
+          ],
+          xAxis: {},
+          series: [],
+        },
+        emptyImg: nodeMenu.imgUrl,
+        chartType: nodeMenu.type
+      }
       state.key += 1
     }
 
@@ -91,17 +114,56 @@ export default {
       state.dataList[index] = {}
     }
 
+    const handleActivated = () => {
+      state.activeIndex = ''
+    }
+
     const handleSave = () => {
-      console.log(state.dataInfoList.filter(item => JSON.stringify(item) !== '{}'))
+      console.log(
+        state.dataInfoList.filter(item => JSON.stringify(item) !== '{}')
+      )
+    }
+
+    const handleGetOptons = ({ yData, xData, title}) => {
+      console.log(state.activeIndex)
+      const { seriesData, chartType } = state.dataList[state.activeIndex]
+      state.dataList[state.activeIndex].seriesData = merge(seriesData, {
+       
+        title: {
+          text: title,
+        },
+        legend: {
+          data: yData.map(item => item.label),
+        },
+        tooltip: {
+            trigger: 'axis',
+          },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: xData.value,
+        },
+        series: yData.map(item => {
+          return {
+            name: item.label,
+            data: item.value,
+            type: chartType,
+          }
+        })
+      })
     }
 
     return {
+      container,
       ...toRefs(state),
-      handleSelect,
+      activeNode,
+      addNode,
       handleDragStop,
       handleOnClick,
       handleSave,
       handleDelItem,
+      handleGetOptons,
+      handleActivated,
     }
   },
 }
@@ -129,6 +191,7 @@ export default {
   align-items: stretch;
   border-top: 1px solid #ddd;
   height: 100%;
+  width: 100%;
 
   .media-left {
     width: 200px;

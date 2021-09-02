@@ -1,17 +1,29 @@
 <!--
  * @Description: 
  * @Date: 2021-08-04 14:24:35
- * @LastEditTime: 2021-08-09 11:48:14
+ * @LastEditTime: 2021-09-02 09:39:07
  * @FilePath: \jsplumb-test\src\components\echart_pie\index.vue
 -->
 <template>
-    <VueDragResize :w="400" :h="400" :parentH="700" :parentW="1220" :parentLimitation="true" @dragstop="handleDragStop" @clicked="handleOnClick">
+  <VueDragResize
+    :w="pos.width"
+    :h="pos.height"
+    :x="pos.left"
+    :y="pos.top"
+    :parentH="parentPos.height"
+    :parentW="parentPos.width"
+    :parentLimitation="true"
+    @dragstop="handleDragStop"
+    @clicked="handleOnClick"
+  >
+    <div class="echart-item">
       <div class="drag-operate-group">
         <el-button @click="handleDelItem">删除</el-button>
       </div>
-      <el-empty v-if="isSeriesEmpty" description="暂无数据" />
+      <el-empty v-if="isSeriesEmpty" :image="emptyImg" />
       <ChartPie v-else v-bind="$props" />
-    </VueDragResize>
+    </div>
+  </VueDragResize>
 </template>
 
 <script>
@@ -26,14 +38,27 @@ export default {
     ChartPie,
     VueDragResize,
   },
-  props: ChartPie.props,
+  props: {
+    ...ChartPie.props,
+    position: Object,
+    parentPos: {
+      type: Object,
+      default: () => {}
+    },
+    emptyImg: String
+  },
   emits: ['onDragStop', 'onClicked', 'onDelItem'],
   setup(props, context) {
     const isSeriesEmpty = computed(() => {
       return isEmpty(
-        props.seriesData.series?.reduce((sum, item) => sum.concat(item.data), [])
+        props.seriesData.series?.reduce(
+          (sum, item) => sum.concat(item.data),
+          []
+        )
       )
     })
+
+    const pos = computed(() => props.position)
 
     const handleDragStop = obj => {
       context.emit('onDragStop', obj)
@@ -48,17 +73,20 @@ export default {
     }
 
     return {
+      pos,
       isSeriesEmpty,
       handleDragStop,
       handleOnClick,
-      handleDelItem
+      handleDelItem,
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
-  .drag-chart-wrap {
-    display: inline-block;
-  }
+.echart-item {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #dedede
+}
 </style>

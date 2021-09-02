@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2021-08-06 17:41:19
+ * @LastEditTime: 2021-09-02 09:37:09
  * @FilePath: \jsplumb-test\src\main.js
  */
 import { createApp } from 'vue'
@@ -28,3 +28,7 @@ app
   .use(router)
   .use(vue3SeamlessScroll)
   .mount('#app')
+
+  // export function createApp() {
+  //   return { app , router}
+  // }

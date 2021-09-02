@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-06 16:28:14
- * @LastEditTime: 2021-08-06 16:30:20
+ * @LastEditTime: 2021-08-12 15:24:50
  * @FilePath: \jsplumb-test\src\views\echarts\node-menu.vue
 -->
 <template>
@@ -10,7 +10,10 @@
       <draggable v-model="menuList" @start="move" @end="end" item-key="id">
         <template #item="{ element }">
           <li :type="element.type">
-            <el-button type="default" :icon="element.icon">{{ element.name }}</el-button>
+            <div class="">
+              <el-image style="width: 100px; height: 100px" :src="element.imgUrl"></el-image>
+            </div>
+            <!-- <el-button type="default" :icon="element.icon">{{ element.name }}</el-button> -->
           </li>
         </template>
       </draggable>
@@ -31,15 +34,17 @@ export default {
       menuList: [
         {
           id: 1,
-          name: '数据接入',
-          type: 'add',
+          name: '柱图',
+          type: 'bar',
           icon: 'el-icon-s-marketing',
+          imgUrl: require('@/assets/imgs/chartImg/img-bar.png')
         },
         {
           id: 2,
-          name: '接口调用',
-          type: 'api',
-          icon: 'el-icon-s-help',
+          name: '折线',
+          type: 'line',
+          icon: 'el-icon-s-marketing',
+          imgUrl: require('@/assets/imgs/chartImg/img-line.png')
         },
       ],
     })
