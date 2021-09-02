@@ -50,6 +50,7 @@ export default {
         left: '',
         top: '',
         ico: '',
+        xData: '',
       },
       line: {
         from: '',

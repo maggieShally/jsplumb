@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-04 15:56:51
- * @LastEditTime: 2021-08-25 14:30:51
+ * @LastEditTime: 2021-09-02 14:48:59
  * @FilePath: \jsplumb-test\src\views\Echarts\index.vue
 -->
 <template>
@@ -13,21 +13,10 @@
     <div class="media-content">
       <div class="echart-panel-wrap" ref="container">
         <template v-for="(seriesItem, index) in dataList" :key="index">
-          <echart-pie
-            v-if="seriesItem.seriesData"
-            :position="dataInfoList[index]"
-            :parentPos="{
+          <echart-pie v-if="seriesItem.seriesData" :position="dataInfoList[index]" :parentPos="{
               width: 1220,
               height: 700
-            }"
-            :emptyImg="seriesItem.emptyImg"
-            :series-data="seriesItem.seriesData"
-            :extra-option="extraOption"
-            :name="`demo${index}`"
-            @onClicked="() => handleOnClick(index)"
-            @onDragStop="handleDragStop"
-            @onDelItem="() => handleDelItem(index)"
-          />
+            }" :emptyImg="seriesItem.emptyImg" :series-data="seriesItem.seriesData" :extra-option="extraOption" :name="`demo${index}`" @onClicked="() => handleOnClick(index)" @onDragStop="handleDragStop" @onDelItem="() => handleDelItem(index)" />
         </template>
       </div>
     </div>
@@ -47,7 +36,9 @@ import NodeMenu from './node-menu.vue'
 
 export default {
   name: 'EchartTemplate',
-  components: { EchartPie, NodeSetting, NodeMenu },
+  components: { EchartPie, 
+  NodeSetting,
+   NodeMenu },
   setup() {
     const container = ref(null)
     const state = reactive({
@@ -89,14 +80,14 @@ export default {
           },
           yAxis: [
             {
-              type: "value",
+              type: 'value',
             },
           ],
           xAxis: {},
           series: [],
         },
         emptyImg: nodeMenu.imgUrl,
-        chartType: nodeMenu.type
+        chartType: nodeMenu.type,
       }
       state.key += 1
     }
@@ -124,11 +115,10 @@ export default {
       )
     }
 
-    const handleGetOptons = ({ yData, xData, title}) => {
+    const handleGetOptons = ({ yData, xData, title }) => {
       console.log(state.activeIndex)
       const { seriesData, chartType } = state.dataList[state.activeIndex]
       state.dataList[state.activeIndex].seriesData = merge(seriesData, {
-       
         title: {
           text: title,
         },
@@ -136,8 +126,8 @@ export default {
           data: yData.map(item => item.label),
         },
         tooltip: {
-            trigger: 'axis',
-          },
+          trigger: 'axis',
+        },
         xAxis: {
           type: 'category',
           boundaryGap: false,
@@ -149,7 +139,7 @@ export default {
             data: item.value,
             type: chartType,
           }
-        })
+        }),
       })
     }
 
