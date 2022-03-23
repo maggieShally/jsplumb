@@ -1,8 +1,8 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2021-08-11 10:01:26
- * @FilePath: \jsplumb-test\src\router\index.js
+ * @LastEditTime: 2022-01-13 10:03:06
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -39,17 +39,70 @@ const routes = [
     component: () => import('../views/echarts/index.vue')
   },
   {
+    path: '/gatt',
+    name: 'gatt',
+    icon: 'icon-settings-2-line',
+    redirect: '/gatt/GSTC',
+    component: () => import('../views/gantt/index.vue'),
+    children: [
+      {
+        path: '/gatt/GSTC',
+        name: 'GSTC',
+        component: () => import('../views/gantt/GSTC/index.vue')
+      },
+      {
+        path: '/gatt/VGT',
+        name: 'VGT',
+        component: () => import('../views/gantt/VGT/index.vue')
+      }
+    ]
+  },
+  {
     path: '/antV',
     name: 'AntV',
     icon: 'icon-settings-2-line',
-    component: () => import('../views/antv/index.vue')
+    component: () => import('../views/antv/index.vue'),
+    children: [
+      {
+        path: '/antv/autoChart',
+        name: 'AutoChart',
+        component: () => import('../views/antv/AutoChart/index.vue')
+      },
+      {
+        path: '/antV/x6',
+        name: 'x6TreeChart',
+        component: () => import('../views/antv/x6/index.vue')
+      },
+      {
+        path: '/antV/x6Flow',
+        name: 'x6Flow',
+        component: () => import('../views/antv/x6Flow/index.vue')
+      },
+      {
+        path: '/antV/x6Panel',
+        name: 'x6Panel',
+        component: () => import('../views/antv/x6Panel/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/word-cloud',
+    name: 'wordCloud',
+    icon: 'icon-settings-2-line',
+    component: () => import('../views/wordCloud/index.vue')
   },
   {
     path: '/canvas',
     name: 'Canvas',
     icon: 'icon-dashboard-line',
+    redirect: '/canvas/clock',
     component: () => import('../views/canvas/index.vue'),
     children: [
+      {
+        path: '/canvas/vertify',
+        name: 'vertify',
+        component: () => import('../views/canvas/vertify/index.vue')
+      },
       {
         path: '/canvas/clock',
         name: 'Clock',
@@ -74,7 +127,6 @@ const router = createRouter({
   routes
 })
 
-
 // 生成菜单树
 export const menuList = counterList(routes)
 
@@ -86,9 +138,7 @@ function counterList(data) {
       icon: item.icon,
       access: item.meta?.access,
       children:
-        item.children?.length > 0
-          ? counterList(item.children)
-          : undefined
+        item.children?.length > 0 ? counterList(item.children) : undefined
     }
   })
 }

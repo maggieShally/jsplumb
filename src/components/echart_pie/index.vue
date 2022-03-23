@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-04 14:24:35
- * @LastEditTime: 2021-09-02 09:39:07
+ * @LastEditTime: 2021-09-13 10:34:03
  * @FilePath: \jsplumb-test\src\components\echart_pie\index.vue
 -->
 <template>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { computed } from '@vue/runtime-core'
+import { computed } from 'vue'
 import ChartPie from './echart_pie.vue'
 import { isEmpty } from 'lodash'
 import VueDragResize from 'vue-drag-resize'

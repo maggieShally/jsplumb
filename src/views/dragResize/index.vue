@@ -1,9 +1,9 @@
 <!--
- * @Description: 
+ * @Description:  拖拽拉伸 vue-drag-resize
  * @Date: 2021-08-06 15:16:16
- * @LastEditTime: 2021-08-06 17:31:43
+ * @LastEditTime: 2022-01-13 09:56:28
   
- * @FilePath: \jsplumb-test\src\views\dragResize\index.vue
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\index.vue
 -->
 <template>
   <div id="app">

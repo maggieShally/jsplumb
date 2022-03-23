@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2021-08-11 09:27:17
+ * @LastEditTime: 2021-11-19 09:12:35
  * @FilePath: \jsplumb-test\src\App.vue
 -->
 <template>

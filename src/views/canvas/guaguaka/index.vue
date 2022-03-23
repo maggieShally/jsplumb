@@ -1,7 +1,7 @@
 <!--
  * @Description: canvas 刮刮乐
  * @Date: 2021-07-12 09:17:10
- * @LastEditTime: 2021-07-21 15:51:12
+ * @LastEditTime: 2021-09-02 17:13:42
  * @FilePath: \jsplumb-test\src\views\canvas\guaguaka\index.vue
 -->
 
@@ -62,6 +62,7 @@ onMounted(() => {
   position: relative;
   width: 400px;
   height: 400px;
+  z-index: 1;
 }
 
 .text {

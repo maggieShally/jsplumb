@@ -1,8 +1,8 @@
 <!--
  * @Description: echart组件封装 学习
  * @Date: 2021-08-04 15:09:25
- * @LastEditTime: 2021-09-01 11:36:38
- * @FilePath: \jsplumb-test\src\components\echart_pie\Echart_pie.vue
+ * @LastEditTime: 2021-11-19 09:11:32
+ * @FilePath: \jsplumb-test\src\components\echart_pie\echart_pie.vue
 -->
 
 <template>
@@ -18,7 +18,10 @@ import ResizeListener from 'element-resize-detector'
 export default {
   name: 'ChartPie',
   props: {
-    name: String,
+    name: {
+      type: String,
+      default: 'ABC'
+    },
     seriesData: {
       type: Object,
       requried: true,
@@ -31,6 +34,7 @@ export default {
   },
   setup(props, context) {
     const ec = inject('ec')
+    console.log(ec)
 
     let chart
 
@@ -98,7 +102,7 @@ export default {
 .chart {
   width: 100%;
   height: 100%;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 400px;
+  min-height: 400px;
 }
 </style>

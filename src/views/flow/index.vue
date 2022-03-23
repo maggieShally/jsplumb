@@ -1,3 +1,10 @@
+<!--
+ * @Description: 学习  jsPlumb
+ * @Date: 2021-05-07 11:57:32
+ * @LastEditTime: 2022-01-13 09:53:14
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\flow\index.vue
+-->
+
 <template>
   <div class="warp">
     <div class="warp-left">

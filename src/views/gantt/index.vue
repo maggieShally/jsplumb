@@ -1,10 +1,9 @@
 <!--
  * @Description: 
- * @Date: 2021-10-12 09:36:37
- * @LastEditTime: 2021-10-12 09:36:53
- * @FilePath: \jsplumb-test\src\views\antv\index.vue
+ * @Date: 2021-09-15 09:44:07
+ * @LastEditTime: 2021-09-15 09:44:08
+ * @FilePath: \jsplumb-test\src\views\gantt\index.vue
 -->
-
 <template>
   <div>
     <router-view></router-view>

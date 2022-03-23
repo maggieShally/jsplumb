@@ -1,7 +1,7 @@
 <!--
  * @Description: canvas 时钟
  * @Date: 2021-07-12 09:16:55
- * @LastEditTime: 2021-07-21 15:48:56
+ * @LastEditTime: 2021-09-07 14:23:47
  * @FilePath: \jsplumb-test\src\views\canvas\clock\index.vue
 -->
 <template>
@@ -108,10 +108,16 @@ const canvasClock = ctx => {
 onMounted(() => {
   var context = document.getElementById('canvas')
   let ctx = context.getContext('2d')
-
-  setInterval(() => {
+  var timer = 0
+  window.requestAnimationFrame(function render() {
+    timer += 1
     canvasClock(ctx)
-  }, 1000)
+    window.requestAnimationFrame(render)
+  })
+
+  // setInterval(() => {
+  //   canvasClock(ctx)
+  // }, 1000)
 })
 </script> 
 
