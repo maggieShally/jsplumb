@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-01-13 09:42:18
- * @LastEditTime: 2022-03-23 16:00:27
+ * @LastEditTime: 2022-03-23 16:18:04
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Panel\index.vue
 -->
 
@@ -259,6 +259,8 @@ export default {
   .right-content {
     width: 300px;
   }
+
+  
 }
 
 .flex-wrap {
