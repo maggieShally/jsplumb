@@ -1,8 +1,8 @@
 /*
  * @Description:
  * @Date: 2022-03-22 16:09:20
- * @LastEditTime: 2022-03-23 15:21:22
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Panel\data.js
+ * @LastEditTime: 2022-03-24 16:21:19
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\data.js
  */
 export const initData = {
   nodes: [
@@ -33,6 +33,7 @@ export const initData = {
         }
       ]
     },
+    
     {
       id: '-2-0',
       name: 'PCBA DDR4,8GB 上游2',
@@ -56,6 +57,23 @@ export const initData = {
         },
         {
           name: '未出货',
+          quantity: 323,
+          amount: 12344
+        }
+      ]
+    },
+    {
+      id: '0-zb-2',
+      name: 'PCBA DDR4,8GB 指标1/生产单',
+      type: 'zb',
+      data: [
+        {
+          name: '已交货',
+          quantity: 223,
+          amount: 12344
+        },
+        {
+          name: '生产在途',
           quantity: 323,
           amount: 12344
         }
@@ -156,6 +174,16 @@ export const initData = {
       },
       target: {
         cell: '0-zb-1',
+        port: 'left'
+      }
+    },
+    {
+      source: {
+        cell: '0',
+        port: 'bottom'
+      },
+      target: {
+        cell: '0-zb-2',
         port: 'left'
       }
     },

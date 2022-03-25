@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2022-01-13 10:03:06
+ * @LastEditTime: 2022-03-24 16:14:56
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -26,12 +26,37 @@ const routes = [
     icon: 'icon-dashboard-line',
     component: () => import('../views/ListScroll/index.vue')
   },
+  // {
+  //   path: '/dragResize',
+  //   name: 'DragResize',
+  //   icon: 'icon-list-settings-fill',
+  //   component: () => import('../views/dragResize/drag/index.vue')
+  // },
   {
     path: '/dragResize',
     name: 'DragResize',
     icon: 'icon-list-settings-fill',
-    component: () => import('../views/dragResize/index.vue')
+    redirect: '/dragResize/drag',
+    component: () => import('../views/dragResize/index.vue'),
+    children: [
+      {
+        path: '/dragResize/drag',
+        name: 'dragResize',
+        component: () => import('../views/dragResize/drag/index.vue')
+      },
+      {
+        path: '/dragResize/JsDrag',
+        name: 'JsDrag',
+        component: () => import('../views/dragResize/JsDrag/index.vue')
+      },
+      {
+        path: '/dragResize/posDrag',
+        name: 'posDrag',
+        component: () => import('../views/dragResize/posDrag/index.vue')
+      }
+    ]
   },
+
   {
     path: '/echarts',
     name: 'Echarts',
@@ -79,9 +104,9 @@ const routes = [
         component: () => import('../views/antv/x6Flow/index.vue')
       },
       {
-        path: '/antV/x6Panel',
-        name: 'x6Panel',
-        component: () => import('../views/antv/x6Panel/index.vue')
+        path: '/antV/x6Tree',
+        name: 'x6Tree',
+        component: () => import('../views/antv/x6Tree/index.vue')
       }
     ]
   },
