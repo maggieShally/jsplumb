@@ -1,7 +1,7 @@
 <!--
  * @Description: 联系拖拽结构
  * @Date: 2022-03-25 15:08:42
- * @LastEditTime: 2022-03-25 17:44:25
+ * @LastEditTime: 2022-03-28 18:04:27
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\JsDrag\index.vue
 -->
 
@@ -24,9 +24,22 @@
     </div>
     <div class="flex-content" @drop="handleDrop" @dragover="handleAllowDrop">
       <el-form>
-        <template v-for="(item, index) in contentList.search.children" :key="item.id">
-          <el-form-item :label="item.properties.label" @click="handleClick(item, index)">
-            <Component :is="item.com" v-bind="item.properties" v-model="item.properties.value" />
+        <template
+          v-for="(item, index) in contentList.search.children"
+          :key="item.id"
+        >
+          <el-form-item
+            :label="item.properties.label"
+          >
+            <Component
+              :id="index"
+              :is="item.com"
+              v-bind="item.properties"
+              v-model="item.properties.value"
+              @click="handleClick(item, index)"
+              draggable="true"
+              @dragstart="handleComDrag"
+            />
           </el-form-item>
         </template>
       </el-form>
@@ -36,7 +49,11 @@
       </template>
     </div>
     <div class="flex-right">
-      <ComInputSet @onChange="handleChange" />
+      <ComInputSet
+        v-if="activeInfo.properties"
+        @onChange="handleChange"
+        :defaultValue="activeInfo"
+      />
     </div>
   </div>
 </template>
@@ -55,7 +72,7 @@ export default {
     ComInputSet
   },
   setup() {
-    let num = 0
+    let num = 2
     const state = reactive({
       formList: [
         {
@@ -105,9 +122,7 @@ export default {
         }
       },
 
-      activeInfo: {
-        
-      }
+      activeInfo: {}
     })
 
     const handleDrag = ev => {
@@ -115,11 +130,7 @@ export default {
       ev.dataTransfer.effectAllowed = 'copy'
     }
 
-    const handleDrop = ev => {
-      console.log(ev)
-      ev.preventDefault()
-      let data = ev.dataTransfer.getData('node')
-
+    const addNode = data => {
       data = JSON.parse(data)
 
       const node = {
@@ -140,8 +151,37 @@ export default {
       }
     }
 
-    const handleAllowDrop = ev => {
+    // 移动位置
+    const moveNode = endIndex => {
+      const node = state.contentList.search.children[state.moveStartIndex]
+      state.contentList.search.children.splice(state.moveStartIndex, 1)
+      state.contentList.search.children.splice(endIndex, 0, node)
+    }
+
+    const handleDrop = ev => {
+      console.log(ev)
       ev.preventDefault()
+      let data = ev.dataTransfer.getData('node')
+
+      if(data) {
+        addNode(data)
+      } else {
+        moveNode(ev.target.id)
+      }
+    }
+
+    const handleAllowDrop = ev => {
+     
+      ev.preventDefault()
+    }
+
+    const handleComDrag = ev => {
+      console.log(ev)
+      state.moveStartIndex = ev.target.id
+    }
+
+    const handleComDrop = ev => {
+      console.log(ev)
     }
 
     const handleClick = (node, index) => {
@@ -152,7 +192,10 @@ export default {
     }
 
     const handleChange = data => {
-      state.contentList[state.activeInfo.classify].children[state.activeInfo.index].properties = data
+      debugger
+      state.contentList[state.activeInfo.classify].children[
+        state.activeInfo.index
+      ].properties = data
     }
 
     return {
@@ -161,7 +204,9 @@ export default {
       handleDrop,
       handleAllowDrop,
       handleChange,
-      handleClick
+      handleClick,
+      handleComDrag,
+      handleComDrop
     }
   }
 }

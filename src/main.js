@@ -1,13 +1,14 @@
 /*
  * @Description:
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2021-11-29 17:12:33
+ * @LastEditTime: 2022-04-08 14:24:38
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\main.js
  */
 import { createApp } from 'vue'
 import App from './App.vue'
 import element from 'element-plus'
 import 'element-plus/dist/index.css'
+import * as icons from '@element-plus/icons-vue' 
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 import router from './router/index.js'
 import * as d3 from 'd3'
@@ -23,6 +24,11 @@ const app = createApp(App)
 app.component('vue-drag-resize', VueDragResize)
 
 app.config.globalProperties.$d3 = d3
+
+Object.keys(icons).forEach(key => {
+  app.component(key, icons[key])
+})
+
 app
 .use(vGanttChart)
   .use(element, { locale })

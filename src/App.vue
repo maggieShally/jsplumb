@@ -1,13 +1,13 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2021-11-19 09:12:35
- * @FilePath: \jsplumb-test\src\App.vue
+ * @LastEditTime: 2022-03-30 11:03:52
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\App.vue
 -->
 <template>
   <el-container>
     <el-header>Header</el-header>
-    <el-container>
+    <el-container class="wrapper">
       <el-aside width="200px">
         <BaseNav />
       </el-aside>
@@ -62,6 +62,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width: 100%;
+  height: 100%;
 }
 
 a {
@@ -74,7 +76,9 @@ a {
   top: 60px;
   bottom: 0;
 }
-
+.el-container {
+  height: 100%;
+}
 .el-header {
   background-color: #2c3e50;
 }
@@ -84,6 +88,10 @@ a {
   
 }
 
+.wrapper {
+  height: calc(100% - 60px);
+}
+
 .content-wrap {
   margin: 0px;
   padding: 20px;
@@ -91,6 +99,6 @@ a {
   background: #fff;
   border-radius: 12px;
   overflow-x: hidden;
-  min-height: 800px;
+  min-height: 830px;
 }
 </style>

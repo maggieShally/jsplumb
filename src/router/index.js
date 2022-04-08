@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2022-03-24 16:14:56
+ * @LastEditTime: 2022-04-02 10:39:00
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -46,7 +46,7 @@ const routes = [
       },
       {
         path: '/dragResize/JsDrag',
-        name: 'JsDrag',
+        name: '拖拽布局',
         component: () => import('../views/dragResize/JsDrag/index.vue')
       },
       {
@@ -61,20 +61,32 @@ const routes = [
     path: '/echarts',
     name: 'Echarts',
     icon: 'icon-settings-2-line',
-    component: () => import('../views/echarts/index.vue')
+    component: () => import('../views/echarts/index.vue'),
+    children: [
+      {
+        path: '/echarts/list',
+        name: 'echarts',
+        component: () => import('../views/echarts/scatter/index.vue')
+      },
+      {
+        path: '/echarts/barChart',
+        name: 'barChart',
+        component: () => import('../views/echarts/barChart/index.vue')
+      },
+    ]
   },
   {
     path: '/gatt',
     name: 'gatt',
     icon: 'icon-settings-2-line',
-    redirect: '/gatt/GSTC',
+    redirect: '/gatt/VGT',
     component: () => import('../views/gantt/index.vue'),
     children: [
-      {
-        path: '/gatt/GSTC',
-        name: 'GSTC',
-        component: () => import('../views/gantt/GSTC/index.vue')
-      },
+      // {
+      //   path: '/gatt/GSTC',
+      //   name: 'GSTC',
+      //   component: () => import('../views/gantt/GSTC/index.vue')
+      // },
       {
         path: '/gatt/VGT',
         name: 'VGT',

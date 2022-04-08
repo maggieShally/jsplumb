@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-03-25 17:16:26
- * @LastEditTime: 2022-03-25 17:39:10
+ * @LastEditTime: 2022-03-28 17:14:56
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\JsDrag\components\ComInput.set.vue
 -->
 <template>
@@ -24,17 +24,38 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, watchEffect} from 'vue'
 export default {
   name: 'ComInputSet',
+  props: {
+    defaultValue: {
+      type: Object,
+      default: () => {
+        return {
+          prop: '',
+          label: '',
+          placeholder: '',
+          value: ''
+        }
+      }
+    }
+  },
   emits: ['onChange'],
   setup(props, context) {
     const state = reactive({
       setForm: {
         prop: '',
         label: '',
-        placeholder: ''
+        placeholder: '',
+        value: ''
       }
+    })
+
+    watchEffect(() => {
+      if(Object.keys(props.defaultValue.properties)) {
+        state.setForm = props.defaultValue.properties
+      }
+      
     })
 
     const handleChange = () => {
