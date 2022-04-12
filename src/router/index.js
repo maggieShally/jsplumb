@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2022-04-02 10:39:00
+ * @LastEditTime: 2022-04-12 09:45:11
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -18,7 +18,19 @@ const routes = [
     path: '/d3',
     name: 'D3',
     icon: 'icon-dashboard-line',
-    component: () => import('../views/D3/index.vue')
+    component: () => import('../views/D3/index.vue'),
+    children: [
+      {
+        path: '/d3/chart',
+        name: 'D3Chart',
+        component: () => import('../views/D3/chart/index.vue')
+      },
+      {
+        path: '/d3/table',
+        name: 'D3Table',
+        component: () => import('../views/D3/table/index.vue')
+      },
+    ]
   },
   {
     path: '/scroll',

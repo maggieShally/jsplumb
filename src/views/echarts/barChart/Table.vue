@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-06 09:40:18
- * @LastEditTime: 2022-04-08 17:31:27
+ * @LastEditTime: 2022-04-11 17:37:14
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\barChart\Table.vue
 -->
 <template>
@@ -18,7 +18,7 @@
         width="180px"
       >
         <template #default="scope">
-          <div style="marginLeft: -12px">
+          <div style="marginLeft: -12px" class="cell-wrapper">
             <div
               :id="`Str${scope.row[scope.column.rawColumnKey]?.id}`"
               class="strBox"
@@ -293,7 +293,9 @@ export default {
         minHeight = offY < 0 && offY < minHeight ? offY : minHeight
         maxHeight = offY > 0 && offY > maxHeight ? offY : maxHeight
 
+        // 尽量让线终点在单元格中间
         item.style.width = (offX < 0 ? -offX - 50 : offX + 30) + 'px'
+        
         if (offX < 0) {
           item.style.transform = 'translate(-100%)'
           item.classList.add('rightArrow')
