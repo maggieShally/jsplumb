@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2022-03-30 11:03:52
+ * @LastEditTime: 2022-04-14 15:08:05
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\App.vue
 -->
 <template>
@@ -60,7 +60,6 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   width: 100%;
   height: 100%;

@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2021-06-30 17:52:24
- * @LastEditTime: 2021-07-07 16:26:03
- * @FilePath: \jsplumb-test\src\views\D3\components\Third.vue
+ * @LastEditTime: 2022-04-13 14:14:46
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\chart\components\Third.vue
 -->
 
 <template>
@@ -26,7 +26,7 @@ onMounted(() => {
     .append('g')
     .attr('transform', `translate(${margin.top}, ${margin.left})`)
 
-  // 定义x轴坐标 scaleBand 坐标轴 根据domain的长度，等分rangeRound域
+  // 定义x轴坐标 scaleBand 坐标轴   根据domain的长度，等分rangeRound域
   const xScale = d3
     .scaleBand()
     .domain(d3.range(dataset.length))

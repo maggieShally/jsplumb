@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-12 09:15:50
- * @LastEditTime: 2021-12-03 10:31:33
+ * @LastEditTime: 2022-04-28 11:22:13
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6\components\BaseChart.vue
 -->
 <template>
@@ -62,6 +62,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
+  min-height: 500px;
   border: 1px solid #ddd;
   .node-btn {
     position: absolute;

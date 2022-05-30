@@ -1,7 +1,7 @@
 <!--
  * @Description: echarts基础封装，返回 echarts实例
  * @Date: 2021-10-14 17:05:49
- * @LastEditTime: 2022-03-30 15:04:58
+ * @LastEditTime: 2022-04-28 11:23:56
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseChart\ChartPie.vue
 -->
 
@@ -218,7 +218,7 @@ export default {
   width: 100%;
   height: 100%;
   min-width: 40px;
-  min-height: 40px;
+  min-height: 400px;
   overflow: hidden;
 }
 </style>

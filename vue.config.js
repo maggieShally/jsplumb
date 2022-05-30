@@ -1,16 +1,31 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-07-21 11:18:51
- * @LastEditTime: 2022-04-08 14:20:46
+ * @LastEditTime: 2022-04-28 09:29:24
  * @FilePath: \webpack-teste:\others\jsplumb-test\vue.config.js
  */
-const path = require("path");
+const path = require('path')
 
-module.exports = { 
+module.exports = {
+  
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html',
+      chunks: ['chunk-vendors', 'chunk-common', 'index']
+    },
+    viewPanel: 'src/viewPanel.js',
+    // viewPanel: {
+    //   entry: './src/viewPanel.js',
+    //   template: 'public/viewPanel.html',
+    //   filename: 'viewPanel.html',
+    // }
+  },
   runtimeCompiler: true,
   devServer: {
-    host: "0.0.0.0",
-    port: "8088",
+    host: '0.0.0.0',
+    port: '8088',
     https: false,
     open: true,
   },
@@ -27,18 +42,20 @@ module.exports = {
     return {
       resolve,
       module: {
-        rules: [{
-          test: /\.mjs$/,
-          include: /node_modules/,
-          type: 'javascript/auto'
-        }]
+        rules: [
+          {
+            test: /\.mjs$/,
+            include: /node_modules/,
+            type: 'javascript/auto'
+          }
+        ]
       }
     }
   },
   pluginOptions: {
-    "style-resources-loader": {
-      preProcessor: "less",
-      patterns: [path.resolve(__dirname, "./src/assets/main.less")], // 引入全局样式变量
-    },
-  },
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: [path.resolve(__dirname, './src/assets/main.less')] // 引入全局样式变量
+    }
+  }
 }

@@ -1,7 +1,7 @@
 <!--
- * @Description: 
+ * @Description: 流程图
  * @Date: 2022-01-11 17:15:49
- * @LastEditTime: 2022-01-13 15:12:57
+ * @LastEditTime: 2022-04-27 14:44:21
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Flow\index.vue
 -->
 <template>
@@ -17,7 +17,9 @@
     <el-col :span="16">
       <el-button type="primary" @click="handleToJson">toJSON</el-button>
       <ContextMenu :nodeEvent="nodeEvent" @onRunNode="handleRunNode">
-        <div id="container"></div>
+        <div >
+          <div id="container"></div>
+        </div>
       </ContextMenu>
     </el-col>
     <el-col :span="4">
@@ -128,11 +130,20 @@ export default {
 
     let graph
     let dnd
+
+
+  
+  
+
+
+
     const initGraph = () => {
       graph = new Graph({
         container: document.getElementById('container'),
         width: 800,
         height: 600,
+        scroller: true,
+        autoResize: true,
         grid: {
           size: 10,      // 网格大小 10px
           visible: true, // 渲染网格背景
@@ -151,6 +162,7 @@ export default {
         }
       });
 
+      // 节点右键
       graph.on('cell:contextmenu', (data) => {
         console.log(data)
         state.nodeEvent = {
@@ -161,6 +173,7 @@ export default {
 
       })
 
+      // 节点点击
       graph.on('node:click', ({ e, x, y, node, view }) => {
         console.log({ e, x, y, node, view })
         state.currentCom = node.data.component
@@ -175,6 +188,7 @@ export default {
       })
     }
 
+    // 创建dnd实例 制定拖拽行为
     const ininLeftNode = () => {
       dnd = new Addon.Dnd({
         target: graph,
@@ -185,6 +199,7 @@ export default {
 
     }
 
+    // 开始拖拽
     const handleDrag = (node, e) => {
       console.log(node)
       const currentNode = lodash.clone(state.defaultNode)
@@ -198,9 +213,11 @@ export default {
     }
 
 
+    // 保存为 json
     const handleToJson = () => {
       const jsonData = graph.toJSON()
       console.log(jsonData)
+      localStorage.setItem('graphJson', JSON.stringify(jsonData))
     }
 
 

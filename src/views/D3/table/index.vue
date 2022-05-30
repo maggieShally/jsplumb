@@ -1,17 +1,20 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 09:44:11
- * @LastEditTime: 2022-04-12 17:51:59
+ * @LastEditTime: 2022-04-14 09:19:02
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\table\index.vue
 -->
 <template>
-  <div style="height: 20px">
-    <div v-if="showTips">我是tips</div>
-  </div>
+
   <div class="wrapper">
     <svg id="headerChart" :width="width" height="36"></svg>
-  <svg id="tableChart" :width="width" :height="height"></svg>
+    <svg id="tableChart" :width="width" :height="height"></svg>
+
+    <div v-if="tipsInfo.visible" class="tips-section" :style="{top: tipsInfo.top + 'px', left: tipsInfo.left  + 'px'}">
+      <div>我是tips</div>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -22,30 +25,62 @@ export default {
   name: 'D3Table',
   setup() {
     const { proxy } = getCurrentInstance()
-    const margin = { top: 25, bottom: 25, left: 0, right: 0 }
-    const height = 60
     const d3 = proxy.$d3
 
-    let headerChart, tableChart
+    // 基础配置信息
+    const margin = { top: 25, bottom: 25, left: 0, right: 0 }
+    const rectHeight = 60 // 行高
+    const dateRang = 7 // 周期分隔（周： 7）
+    const defaultBarColor = 'rgba(30,144,255, .5)' // 默认 bar 颜色
+    const defaultBarBorderColor = 'rgba(30,144,255, 1)' // 默认 bar 边框 颜色
+    const activeBarColor = 'yellowgreen' // 点击 bar 颜色
+
+    const circleColor = 'rgba(255,127,80, 1)'
+    const lineColor = 'rgba(112,128,144, 1)' // 折线颜色
+    const borderColor = 'rgba(112,128,144, .4)' // 顶部边框
+    const rowBorderColor = 'rgba(233, 123, 22, .3)' // 行 边线
+
+    let headerChart, tableChart, xScale
 
     const state = reactive({
       width: window.screen.width > 1920 ? 1600 : headerData.length * 100,
       height: window.screen.height > 1920 ? 1200 : 600,
-      showTips: false
+      showTips: false,
+      tipsInfo: {
+        top: 0,
+        left: 0,
+        visible: false,
+      },
+      headerData: headerData,
+      tableData: tableData
     })
 
     const rectWidth = computed(() => state.width / headerData.length)
 
-    const xScale = d3
-      .scaleBand()
-      .domain(d3.range(headerData.length))
-      .rangeRound([0, state.width - margin.left - margin.right])
+    const handleShowTip = (e, visible) => {
+      const { tipsInfo } = state
+      console.log(d3.select(e.currentTarget).attr('id'))
+      state.tipsInfo = {
+        ...tipsInfo,
+        visible: visible,
+        top: e.offsetY + 10,
+        left: e.offsetX + 10,
+      }
+    }
+
+    const init = () => {
+      xScale = d3
+        .scaleBand()
+        .domain(d3.range(headerData.length))
+        .rangeRound([0, state.width - margin.left - margin.right])
+
+      initHeader()
+      initTable()
+    }
 
     const initHeader = () => {
       headerChart = d3.select('#headerChart')
-
       const g = headerChart.append('g')
-
       // 外框线
       g.append('rect')
         .attr('y', 0)
@@ -53,7 +88,7 @@ export default {
         .attr('width', state.width)
         .attr('height', 30)
         .attr('fill', 'transparent')
-        .attr('stroke', '#ddd')
+        .attr('stroke', borderColor)
 
       const gs = headerChart
         .selectAll('line')
@@ -71,7 +106,7 @@ export default {
         })
         .attr('y1', 5)
         .attr('y2', 27)
-        .attr('stroke', '#ddd')
+        .attr('stroke', borderColor)
 
       // 单元格右边线
       gs.append('text')
@@ -86,75 +121,190 @@ export default {
         })
     }
 
-    const initTable = () => {
-      let tableChart = d3.select('#tableChart')
+    // 渲染 bar
+    const renderBar = ({ i, data }) => {
+      const g = tableChart.append('g')
 
+      const gs = g.selectAll('rect').data(data).enter()
+      // 行 的小格
+      gs.append('rect')
+        .attr('x', function (d, j) {
+          return (
+            rectWidth.value * (d.week - 1) +
+            (rectWidth.value / dateRang) * (d.start - 1)
+          )
+        })
+        .attr('y', i * rectHeight + 15)
+        .attr('rx', 3)
+        .attr('ry', 3)
+        .attr('width', function (d, j) {
+          return (rectWidth.value / dateRang) * (d.end - d.start + 1)
+        })
+        .attr('height', 50)
+        .attr('fill', defaultBarColor)
+        .attr('stroke', defaultBarBorderColor)
+        .attr('id', function (d, j) {
+          return `str${d.id}`
+        })
+        .attr('nextId', function (d, j) {
+          return d.nextId
+        })
+        .on('click', function (e) {
+          const nextId =
+            data.find(item => item.id == e.currentTarget.id.split('str')[1])
+              .nextId ?? []
+          nextId.push(e.currentTarget.id.split('str')[1])
 
-      // 每一行数据
-      for (let i = 0; i < tableData.length; i++) {
-        const g = tableChart.append('g')
-
-        const gs = g.selectAll('rect').data(tableData[i]).enter()
-      
-
-        // 行 的小格
-        gs.append('rect')
-          .attr('x', function (d, j) {
-            return (
-              rectWidth.value * (d.week - 1) +
-              (rectWidth.value / 7) * (d.start - 1)
-            )
-          })
-          .attr('y', i * height + 15)
-          .attr('rx', 3)
-          .attr('ry', 3)
-          .attr('width', function (d, j) {
-            return (rectWidth.value / 7) * (d.end - d.start + 1)
-          })
-          .attr('height', 50)
-          .attr('fill', 'rgba(30,144,255, .5)')
-          .attr('stroke', 'rgba(30,144,255, 1)')
-          .attr('id', function (d, j) {
-            return `str${d.id}`
-          })
-          .attr('nextId', function(d, j) {
-            return d.nextId
-          })
-          .on('click', function (e) {
-
-            const nextId = tableData[i].find(item => item.id == e.target.id.split('str')[1]).nextId ?? []
-            nextId.push(e.target.id.split('str')[1])
-            // console.log(document.querySelector('#str2'))
-
+          if (!d3.select(this).attr('data-active')) {
             nextId.forEach(id => {
               d3.select(document.querySelector(`#str${id}`))
                 .transition()
                 .duration(500)
-                .attr('fill', 'yellowgreen')
+                .attr('fill', activeBarColor)
+                .attr('data-active', 'active')
             })
-            
-          })
-          .on('mouseover', function(e) {
-            state.showTips = true
-          })
-          .on('mouseleave', function(e) {
-            state.showTips = false
-          })
+          } else {
+            nextId.forEach(id => {
+              d3.select(document.querySelector(`#str${id}`))
+                .transition()
+                .duration(500)
+                .attr('fill', defaultBarColor)
+                .attr('data-active', '')
+            })
+          }
+        })
+        .on('mouseover', function (e) {
+          // console.log(d3.select(this).attr('id'))
+          handleShowTip(e, true)
+        })
+        .on('mousemove', function (e) {
+          handleShowTip(e, true)
+        })
+        .on('mouseleave', function (e) {
+          handleShowTip(e, false)
+        })
 
-        g.append('line')
-          .attr('x1', 0)
-           .attr('y1', (i + 1) * height + 10)
-          .attr('x2', state.width)
-          .attr('y2', (i + 1) * height  + 10)
-          .attr('style', 'stroke-width: 1; stroke: rgba(233, 123, 22, .3); fill: none;')
+      // 每一行下面的 分格 线
+      g.append('line')
+        .attr('x1', 0)
+        .attr('y1', (i + 1) * rectHeight + 10)
+        .attr('x2', state.width)
+        .attr('y2', (i + 1) * rectHeight + 10)
+        .attr(
+          'style',
+          `stroke-width: 1; stroke: ${rowBorderColor}; fill: none;`
+        )
+    }
 
-       
+    const renderLine = ({ i, data }) => {
+      const g = tableChart.append('g')
+
+      const gs = g.selectAll('circle').data(data).enter().append('g')
+
+      const onWayList = data.map(item => item.onWay)
+      const max = d3.max(onWayList) + 5
+      const min = d3.min(onWayList) - 5
+
+      // 计算 x 位置
+      const calcurXline = function (d) {
+        const xPos =
+          rectWidth.value * (d.week - 1) +
+          (rectWidth.value / dateRang) * (d.start - 1)
+        return xPos
+      }
+
+      // 计算 y 位置
+      const calcurYline = function (d) {
+        const yPos =
+          rectHeight * (i + 1) -
+          ((d.onWay - min) / ((max - min) / rectHeight) - 10)
+        return yPos
+      }
+      
+      gs.append('line')
+        .attr('x1', function (d, j) {
+          return calcurXline(d)
+        })
+        .attr('y1', function (d, j) {
+          return calcurYline(d)
+        })
+        .attr('y2', function (d, j) {
+          return calcurYline(d)
+        })
+        .attr('x2', function (d, j) {
+          const nextData = data[j + 1]
+          return nextData ? calcurXline(nextData) : calcurXline(d)
+        })
+        .attr('stroke', lineColor)
+
+      gs.append('line')
+        .attr('x1', function (d, j) {
+          const nextData = data[j + 1]
+          return nextData ? calcurXline(nextData) : calcurXline(d)
+        })
+        .attr('y1', function (d, j) {
+          return calcurYline(d)
+        })
+        .attr('y2', function (d, j) {
+          const nextData = data[j + 1]
+          return nextData ? calcurYline(nextData) : calcurYline(d)
+        })
+        .attr('x2', function (d, j) {
+          const nextData = data[j + 1]
+          return nextData ? calcurXline(nextData) : calcurXline(d)
+        })
+        .attr('stroke', lineColor)
+
+      gs.append('circle')
+        .attr('r', 3)
+        .attr('cx', function (d, j) {
+          return calcurXline(d)
+        })
+        .attr('cy', function (d, j) {
+          return calcurYline(d)
+        })
+        .attr('id', function (d, j) {
+          return d.id
+        })
+        .attr('fill', circleColor)
+        .on('mouseover', function (e) {
+          handleShowTip(e, true)
+        })
+        .on('mousemove', function (e) {
+          handleShowTip(e, true)
+        })
+        .on('mouseleave', function (e) {
+          handleShowTip(e, false)
+        })
+
+      // 每一行下面的 分格 线
+      g.append('line')
+        .attr('x1', 0)
+        .attr('y1', (i + 1) * rectHeight + 10)
+        .attr('x2', state.width)
+        .attr('y2', (i + 1) * rectHeight + 10)
+        .attr(
+          'style',
+          `stroke-width: 1; stroke: ${rowBorderColor}; fill: none;`
+        )
+    }
+
+    const initTable = () => {
+      tableChart = d3.select('#tableChart')
+
+      // 每一行数据
+      for (let i = 0; i < tableData.length; i++) {
+        const { type, data } = tableData[i]
+        if (type === 'bar') {
+          renderBar({ i, data })
+        } else if (type === 'line') {
+          renderLine({ i, data })
+        }
       }
     }
 
     onMounted(() => {
-      initHeader()
-      initTable()
+      init()
     })
 
     return {
@@ -164,9 +314,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .wrapper {
   width: 100%;
   overflow: auto;
+  position: relative;
+
+  .tips-section {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Description: echart test
  * @Date: 2022-03-30 09:40:28
- * @LastEditTime: 2022-03-30 17:01:35
+ * @LastEditTime: 2022-04-28 11:22:24
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\index.vue
 -->
 
@@ -15,6 +15,11 @@
       <h4>散点图不分区</h4>
       <ScatterChartSame />
     </el-tab-pane>
+
+    <el-tab-pane label="图表联动" name="third">
+      <h4>图表联动</h4>
+      <ChartGroup />
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -22,16 +27,17 @@
 import { reactive, toRefs, computed, provide } from 'vue'
 import ScatterChart from './Scatter.vue'
 import ScatterChartSame from './Scatter.same.vue'
-
+import ChartGroup from './ChartGroup.vue'
 export default {
   name: 'EchartTest',
   components: {
     ScatterChart,
-    ScatterChartSame
+    ScatterChartSame,
+    ChartGroup
   },
   setup() {
     const state = reactive({
-      panelName: 'second'
+      panelName: 'third'
     })
 
     const isManual = computed(() => state.panelName === 'second')

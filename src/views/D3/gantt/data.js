@@ -1,8 +1,8 @@
 /*
- * @Description:
- * @Date: 2022-04-12 09:58:32
- * @LastEditTime: 2022-04-14 09:20:20
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\table\data.js
+ * @Description: 
+ * @Date: 2022-04-14 09:20:48
+ * @LastEditTime: 2022-04-14 14:07:49
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\gantt\data.js
  */
 
 export const headerData = [
@@ -94,99 +94,12 @@ export const headerData = [
 
 export const tableData = [
   {
-    type: 'bar',
-    data: [
-      {
-        id: '1',
-        value: 12,
-        total: 100,
-        week: 1,
-        start: 1,
-        end: 2,
-        nextId: ['2', '5']
-      },
-      {
-        id: '2',
-        value: 12,
-        total: 100,
-        week: 1,
-        start: 3,
-        end: 7
-      },
-      {
-        id: '3',
-        value: 12,
-        total: 100,
-        week: 3,
-        start: 2,
-        end: 4
-      },
-      {
-        id: '4',
-        value: 12,
-        total: 100,
-        week: 3,
-        start: 5,
-        end: 5
-      },
-      {
-        id: '5',
-        value: 12,
-        total: 100,
-        week: 7,
-        start: 3,
-        end: 9
-      }
-    ]
-  },
-
-  {
-    type: 'bar',
-    data: [
-      {
-        id: '01',
-        value: 12,
-        total: 100,
-        week: 1,
-        start: 3,
-        end: 4,
-        nextId: ['2', '5']
-      },
-      {
-        id: '02',
-        value: 12,
-        total: 100,
-        week: 5,
-        start: 7,
-        end: 8
-      },
-      {
-        id: '03',
-        value: 12,
-        total: 100,
-        week: 9,
-        start: 2,
-        end: 4
-      },
-      {
-        id: '04',
-        value: 12,
-        total: 100,
-        week: 10,
-        start: 5,
-        end: 5
-      },
-      {
-        id: '05',
-        value: 11,
-        total: 100,
-        week: 11,
-        start: 1,
-        end: 3
-      }
-    ]
-  }, {
+    id: 'xxx01',
+    itemCategroy: 'DDR4',
+    itemNo: 'CAPD333023',
     type: 'line',
+    store: '123',
+    storeType: 'store',
     data: [
       {
         id: 'line1',
@@ -245,7 +158,7 @@ export const tableData = [
         onWay: 40
       },
       {
-        id: 'line7',
+        id: 'line8',
         week: 10,
         start: 4,
         end: 4,
@@ -253,12 +166,94 @@ export const tableData = [
         onWay: 60
       },
       {
-        id: 'line8',
+        id: 'line9',
         week: 10,
         start: 5,
         end: 5,
         quantity: 20,
         onWay: 80
+      },
+    ]
+  },
+  {
+    id: 'xxx02',
+    itemCategroy: 'DDR3',
+    itemNo: 'CAPD333023',
+    type: 'line',
+    store: '12ddd3',
+    storeType: 'sales',
+    data: [
+      {
+        id: 'lineXX1',
+        week: 2,
+        start: 3,
+        end: 3,
+        quantity: 20,
+        onWay: 150,
+      },
+      {
+        id: 'lineXX2',
+        week: 4,
+        start: 2,
+        end: 2,
+        quantity: 20,
+        onWay: 50
+      },
+      {
+        id: 'lineXX3',
+        week: 4,
+        start: 6,
+        end: 6,
+        quantity: 20,
+        onWay: 30
+      },
+      {
+        id: 'lineXX4',
+        week: 6,
+        start: 6,
+        end: 6,
+        quantity: 20,
+        onWay: 165
+      },
+      {
+        id: 'lineXX5',
+        week: 6,
+        start: 7,
+        end: 7,
+        quantity: 20,
+        onWay: 240
+      },
+      {
+        id: 'lineXX6',
+        week: 8,
+        start: 4,
+        end: 4,
+        quantity: 20,
+        onWay: 20
+      },
+      {
+        id: 'lineXX7',
+        week: 9,
+        start: 1,
+        end: 1,
+        quantity: 20,
+        onWay: 140
+      },
+      {
+        id: 'lineXX8',
+        week: 10,
+        start: 4,
+        end: 4,
+        quantity: 20,
+        onWay: 30
+      },
+      {
+        id: 'lineXX9',
+        week: 10,
+        start: 5,
+        end: 5,
+        quantity: 20,
+        onWay: 140
       },
     ]
   }
