@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-06-06 14:16:30
- * @LastEditTime: 2022-06-06 18:38:08
+ * @LastEditTime: 2022-06-06 18:44:37
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\paintBar.js
  */
 
@@ -53,7 +53,6 @@ class PaintBar {
       temp.forEach(item => {
         let temp = item
         while(num < 2) {
-
           if(temp.children) {
             temp = item.children
           } else {

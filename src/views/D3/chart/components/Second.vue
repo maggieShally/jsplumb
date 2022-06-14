@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2021-06-29 16:55:02
- * @LastEditTime: 2021-07-01 15:23:38
- * @FilePath: \jsplumb-test\src\views\D3\components\Second.vue
+ * @LastEditTime: 2022-06-14 09:49:50
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\chart\components\Second.vue
 -->
 
 <template>
@@ -22,8 +22,8 @@ onMounted(() => {
   // 创建比例尺
   const scaleLinear = d3
     .scaleLinear()
-    .domain([0, d3.max(dataset)])
-    .range([0, 300])
+    .domain([0, d3.max(dataset)]) // 设置定义域
+    .range([0, 300]) //设置值域
 
   let svg = d3.select('#secondSvg')
   let g = svg.append('g')
