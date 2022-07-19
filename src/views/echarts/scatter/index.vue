@@ -1,7 +1,7 @@
 <!--
  * @Description: echart test
  * @Date: 2022-03-30 09:40:28
- * @LastEditTime: 2022-04-28 11:22:24
+ * @LastEditTime: 2022-07-15 11:28:45
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\index.vue
 -->
 
@@ -20,6 +20,12 @@
       <h4>图表联动</h4>
       <ChartGroup />
     </el-tab-pane>
+
+     <el-tab-pane label="接口图表" name="four">
+      <h4>接口图表</h4>
+      <APIChart />
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
@@ -28,16 +34,19 @@ import { reactive, toRefs, computed, provide } from 'vue'
 import ScatterChart from './Scatter.vue'
 import ScatterChartSame from './Scatter.same.vue'
 import ChartGroup from './ChartGroup.vue'
+import APIChart from './ApiChart.vue'
+
 export default {
   name: 'EchartTest',
   components: {
     ScatterChart,
     ScatterChartSame,
-    ChartGroup
+    ChartGroup,
+    APIChart
   },
   setup() {
     const state = reactive({
-      panelName: 'third'
+      panelName: 'four'
     })
 
     const isManual = computed(() => state.panelName === 'second')

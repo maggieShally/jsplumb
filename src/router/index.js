@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2022-05-30 18:19:56
+ * @LastEditTime: 2022-07-19 17:38:34
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -19,6 +19,29 @@ const routes = [
         redirect: '/flow',
         icon: 'icon-apps-line',
         component: () => import('../views/flow/index.vue')
+      },
+      {
+        path: '/others',
+        name: 'others',
+        icon: 'icon-dashboard-line',
+        component: () => import('../views/others/index.vue'),
+        children: [
+          {
+            path: '/others/nodeItem',
+            name: 'nodeItem',
+            component: () => import('../views/others/nodeItem/index.vue')
+          },
+          {
+            path: '/others/linkage',
+            name: 'linkage',
+            component: () => import('../views/others/linkage/index.vue')
+          },
+          {
+            path: '/others/tailwindcss',
+            name: 'tailwindcss',
+            component: () => import('../views/others/tailwindcss/index.vue')
+          }
+        ]
       },
       {
         path: '/d3',
@@ -97,9 +120,9 @@ const routes = [
             component: () => import('../views/echarts/scatter/index.vue')
           },
           {
-            path: '/echarts/barChart',
-            name: 'barChart',
-            component: () => import('../views/echarts/barChart/index.vue')
+            path: '/echarts/tableLine',
+            name: '表格连线',
+            component: () => import('../views/echarts/tableLine/index.vue')
           }
         ]
       },
@@ -147,6 +170,16 @@ const routes = [
             path: '/antV/x6Tree',
             name: 'x6Tree',
             component: () => import('../views/antv/x6Tree/index.vue')
+          },
+          {
+            path: '/antV/nodeTree',
+            name: 'nodeTree',
+            component: () => import('../views/antv/nodeTree/index.vue')
+          },
+          {
+            path: '/antV/department',
+            name: '事业部treeDemo',
+            component: () => import('../views/antv/department/index.vue')
           }
         ]
       },
@@ -203,11 +236,12 @@ function counterList(data) {
       index: item.path,
       title: item.name,
       icon: item.icon,
-      access: item.meta?.access,
+      access: item?.meta?.access,
       children:
         item.children?.length > 0 ? counterList(item.children) : undefined
     }
   })
 }
+
 
 export default router

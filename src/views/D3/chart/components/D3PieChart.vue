@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-06-14 09:17:20
- * @LastEditTime: 2022-06-14 11:02:52
+ * @LastEditTime: 2022-06-16 10:58:05
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\chart\components\D3PieChart.vue
 -->
 <template>
@@ -17,18 +17,7 @@ export default {
     const { proxy } = getCurrentInstance()
     const d3 = proxy.$d3
 
-    // const color = [
-    //   '#5470c6',
-    //   '#91cc75',
-    //   '#fac858',
-    //   '#ee6666',
-    //   '#73c0de',
-    //   '#3ba272',
-    //   '#fc8452',
-    //   '#9a60b4',
-    //   '#ea7ccc',
-    // ]
-    const color = d3.scaleOrdinal(d3.schemeCategory10)
+    const color = d3.scaleOrdinal(d3.schemeCategory10) // 生成颜色函数
 
     let svg, pieData, arc, arcs
 

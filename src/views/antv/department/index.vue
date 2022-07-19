@@ -1,8 +1,8 @@
 <!--
  * @Description: 
- * @Date: 2022-01-13 09:42:18
- * @LastEditTime: 2022-07-12 14:23:07
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\index.vue
+ * @Date: 2022-07-12 10:46:35
+ * @LastEditTime: 2022-07-13 18:23:39
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\index.vue
 -->
 
 <template>
@@ -27,13 +27,16 @@
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
 import { Graph, ObjectExt, Cell } from '@antv/x6'
-import { DagreLayout, CircularLayout, ForceLayout,RadialLayout } from '@antv/layout'
+import {
+  DagreLayout,
+  CircularLayout,
+  ForceLayout,
+  RadialLayout,
+} from '@antv/layout'
 import '@antv/x6-vue-shape'
 import dagre from 'dagre'
 
-import layout from './layout.js'
-
-import { initData, data2 } from './data.js'
+import { initData } from './data.js'
 
 import NodeCom from './NodeCom.vue'
 
@@ -97,10 +100,6 @@ export default {
             },
           },
         },
-        layout: {
-          type: 'radial',
-          unitRadius: 50,
-        },
       })
 
       const data = {
@@ -109,7 +108,7 @@ export default {
             ...item,
             shape: 'vue-shape',
             width: 150,
-            height: item.type === 'zb' ? 140 : 100,
+            height: 100,
             component: {
               template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
               components: {
@@ -141,63 +140,6 @@ export default {
               },
             },
             data: item,
-            ports: {
-              groups: {
-                // 输入链接桩群组定义
-                in: {
-                  position: 'left',
-                  attrs: {
-                    circle: {
-                      r: 1,
-                      magnet: true,
-                      stroke: '#fff',
-                      strokeWidth: 1,
-                      fill: '#fff',
-                    },
-                  },
-                },
-                // 输出链接桩群组定义
-                out: {
-                  position: 'right',
-                  attrs: {
-                    circle: {
-                      r: 1,
-                      magnet: true,
-                      stroke: '#fff',
-                      strokeWidth: 1,
-                      fill: '#fff',
-                    },
-                  },
-                },
-                // 指标
-                zb: {
-                  position: 'right',
-                  attrs: {
-                    circle: {
-                      r: 1,
-                      magnet: true,
-                      stroke: '#fff',
-                      strokeWidth: 1,
-                      fill: '#fff',
-                    },
-                  },
-                },
-              },
-              items: [
-                {
-                  id: 'left',
-                  group: 'in',
-                },
-                {
-                  id: 'right',
-                  group: 'out',
-                },
-                {
-                  id: 'bottom',
-                  group: 'out',
-                },
-              ],
-            },
           }
         }),
         edges: state.initData.edges.map(item => {
@@ -229,6 +171,7 @@ export default {
         nodesep: 30, // 可选
         ranksep: 100, // 可选
         controlPoints: true, // 可选
+        sortBy: 'value'
       })
       const model = dagreLayout.layout(data)
 

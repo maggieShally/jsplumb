@@ -1,31 +1,18 @@
 <!--
  * @Description: 
  * @Date: 2022-03-22 16:28:10
- * @LastEditTime: 2022-07-12 14:16:01
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\NodeCom.vue
+ * @LastEditTime: 2022-07-12 14:38:22
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\NodeCom.vue
 -->
 
 <template>
   <div class="node-wrap">
     <div class="node-content">
-      <!-- <template v-if="nodeInfo.type !== 'zb' && !nodeInfo.isLeaf"> -->
-      <span class="node-icon icon-right" @click="handleClick('right')">下{{rightVisible ? '+' : '-'}}</span>
-      <!-- <span class="node-icon icon-bottom" @click="handleClick('bottom')">指{{bottomVisible ? '+' : '-'}}</span> -->
-      <!-- </template> -->
+      <span class="node-icon icon-right" @click="handleClick('right')">{{visible ? '+' : '-'}}</span>
       <div class="normal-section" v-if="nodeInfo.type !== 'zb'">
-        <el-button type="primary" size="small" @click="handleShowZb">指标</el-button>
+        <!-- <el-button type="primary" size="small" @click="handleShowZb">指标</el-button> -->
         <p class="title">{{ nodeInfo.name }}</p>
       </div>
-      <!-- <div class="node-section" v-else>
-
-        <p class="node-title">{{ nodeInfo.name }}</p>
-        <div class="flex-wrap">
-          <div class="flex-item" v-for="item in nodeInfo.data" :key="item.name">
-            <p>{{ item.name }}</p>
-            <p>{{ item.quantity }}</p>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -36,7 +23,7 @@ import { Graph, ObjectExt, Cell } from '@antv/x6'
 import { ElButton } from 'element-plus'
 export default {
   name: 'X6Panel',
-  components: { ElButton },
+  // components: { ElButton },
   props: {
     nodes: {
       type: Array,
@@ -52,8 +39,7 @@ export default {
     const graph = getGraph()
     const state = reactive({
       nodeInfo: getNode().data,
-      rightVisible: true,
-      bottomVisible: true,
+      visible: true,
     })
 
     node.on('change:data', ({ current }) => {
@@ -61,25 +47,23 @@ export default {
       state.nodeInfo = current
     })
 
-    const handleClick = (type = 'right') => {
+    const handleClick = () => {
       const edges = graph.getConnectedEdges(node, { outgoing: true })
 
-      const visible = state[`${type}Visible`]
-      console.log(visible)
+      const { visible } = state
+      console.log(edges)
 
       edges.forEach(item => {
-        if (item.getSourcePortId() === type) {
-          const cell = graph.getCellById(item.store.data.target.cell)
-          console.log(cell)
-          cell.toggleVisible(!visible)
+        const cell = graph.getCellById(item.store.data.target.cell)
+        console.log(cell)
+        cell.toggleVisible(!visible)
 
-          const allNextNodes = graph.getSuccessors(cell)
-          allNextNodes.forEach(node => {
-            node.toggleVisible(!visible)
-          })
+        const allNextNodes = graph.getSuccessors(cell)
+        allNextNodes.forEach(node => {
+          node.toggleVisible(!visible)
+        })
 
-          state[`${type}Visible`] = !visible
-        }
+        state.visible = !visible
       })
 
       const nodes = graph.getNodes()
@@ -135,7 +119,8 @@ export default {
   .icon-right {
     position: absolute;
     right: 0;
-    top: 15%;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .icon-bottom {
