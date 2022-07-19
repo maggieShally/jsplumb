@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2022-07-19 16:49:57
+ * @LastEditTime: 2022-07-19 17:56:30
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\main.js
  */
 import { createApp } from 'vue'
@@ -18,7 +18,7 @@ import 'vue3-seamless-scroll/lib/vue3SeamlessScroll.css'
 import vGanttChart from 'v-gantt-chart'
 import VueDragResize from 'vue-drag-resize'
 
-// import "./assets/tailwindcss.css"
+import "./assets/tailwindcss.css"
 
 const app = createApp(App)
 
