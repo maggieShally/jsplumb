@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-12 10:46:35
- * @LastEditTime: 2022-07-13 18:23:39
+ * @LastEditTime: 2022-07-21 17:55:45
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\index.vue
 -->
 
@@ -10,16 +10,12 @@
   <div class="wrap">
     <div id="container" class="left-content" style="height: 700px"></div>
     <div class="right-content">
-      <p>指标</p>
-      <div v-for="node in zbNodeList" :key="node.id">
-        <div>{{ node.name }}</div>
-        <div class="flex-wrap">
-          <div class="flex-item" v-for="item in node.data" :key="item.name">
-            <p>{{ item.name }}</p>
-            <p>{{ item.quantity }}</p>
-          </div>
-        </div>
-      </div>
+
+      <el-table :data="dataList" border>
+        <el-table-column label="料号" prop="itemNo"></el-table-column>
+        <el-table-column label="PN" prop="pn"></el-table-column>
+        <el-table-column label="状态" prop="status"></el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -46,6 +42,23 @@ export default {
     const state = reactive({
       initData: initData,
       zbNodeList: [],
+      dataList: [
+        {
+          itemNo: '我是一个料号',
+          pn: '我是一个PN',
+          status: '我是一个状态',
+        },
+        {
+          itemNo: '我是一个料号',
+          pn: '我是一个PN',
+          status: '我是一个状态',
+        },
+        {
+          itemNo: '我是一个料号',
+          pn: '我是一个PN',
+          status: '我是一个状态',
+        },
+      ],
     })
     let graph
 
@@ -86,7 +99,6 @@ export default {
         width: 2200,
         height: 700,
         grid: true,
-        scroller: true,
         interacting: false,
         connecting: {
           anchor: 'orth',
@@ -99,6 +111,16 @@ export default {
               direction: 'H',
             },
           },
+        },
+        scroller: {
+          enabled: true,
+          pannable: true,
+          pageVisible: true,
+          pageBreak: false,
+        },
+        mousewheel: {
+          enabled: true,
+          modifiers: ['ctrl', 'meta'],
         },
       })
 
@@ -169,9 +191,9 @@ export default {
         rankdir: 'LR', // 可选，默认为图的中心
         align: 'DL', // 可选
         nodesep: 30, // 可选
-        ranksep: 100, // 可选
+        ranksep: 60, // 可选
         controlPoints: true, // 可选
-        sortBy: 'value'
+        sortBy: 'value',
       })
       const model = dagreLayout.layout(data)
 
