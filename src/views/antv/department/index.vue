@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-12 10:46:35
- * @LastEditTime: 2022-07-21 17:55:45
+ * @LastEditTime: 2022-07-27 15:23:54
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\index.vue
 -->
 
@@ -42,23 +42,19 @@ export default {
     const state = reactive({
       initData: initData,
       zbNodeList: [],
-      dataList: [
-        {
-          itemNo: '我是一个料号',
-          pn: '我是一个PN',
-          status: '我是一个状态',
-        },
-        {
-          itemNo: '我是一个料号',
-          pn: '我是一个PN',
-          status: '我是一个状态',
-        },
-        {
-          itemNo: '我是一个料号',
-          pn: '我是一个PN',
-          status: '我是一个状态',
-        },
-      ],
+      dataList: [{
+        itemNo: '我是一个料号',
+        pn: '我是一个PN',
+        status: '我是一个状态'
+      },{
+        itemNo: '我是一个料号',
+        pn: '我是一个PN',
+        status: '我是一个状态'
+      },{
+        itemNo: '我是一个料号',
+        pn: '我是一个PN',
+        status: '我是一个状态'
+      }],
     })
     let graph
 
@@ -99,6 +95,7 @@ export default {
         width: 2200,
         height: 700,
         grid: true,
+        scroller: true,
         interacting: false,
         connecting: {
           anchor: 'orth',
@@ -111,16 +108,6 @@ export default {
               direction: 'H',
             },
           },
-        },
-        scroller: {
-          enabled: true,
-          pannable: true,
-          pageVisible: true,
-          pageBreak: false,
-        },
-        mousewheel: {
-          enabled: true,
-          modifiers: ['ctrl', 'meta'],
         },
       })
 
@@ -191,7 +178,7 @@ export default {
         rankdir: 'LR', // 可选，默认为图的中心
         align: 'DL', // 可选
         nodesep: 30, // 可选
-        ranksep: 60, // 可选
+        ranksep: 100, // 可选
         controlPoints: true, // 可选
         sortBy: 'value',
       })

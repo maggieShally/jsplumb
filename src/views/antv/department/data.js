@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-07-12 10:50:47
- * @LastEditTime: 2022-07-21 18:20:38
+ * @LastEditTime: 2022-07-25 09:21:16
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\data.js
  */
 
@@ -23,71 +23,76 @@ export const initData = {
   nodes: [
     {
       id: '1',
-      name: 'CBG'
+      name: 'CBG',
+      index: 0
     },
     {
-      id: '2',
-      name: 'CCARD'
-    }, {
       id: '2-1',
-      name: 'FSSD'
+      name: 'FSSD-1',
+      index: 1
+    }, {
+      id: '2',
+      name: 'CCARD-2',
+      index: 2
     }, {
       id: '2-2',
-      name: 'CARD'
+      name: 'CARD',
+      index: 3
     }, {
       id: '2-3',
-      name: 'CINDUSTRIALARD'
+      name: 'CINDUSTRIALARD',
+      index: 4
     },
     {
       id: '3',
-      name: 'Lexar'
+      name: 'Lexar', index: 5
     },{
       id: '3-1',
-      name: 'FORESEE'
+      name: 'FORESEE', index: 5
     },
     {
       id: '4',
-      name: 'G1'
+      name: 'G1', index: 5
     },
     {
       id: '5',
-      name: 'S2'
+      name: 'S2', index: 5
     }, {
       id: '5-1',
-      name: 'S2'
+      name: 'S2', index: 5
     },
     {
       id: '6',
-      name: 'SD4.0'
+      name: 'SD4.0', index: 5
     },
     {
       id: '7',
-      name: 'MICRO',
+      name: 'MICRO', index: 5,
       value: '3'
     },
     {
       id: '8',
-      name: '1667x'
+      name: '1667x', index: 5
     },
     {
       id: '9',
-      name: '633x'
+      name: '633x', index: 5
     },
     {
       id: '10',
-      name: '消费类'
+      name: '消费类', index: 5
     },
     {
       id: '11',
-      name: 'NA'
+      name: 'NA', index: 5
     },
     {
       id: '12',
-      name: '128GB'
+      name: '128GB', index: 5
     },
     {
       id: '13',
-      name: '64GB'
+      name: '64GB', index: 5
     }
   ],
   edges: [

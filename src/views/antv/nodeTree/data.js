@@ -1511,12 +1511,14 @@ const dataList = {
   nodes: [
     {
       id: '1',
-      label: 'FLASH -1',
+      label: 'CARD',
       comboId: '组包',
+      saleAmount: 124,
+      saleQuanity: 23454,
       childrenList: [
         {
           id: '1-1',
-          label: 'FLASH-128G',
+          label: 'CARD-128G',
           comboId: '组包',
           pid: '1',
           edges: [
@@ -1536,7 +1538,7 @@ const dataList = {
           childrenList: [
             {
               id: '1-1-1',
-              label: 'FLASH-128G-128G',
+              label: 'CARD-128G-128G',
               comboId: '组包',
               pid: '1-1',
               edges: [
@@ -1549,7 +1551,7 @@ const dataList = {
             },
             {
               id: '1-1-2',
-              label: 'FLASH-128G-256G',
+              label: 'CARD-128G-256G',
               comboId: '组包',
               pid: '1-1',
               edges: [
@@ -1564,7 +1566,7 @@ const dataList = {
         },
         {
           id: '1-2',
-          label: 'FLASH-68G',
+          label: 'CARD-68G',
           comboId: '组包',
           pid: '1',
           edges: [

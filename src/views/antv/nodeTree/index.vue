@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-06 16:35:06
- * @LastEditTime: 2022-07-15 10:42:13
+ * @LastEditTime: 2022-08-03 14:53:47
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\nodeTree\index.vue
 -->
 <template>
@@ -134,6 +134,31 @@ export default {
       size: [150, 100],
     })
 
+    const registerFn = () => {
+      const textXML = cfg => {
+        return `
+            <group >
+              <rect style={{
+                width: 80, height: 20, fill: '#1890ff', stroke: '#1890ff', radius: [6, 6, 0, 0]
+              }}   cursor="pointer">
+                <text style={{ marginTop: 2, marginLeft: 40, 
+                  textAlign: 'center',
+                  fontWeight: 'bold', 
+                  fill: '#fff' }}>${cfg.label}</text>
+              </rect>
+              <rect style={{ width: 80, height: 40, fill: 'rgba(24,144,255,0.15)', radius: [0, 0, 6, 6] }} keyshape="true"   cursor="pointer">
+                <text style={{marginTop: 2, marginLeft: 10 ,fill: #708090}}>销售额: ${cfg.saleAmount}</text>
+                <text style={{marginTop: 2, marginLeft: 10, fill: #708090}}>销量: ${cfg.saleQuanity}</text>
+              </rect>
+            </group>
+            `
+      }
+
+      G6.registerNode('test', {
+        jsx: textXML,
+      })
+    }
+
     // 绘制树状图
     const rendTree = data => {
       graph = new G6.Graph({
@@ -243,14 +268,18 @@ export default {
       graph.node(node => {
         return {
           id: node.id,
-          size: 25,
-          style: {
-            fill: state.colorObj[node.comboId]?.color,
-            stroke: state.colorObj[node.comboId]?.stroke,
-          },
-          labelCfg: {
-            position: 'bottom',
-          },
+          // size: 25,
+          // style: {
+          //   fill: state.colorObj[node.comboId]?.color,
+          //   stroke: state.colorObj[node.comboId]?.stroke,
+          // },
+          // labelCfg: {
+          //   position: 'bottom',
+          // },
+          ...node,
+          type: 'test',
+          saleAmount: 124,
+          saleQuanity: 23454,
         }
       })
 
@@ -353,6 +382,8 @@ export default {
     }
 
     onMounted(async () => {
+      registerFn()
+
       rendTree(data.dataList)
       // rendTree(data.dataTemp)
     })
