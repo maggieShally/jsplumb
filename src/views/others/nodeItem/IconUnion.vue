@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-06-16 14:43:53
- * @LastEditTime: 2022-07-04 14:06:46
+ * @LastEditTime: 2022-11-23 17:28:36
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\nodeItem\IconUnion.vue
 -->
 <template>
@@ -45,7 +45,6 @@ export default {
   setup(props, content) {
     const state = reactive({
       modelType: props.type,
-      // height: (props.parentCount ? props.parentCount * 40 : 40) + 'px',
       width: props.nodeIndex ? '15px' : '35px',
     })
 

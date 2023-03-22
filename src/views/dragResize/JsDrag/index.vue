@@ -1,7 +1,7 @@
 <!--
- * @Description: 联系拖拽结构
+ * @Description: 练习拖拽结构
  * @Date: 2022-03-25 15:08:42
- * @LastEditTime: 2022-03-28 18:04:27
+ * @LastEditTime: 2022-12-07 10:46:35
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\JsDrag\index.vue
 -->
 
@@ -171,7 +171,6 @@ export default {
     }
 
     const handleAllowDrop = ev => {
-     
       ev.preventDefault()
     }
 

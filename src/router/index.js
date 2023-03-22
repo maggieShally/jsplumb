@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2022-07-19 17:38:34
+ * @LastEditTime: 2023-02-16 11:24:18
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -26,6 +26,11 @@ const routes = [
         icon: 'icon-dashboard-line',
         component: () => import('../views/others/index.vue'),
         children: [
+          {
+            path: '/others/formula',
+            name: '公式',
+            component: () => import('../views/others/formula/index.vue')
+          },
           {
             path: '/others/nodeItem',
             name: 'nodeItem',
@@ -77,12 +82,6 @@ const routes = [
         icon: 'icon-dashboard-line',
         component: () => import('../views/ListScroll/index.vue')
       },
-      // {
-      //   path: '/dragResize',
-      //   name: 'DragResize',
-      //   icon: 'icon-list-settings-fill',
-      //   component: () => import('../views/dragResize/drag/index.vue')
-      // },
       {
         path: '/dragResize',
         name: 'DragResize',
@@ -123,6 +122,16 @@ const routes = [
             path: '/echarts/tableLine',
             name: '表格连线',
             component: () => import('../views/echarts/tableLine/index.vue')
+          },
+          {
+            path: '/echarts/sankeyChart',
+            name: '桑基图',
+            component: () => import('../views/echarts/sankeyChart/index.vue')
+          },
+          {
+            path: '/echarts/ganttChart',
+            name: '甘特图',
+            component: () => import('../views/echarts/ganttChart/index.vue')
           }
         ]
       },
@@ -144,80 +153,80 @@ const routes = [
             component: () => import('../views/gantt/VGT/index.vue')
           }
         ]
-      },
-      {
-        path: '/antV',
-        name: 'AntV',
-        icon: 'icon-settings-2-line',
-        component: () => import('../views/antv/index.vue'),
-        children: [
-          {
-            path: '/antv/autoChart',
-            name: 'AutoChart',
-            component: () => import('../views/antv/AutoChart/index.vue')
-          },
-          {
-            path: '/antV/x6',
-            name: 'x6TreeChart',
-            component: () => import('../views/antv/x6/index.vue')
-          },
-          {
-            path: '/antV/x6Flow',
-            name: 'x6Flow',
-            component: () => import('../views/antv/x6Flow/index.vue')
-          },
-          {
-            path: '/antV/x6Tree',
-            name: 'x6Tree',
-            component: () => import('../views/antv/x6Tree/index.vue')
-          },
-          {
-            path: '/antV/nodeTree',
-            name: 'nodeTree',
-            component: () => import('../views/antv/nodeTree/index.vue')
-          },
-          {
-            path: '/antV/department',
-            name: '事业部treeDemo',
-            component: () => import('../views/antv/department/index.vue')
-          }
-        ]
-      },
-      {
-        path: '/word-cloud',
-        name: 'wordCloud',
-        icon: 'icon-settings-2-line',
-        component: () => import('../views/wordCloud/index.vue')
-      },
-      {
-        path: '/canvas',
-        name: 'Canvas',
-        icon: 'icon-dashboard-line',
-        redirect: '/canvas/clock',
-        component: () => import('../views/canvas/index.vue'),
-        children: [
-          {
-            path: '/canvas/vertify',
-            name: 'vertify',
-            component: () => import('../views/canvas/vertify/index.vue')
-          },
-          {
-            path: '/canvas/clock',
-            name: 'Clock',
-            component: () => import('../views/canvas/clock/index.vue')
-          },
-          {
-            path: '/canvas/guaguaka',
-            name: 'Guaguaka',
-            component: () => import('../views/canvas/guaguaka/index.vue')
-          },
-          {
-            path: '/canvas/canvasImg',
-            name: 'CanvasImg',
-            component: () => import('../views/canvas/canvasImg/index.vue')
-          }
-        ]
       }
+      // {
+      //   path: '/antV',
+      //   name: 'AntV',
+      //   icon: 'icon-settings-2-line',
+      //   component: () => import('../views/antv/index.vue'),
+      //   children: [
+      //     {
+      //       path: '/antv/autoChart',
+      //       name: 'AutoChart',
+      //       component: () => import('../views/antv/AutoChart/index.vue')
+      //     },
+      //     {
+      //       path: '/antV/x6',
+      //       name: 'x6TreeChart',
+      //       component: () => import('../views/antv/x6/index.vue')
+      //     },
+      //     {
+      //       path: '/antV/x6Flow',
+      //       name: 'x6Flow',
+      //       component: () => import('../views/antv/x6Flow/index.vue')
+      //     },
+      //     {
+      //       path: '/antV/x6Tree',
+      //       name: 'x6Tree',
+      //       component: () => import('../views/antv/x6Tree/index.vue')
+      //     },
+      //     {
+      //       path: '/antV/nodeTree',
+      //       name: 'nodeTree',
+      //       component: () => import('../views/antv/nodeTree/index.vue')
+      //     },
+      //     {
+      //       path: '/antV/department',
+      //       name: '事业部treeDemo',
+      //       component: () => import('../views/antv/department/index.vue')
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: '/word-cloud',
+      //   name: 'wordCloud',
+      //   icon: 'icon-settings-2-line',
+      //   component: () => import('../views/wordCloud/index.vue')
+      // },
+      // {
+      //   path: '/canvas',
+      //   name: 'Canvas',
+      //   icon: 'icon-dashboard-line',
+      //   redirect: '/canvas/clock',
+      //   component: () => import('../views/canvas/index.vue'),
+      //   children: [
+      //     {
+      //       path: '/canvas/vertify',
+      //       name: 'vertify',
+      //       component: () => import('../views/canvas/vertify/index.vue')
+      //     },
+      //     {
+      //       path: '/canvas/clock',
+      //       name: 'Clock',
+      //       component: () => import('../views/canvas/clock/index.vue')
+      //     },
+      //     {
+      //       path: '/canvas/guaguaka',
+      //       name: 'Guaguaka',
+      //       component: () => import('../views/canvas/guaguaka/index.vue')
+      //     },
+      //     {
+      //       path: '/canvas/canvasImg',
+      //       name: 'CanvasImg',
+      //       component: () => import('../views/canvas/canvasImg/index.vue')
+      //     }
+      //   ]
+      // }
     ]
   }
 ]
@@ -242,6 +251,5 @@ function counterList(data) {
     }
   })
 }
-
 
 export default router

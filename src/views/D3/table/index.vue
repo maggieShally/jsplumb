@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 09:44:11
- * @LastEditTime: 2022-04-14 09:19:02
+ * @LastEditTime: 2022-10-26 16:26:18
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\table\index.vue
 -->
 <template>
@@ -18,7 +18,14 @@
 </template>
 
 <script>
-import { onMounted, reactive, toRefs, getCurrentInstance, computed } from 'vue'
+import {
+  onMounted,
+  reactive,
+  toRefs,
+  getCurrentInstance,
+  computed,
+  unref,
+} from 'vue'
 import { headerData, tableData } from './data.js'
 
 export default {
@@ -40,6 +47,18 @@ export default {
     const borderColor = 'rgba(112,128,144, .4)' // 顶部边框
     const rowBorderColor = 'rgba(233, 123, 22, .3)' // 行 边线
 
+    const nodeTypeColor = {
+      oneType: {
+        color: 'rgba(222,222,222, .5)',
+      },
+      twoType: {
+        color: 'rgba(153,136,153, .5)',
+      },
+      threeType: {
+        color: 'rgba(255,99,71, .5)',
+      },
+    }
+
     let headerChart, tableChart, xScale
 
     const state = reactive({
@@ -52,14 +71,14 @@ export default {
         visible: false,
       },
       headerData: headerData,
-      tableData: tableData
+      tableData: tableData,
     })
 
     const rectWidth = computed(() => state.width / headerData.length)
 
     const handleShowTip = (e, visible) => {
       const { tipsInfo } = state
-      console.log(d3.select(e.currentTarget).attr('id'))
+      // console.log(d3.select(e.currentTarget).attr('id'))
       state.tipsInfo = {
         ...tipsInfo,
         visible: visible,
@@ -121,6 +140,58 @@ export default {
         })
     }
 
+    let moveInfo = {}
+
+    //开始drag
+    const dragStart = (d, i, a, node) => {
+      const originTransform = node.attr('transform')
+      const prefix = originTransform ? `${originTransform}` : ''
+      moveInfo = {
+        x: d.x,
+        y: d.y,
+        prefix,
+      }
+    }
+
+    //drag
+    const dragDrag = function (d, i, a, node) {
+      const diffX = d.x - moveInfo.x
+      node.attr('transform', `${moveInfo.prefix}translate(${diffX}, 0)`)
+
+      console.log('___dragDrag___')
+    }
+
+    // 结束 drag
+    const dragEnd = (d, i, a, node) => {
+      const yList = node
+        .attr('transform')
+        .match(/\d*,/g)
+        .map(i => parseFloat(i.replace(',', '')))
+      const allYPos = yList.reduce((result, item) => (result += item), 0)
+
+      const unitCount = Math.ceil(allYPos / (unref(rectWidth) / dateRang))
+      console.log('___dragEnd___相对原点移动位置', allYPos, unitCount)
+    }
+
+    // drag 移动
+    var dragHandler = d3
+      .drag()
+      .on('start', function (d, i, a) {
+        const node = d3.select(this)
+        dragStart(d, i, a, node)
+      })
+      .on('drag', function (d, i, a) {
+        const node = d3.select(this)
+        dragDrag(d, i, a, node)
+      })
+      .on('end', function (d, i, a) {
+        const node = d3.select(this)
+        dragEnd(d, i, a, node)
+      })
+
+    // zoom 缩放
+    // var zoomHandler  =d3.zoom()
+
     // 渲染 bar
     const renderBar = ({ i, data }) => {
       const g = tableChart.append('g')
@@ -141,7 +212,9 @@ export default {
           return (rectWidth.value / dateRang) * (d.end - d.start + 1)
         })
         .attr('height', 50)
-        .attr('fill', defaultBarColor)
+        .attr('fill', function (d, j) {
+          return nodeTypeColor[d.nodeType]?.color || defaultBarColor
+        })
         .attr('stroke', defaultBarBorderColor)
         .attr('id', function (d, j) {
           return `str${d.id}`
@@ -183,6 +256,12 @@ export default {
         .on('mouseleave', function (e) {
           handleShowTip(e, false)
         })
+        .call(dragHandler)
+        .call(
+          d3.zoom().on('zoom', function () {
+            d3.select(this).attr('transform', d3.event.transform)
+          })
+        )
 
       // 每一行下面的 分格 线
       g.append('line')
@@ -220,7 +299,7 @@ export default {
           ((d.onWay - min) / ((max - min) / rectHeight) - 10)
         return yPos
       }
-      
+
       gs.append('line')
         .attr('x1', function (d, j) {
           return calcurXline(d)

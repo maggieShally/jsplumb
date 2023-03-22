@@ -92,7 +92,7 @@ export const options2 = {
     {
       data: [120, 200, 150, 80, 70, 110, 130],
       type: 'bar',
-      name: '一月1',
+      name: '一月',
       showBackground: true,
       backgroundStyle: {
         color: 'rgba(180, 180, 180, 0.2)'
@@ -101,7 +101,7 @@ export const options2 = {
     {
       data: [320, 100, 250, 380, 470, 210, 430],
       type: 'bar',
-      name: '二月2',
+      name: '二月',
       showBackground: true,
       backgroundStyle: {
         color: 'rgba(180, 180, 180, 0.2)'
@@ -110,7 +110,7 @@ export const options2 = {
     {
       data: [720, 140, 450, 320, 520, 510, 230],
       type: 'bar',
-      name: '三月3',
+      name: '三月',
       showBackground: true,
       backgroundStyle: {
         color: 'rgba(180, 180, 180, 0.2)'
@@ -119,7 +119,7 @@ export const options2 = {
     {
       data: [350, 200, 450, 280, 170, 310, 450],
       type: 'bar',
-      name: '四月4',
+      name: '四月',
       showBackground: true,
       backgroundStyle: {
         color: 'rgba(180, 180, 180, 0.2)'

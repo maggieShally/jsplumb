@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-07-04 10:18:10
- * @LastEditTime: 2022-07-25 11:36:33
+ * @LastEditTime: 2022-11-23 17:29:08
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\utils.js
  */
 export const rendTree = arr => {
@@ -28,9 +28,9 @@ export const rendTree = arr => {
     }
   }
 
-  result.forEach(item => {
-    updateScore(item, item.children.length)
-  })
+  // result.forEach(item => {
+  //   updateScore(item, item.children.length)
+  // })
 
   return result
 }

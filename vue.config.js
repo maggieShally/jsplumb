@@ -1,13 +1,12 @@
 /*
  * @Description:
  * @Date: 2021-07-21 11:18:51
- * @LastEditTime: 2022-04-28 09:29:24
+ * @LastEditTime: 2022-12-02 16:23:40
  * @FilePath: \webpack-teste:\others\jsplumb-test\vue.config.js
  */
 const path = require('path')
 
 module.exports = {
-  
   pages: {
     index: {
       entry: 'src/main.js',
@@ -15,7 +14,7 @@ module.exports = {
       filename: 'index.html',
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     },
-    viewPanel: 'src/viewPanel.js',
+    viewPanel: 'src/viewPanel.js'
     // viewPanel: {
     //   entry: './src/viewPanel.js',
     //   template: 'public/viewPanel.html',
@@ -25,9 +24,9 @@ module.exports = {
   runtimeCompiler: true,
   devServer: {
     host: '0.0.0.0',
-    port: '8088',
+    port: '8087',
     https: false,
-    open: true,
+    open: true
   },
   configureWebpack: config => {
     // 添加如下代码
@@ -47,6 +46,11 @@ module.exports = {
             test: /\.mjs$/,
             include: /node_modules/,
             type: 'javascript/auto'
+          },
+          {
+            test: /\.tsx?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/
           }
         ]
       }

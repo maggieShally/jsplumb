@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2022-07-19 17:56:30
+ * @LastEditTime: 2023-02-28 15:45:45
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\main.js
  */
 import { createApp } from 'vue'
@@ -18,7 +18,12 @@ import 'vue3-seamless-scroll/lib/vue3SeamlessScroll.css'
 import vGanttChart from 'v-gantt-chart'
 import VueDragResize from 'vue-drag-resize'
 
-import "./assets/tailwindcss.css"
+import ClickOutside from 'element-plus/lib/directives/click-outside'
+
+
+import screenfull from 'screenfull'
+
+import './assets/tailwindcss.css'
 
 const app = createApp(App)
 
@@ -29,6 +34,8 @@ app.config.globalProperties.$d3 = d3
 Object.keys(icons).forEach(key => {
   app.component(key, icons[key])
 })
+
+app.directive('click-outside', ClickOutside)
 
 app
   .use(vGanttChart)

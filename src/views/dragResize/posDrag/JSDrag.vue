@@ -1,8 +1,8 @@
 <!--
- * @Description: 
+ * @Description: JS 移动缩放练习
  * @Date: 2022-03-23 17:36:13
- * @LastEditTime: 2022-03-25 15:36:33
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\posDrag\JsDrag.vue
+ * @LastEditTime: 2022-12-07 10:47:52
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\posDrag\JSDrag.vue
 -->
 <template>
   <div class="drag-wrap">

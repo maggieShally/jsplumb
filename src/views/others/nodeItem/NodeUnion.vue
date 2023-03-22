@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-06-16 11:22:06
- * @LastEditTime: 2022-07-04 14:10:23
+ * @LastEditTime: 2022-12-05 10:22:27
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\nodeItem\NodeUnion.vue
 -->
 
@@ -17,17 +17,18 @@
     </div>
 
     <div>
-      <el-dropdown @command="handleCommand">
+      <el-dropdown :teleported="false" @command="handleCommand">
         <el-icon>
           <Edit />
         </el-icon>
-        <template #dropDown>
+        <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item command="addSub">添加关联</el-dropdown-item>
             <el-dropdown-item command="edit">编辑关联</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+
     </div>
 
     <div v-if="currentNode.children">
@@ -68,8 +69,13 @@ export default {
       lineLength: 13,
     })
 
+    const handleCommand = (command) => {
+      console.log(command)
+    }
+
     return {
       ...toRefs(state),
+      handleCommand,
     }
   },
 }

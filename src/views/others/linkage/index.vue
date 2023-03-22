@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-07 11:09:33
- * @LastEditTime: 2022-07-15 18:06:08
+ * @LastEditTime: 2022-12-02 17:40:55
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\linkage\index.vue
 -->
 <template>
@@ -9,7 +9,8 @@
     <div v-for="item in 4" :key="item" class="chart-sec">
       <div class="linkAge-sec" @mouseover="handleShowHover(item)">
         <div class="linkAge-operate" v-show="hoverChart === item">
-          <span @click="handleSetLinkAge(item)">联动</span>
+          <p @click="handleSetLinkAge(item)">联动</p>
+          <p v-if="mainChart === item" @click="mainChart=''">取消联动</p>
         </div>
         <div class="linkAge-operate" v-if="mainChart && mainChart != item">
           <el-checkbox v-model="chartInfoList[`a${item}`].isLink"></el-checkbox>
@@ -30,7 +31,7 @@
           </el-popover>
 
         </div>
-        <ChartCom :ref="chartItemRef"/>
+        <ChartCom :ref="chartItemRef" :unitKey="'b'+item+'a'" />
       </div>
     </div>
   </div>

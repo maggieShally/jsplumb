@@ -1,7 +1,7 @@
 <!--
  * @Description: echarts基础封装，返回 echarts实例
  * @Date: 2021-10-14 17:05:49
- * @LastEditTime: 2022-04-28 11:23:56
+ * @LastEditTime: 2022-12-02 17:09:47
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseChart\ChartPie.vue
 -->
 
@@ -57,6 +57,27 @@ export default {
     const chart = shallowRef(null)
     const currentNode = shallowRef(getNode && getNode())
 
+    watch(
+      () => props.seriesData,
+      () => {
+        updateChartView()
+        addChartResizeListener()
+        chart.value.resize()
+      },
+      { deep: true }
+    )
+
+    watch(
+      () => isManual.value,
+      async val => {
+        console.log(val)
+        if (val) {
+          await nextTick()
+          chart.value.resize()
+        }
+      }
+    )
+
     const handleWindowResize = () => {
       if (!chart.value) return false
       chart.value.resize()
@@ -101,7 +122,6 @@ export default {
               width: '100%',
               height: '100%',
               bounding: 'raw',
-             
             },
           ],
         },
@@ -126,32 +146,12 @@ export default {
       instance.listenTo(
         document.querySelector(`#${props.name}_chart`),
         async () => {
+          console.log('xxxxxxxxxxxxxxx')
           if (!chart.value) return false
           chart.value.resize()
         }
       )
     }
-
-    watch(
-      () => props.seriesData,
-      () => {
-        updateChartView()
-        addChartResizeListener()
-        chart.value.resize()
-      },
-      { deep: true }
-    )
-
-    watch(
-      () => isManual.value,
-      async val => {
-        console.log(val)
-        if (val) {
-          await nextTick()
-          chart.value.resize()
-        }
-      }
-    )
 
     const initMethods = () => {
       // 点击 标题 复制标题
@@ -179,7 +179,7 @@ export default {
       document.getElementById('cp_input').select()
       document.execCommand('copy')
       document.getElementById('cp_input').remove()
-      
+
       if (callback) {
         callback(text)
       }
@@ -200,6 +200,10 @@ export default {
       initMethods()
     })
 
+    const chartResize = () => {
+       chart.value.resize()
+    }
+
     onUnmounted(() => {
       chart.value.dispose()
       window.removeEventListener('resize', handleWindowResize)
@@ -208,6 +212,7 @@ export default {
     return {
       chart,
       currentNode,
+      chartResize
     }
   },
 }

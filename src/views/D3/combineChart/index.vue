@@ -1,46 +1,59 @@
 <!--
  * @Description: 
  * @Date: 2022-05-30 17:18:20
- * @LastEditTime: 2022-06-16 10:56:17
+ * @LastEditTime: 2023-02-27 15:05:17
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\index.vue
 -->
 <template>
-  <div class="box" id="barChart"></div>
+
+  <el-tabs v-model="activeName" class="demo-tabs">
+    <el-tab-pane label="单线" name="sigle">
+      
+      <SigleCom />
+    </el-tab-pane>
+    <el-tab-pane label="多线" name="multiple">
+      <MultipleCom />
+
+    </el-tab-pane>
+  <el-tab-pane label="多线" name="multiple2">
+      <MultipleCom2 />
+
+    </el-tab-pane>
+  </el-tabs>
+
+
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, reactive, toRefs } from 'vue'
+import { reactive, toRefs, nextTick } from 'vue'
+import { weeks, columns } from './data.js'
 
+import TableNextModal from './Table.modal.vue'
+
+import SigleCom from './SigleCom.vue'
+import MultipleCom from './MultipleCom.vue'
+import MultipleCom2 from './MultipleCom2.vue'
 
 export default {
-  name: 'combineChart',
-
+  name: 'Table',
+  components: {
+    SigleCom,
+    MultipleCom,
+    MultipleCom2
+  },
   setup() {
-    const { proxy } = getCurrentInstance()
-
-    const d3 = proxy.$d3
-
-   
-
-    onMounted(async () => {
-      const svg = d3
-        .select('#barChart')
-        .append('svg')
-        .attr('width', 800)
-        .attr('height', 1000)
-
     
+    const state =reactive({
+      activeName: 'sigle'
     })
 
-    return {}
+    return {
+      ...toRefs(state),
+    
+    }
   },
 }
 </script>
 
 <style lang="less" scoped>
-.box {
-  height: 800px;
-  width: 1000px;
-  border: 1px solid #ddd;
-}
 </style>

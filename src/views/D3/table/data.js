@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-04-12 09:58:32
- * @LastEditTime: 2022-04-14 09:20:20
+ * @LastEditTime: 2022-10-26 15:12:51
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\table\data.js
  */
 
@@ -52,7 +52,7 @@ export const headerData = [
   },
   {
     label: '周12',
-    value: '1'
+    value: '12'
   },
   {
     label: '周13',
@@ -103,7 +103,8 @@ export const tableData = [
         week: 1,
         start: 1,
         end: 2,
-        nextId: ['2', '5']
+        nextId: ['2', '5'],
+        nodeType: 'oneType'
       },
       {
         id: '2',
@@ -111,7 +112,8 @@ export const tableData = [
         total: 100,
         week: 1,
         start: 3,
-        end: 7
+        end: 7,
+        nodeType: 'twoType'
       },
       {
         id: '3',
@@ -135,7 +137,8 @@ export const tableData = [
         total: 100,
         week: 7,
         start: 3,
-        end: 9
+        end: 9,
+        nodeType: 'oneType'
       }
     ]
   },
@@ -158,7 +161,8 @@ export const tableData = [
         total: 100,
         week: 5,
         start: 7,
-        end: 8
+        end: 8,
+        nodeType: 'oneType'
       },
       {
         id: '03',
@@ -182,7 +186,8 @@ export const tableData = [
         total: 100,
         week: 11,
         start: 1,
-        end: 3
+        end: 3,
+        nodeType: 'threeType'
       }
     ]
   }, {

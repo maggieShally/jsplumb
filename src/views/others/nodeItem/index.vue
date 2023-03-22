@@ -1,24 +1,81 @@
 <!--
  * @Description: sss
  * @Date: 2022-06-16 11:04:43
- * @LastEditTime: 2022-07-04 14:06:25
+ * @LastEditTime: 2022-12-05 10:19:21
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\nodeItem\index.vue
 -->
 <template>
-  <NodeUnion :currentNode="nodeTree" :nodeIndex="0" :childrenList="nodeTree.children" :isLast="true" />
+  <ScreenFullCom @onToggle="val => isFullScreen = val">
+    <el-button @click="visible=true">sss</el-button>
+    <div id="nodeUnit">
+      <el-tooltip :teleported="false" content="<span>The content can be <strong>HTML</strong></span>" raw-content>
+        <el-button>hover me</el-button>
+      </el-tooltip>
+      <NodeUnion :currentNode="nodeTree" :nodeIndex="0" :childrenList="nodeTree.children" :isLast="true" />
+   
+    </div>
+    <!-- <div style="height: 1100px">
+      <iframe src="http://localhost:8080/matter/productToResource" width="100%" height="100%" frameborder="0" scrolling="no">
+      </iframe>
+    </div> -->
+
+    <el-dialog v-model="visible" title="22222">
+
+      <el-dropdown :teleported="false">
+        <span class="el-dropdown-link">
+          Dr<el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>Action 1</el-dropdown-item>
+            <el-dropdown-item>
+              Action 2
+            </el-dropdown-item>
+            <el-dropdown-item>Action 3</el-dropdown-item>
+            <el-dropdown-item>Action 4</el-dropdown-item>
+            <el-dropdown-item>Action 5</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
+      <el-popover :teleported="false" placement="top-start" title="Title" :width="200" trigger="hover" content="this is content, this is content, this is content">
+        <template #reference>
+          <el-button class="m-2">Hover to activate</el-button>
+        </template>
+      </el-popover>
+
+      <el-select :teleported="false">
+        <el-option value="1" label="23"></el-option>
+      </el-select>
+
+      <el-tooltip class="box-item" effect="dark" content="Top Left prompts info" placement="top-start" :teleported="false">
+        <el-button>tooltip</el-button>
+      </el-tooltip>
+
+    </el-dialog>
+
+  </ScreenFullCom>
 </template>
+
 
 <script>
 import { computed, onMounted, reactive, toRefs } from 'vue'
+import ScreenFullCom from '@/components/screenFull'
+
 import NodeUnion from './NodeUnion.vue'
 import { rendTree } from '../utils.js'
 export default {
   name: 'NodeItemWrap',
   components: {
     NodeUnion,
+    ScreenFullCom,
   },
   setup() {
     const state = reactive({
+      visible: false,
+      isFullScreen: false,
       node: [
         {
           id: 'x0',
@@ -40,7 +97,8 @@ export default {
           unionToParent: {
             type: 'inner',
           },
-        }, {
+        },
+        {
           id: 'x0-1-2',
           pid: 'x0-1',
           name: 'x0-1-2',
