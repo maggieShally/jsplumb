@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2022-04-14 15:08:05
+ * @LastEditTime: 2023-04-17 18:05:42
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\App.vue
 -->
 <template>
@@ -19,6 +19,7 @@
     </el-container>
   </el-container>
 </template>
+
 
 <script>
 import { provide } from 'vue'
