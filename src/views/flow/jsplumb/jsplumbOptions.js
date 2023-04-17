@@ -122,8 +122,8 @@ export const jsplumbSourceOptions = {
   filterExclude: false,
   anchor: 'Continuous',
   // 是否允许自己连接自己
-  allowLoopback: true,
-  maxConnections: -1,
+  allowLoopback: false,
+  maxConnections: 2,
   onMaxConnections: function(info, e) {
     console.log(`超过了最大值连线: ${info.maxConnections}`)
   }

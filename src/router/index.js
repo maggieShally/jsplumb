@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2023-02-16 11:24:18
+ * @LastEditTime: 2023-04-06 11:33:57
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -18,7 +18,14 @@ const routes = [
         name: 'Flow',
         redirect: '/flow',
         icon: 'icon-apps-line',
-        component: () => import('../views/flow/index.vue')
+        component: () => import('../views/flow/index.vue'),
+        children: [
+          {
+            path: '/flow/jsplumb',
+            name: 'jsplumb',
+            component: () => import('../views/flow/jsplumb/index.vue')
+          },
+        ]
       },
       {
         path: '/others',
@@ -30,6 +37,7 @@ const routes = [
             path: '/others/formula',
             name: '公式',
             component: () => import('../views/others/formula/index.vue')
+            // component: () => import('../views/flow/index.vue')
           },
           {
             path: '/others/nodeItem',

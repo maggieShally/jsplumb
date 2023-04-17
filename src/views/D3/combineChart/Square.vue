@@ -1,7 +1,7 @@
 <!--
  * @Description: 方型
  * @Date: 2023-02-21 18:13:34
- * @LastEditTime: 2023-02-21 18:32:30
+ * @LastEditTime: 2023-04-07 16:00:50
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\Square.vue
 -->
 <template>
@@ -25,8 +25,8 @@ export default {
 <style lang="less" scoped>
 .shape-wrap {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   border: 1px solid #ddd;
   border-radius: 20%;
   display: inline-flex;

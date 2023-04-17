@@ -1,15 +1,19 @@
 <!--
  * @Description: 
  * @Date: 2021-05-08 16:54:41
- * @LastEditTime: 2021-06-29 15:29:22
- * @FilePath: \jsplumb-test\src\views\flow\node.vue
+ * @LastEditTime: 2023-04-06 11:48:24
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\flow\jsplumb\node.vue
 -->
 <template>
   <div :key="node.id" :id="node.id" @click="clickNode" class="flow-item" :style="nodeContainerStyle">
     <el-button type="default">
-      <i class="flow-node-drag flow-item-icon" :class="node.ico"></i>
-      <span>{{ node.name }} </span>
+      <!-- <el-icon :class="node.ico">
+        <Search />
+      </el-icon> -->
+      <span class="flow-node-drag flow-item-icon" >X</span>
+      <span>{{ node.name }} sssss</span>
     </el-button>
+    
   </div>
 </template>
 
@@ -50,6 +54,9 @@ export default {
   display: inline-block;
 
   .flow-item-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
     &:hover {
       cursor: crosshair;
     }

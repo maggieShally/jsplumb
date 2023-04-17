@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2023-02-21 18:33:12
- * @LastEditTime: 2023-02-24 09:31:18
+ * @LastEditTime: 2023-04-07 13:55:54
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\Triangle.vue
 -->
 <template>
@@ -27,7 +27,7 @@ export default {
   position: relative;
   width: 0;
   height: 0;
-  border-width: 0 50px 70px;
+  border-width: 0 40px 70px;
   border-style: solid;
   border-color: transparent transparent #ddd;
   display: inline-flex;

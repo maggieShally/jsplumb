@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-05-30 17:18:20
- * @LastEditTime: 2023-02-27 15:05:17
+ * @LastEditTime: 2023-04-03 15:57:31
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\index.vue
 -->
 <template>
@@ -44,7 +44,7 @@ export default {
   setup() {
     
     const state =reactive({
-      activeName: 'sigle'
+      activeName: 'multiple2'
     })
 
     return {

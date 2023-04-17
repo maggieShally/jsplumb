@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:45:22
- * @LastEditTime: 2022-04-14 15:18:16
+ * @LastEditTime: 2023-04-10 17:13:47
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\gantt\index.vue
 -->
 <template>
@@ -126,11 +126,19 @@ export default {
 
         // renderNoneBar({ svg, data: tableData[i].data })
 
-        renderLine({
-          svg,
-          data: tableData[i].data,
-          type: tableData[i].storeType,
-        })
+        i == 0 &&
+          renderArea({
+            svg,
+            data: tableData[i].data,
+            type: tableData[i].storeType,
+          })
+
+        i === 1 &&
+          renderLine({
+            svg,
+            data: tableData[i].data,
+            type: tableData[i].storeType,
+          })
 
         renderMinMax({
           svg,
@@ -286,6 +294,66 @@ export default {
         })
     }
 
+    const renderArea = ({ svg, data, type }) => {
+      const { rectHeight, svgMarginLeft } = state
+
+      const gs = svg.append('g')
+
+      const onWayList = data.map(item => item.onWay)
+      const max = d3.max(onWayList) + 10
+      // const min = d3.min(onWayList)
+      const min = 0
+
+      // 计算 x 位置
+      const calcurXline = function (d, i) {
+        const { rectWidth, rectHeight, dateRang } = state
+        const xPos = rectWidth * i + (rectWidth / dateRang) * (d.start - 1)
+        return xPos + svgMarginLeft
+      }
+
+      // 计算 y 位置
+      const calcurYline = function (d) {
+        const yPos = rectHeight - (d.onWay - min) / ((max - min) / rectHeight)
+        return yPos
+      }
+
+      // 创建数据
+      let datas = data.map((d, j) => {
+        return {
+          x: calcurXline(d, j),
+          y: calcurYline(d),
+        }
+      })
+      console.log(datas)
+
+      // 创建辅助函数
+      var curveFunc = d3
+        .area()
+        .x(function (d) {
+          return d.x
+        })
+        .y1(function (d) {
+          return d.y
+        }) // 区域上边界坐标
+        .y0(100) // 区域下边界坐标
+
+      // 添加属性
+      gs.append('path')
+        .attr('d', curveFunc(datas))
+        // .attr('stroke', 'black')
+        .attr('fill', 'rgba(144,238,144, .5)')
+
+      gs.on('mouseover', function (e) {
+        handleShowTip(e, true)
+      })
+        .on('mousemove', function (e) {
+          handleShowTip(e, true)
+        })
+        .on('mouseleave', function (e) {
+          handleShowTip(e, false)
+        })
+    }
+
     onMounted(async () => {
       await nextTick()
 
@@ -328,7 +396,7 @@ export default {
     cursor: pointer;
 
     &:hover {
-      color: rgb(56, 123, 211)
+      color: rgb(56, 123, 211);
     }
   }
 }

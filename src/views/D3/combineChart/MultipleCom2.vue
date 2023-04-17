@@ -1,45 +1,57 @@
 <!--
  * @Description: 多条连线
  * @Date: 2023-02-24 16:39:42
- * @LastEditTime: 2023-02-27 15:02:25
+ * @LastEditTime: 2023-04-07 16:59:06
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\MultipleCom2.vue
 -->
 
 <template>
+  <div>
 
-  <div style="marginBottom: 50px">
-    <el-table :data="tableData">
-      <el-table-column label="" prop="category" width="150px" />
-      <el-table-column v-for="item in columns" label="" :prop="item.key" :key="item.key" width="180px" align="center">
-        <template #default="scope">
-          <div style="marginLeft: -12px" class="cell-wrapper">
-            <template v-if="scope.row[scope.column.rawColumnKey]?.chartType">
-              <Component :is="`${scope.row[scope.column.rawColumnKey].chartType}`" :label="scope.row[scope.column.rawColumnKey].label" />
-              <div :id="`Str${scope.row[scope.column.rawColumnKey]?.id}`" class="strBox"></div>
-              <div class="line-wrap" v-if="scope.row[scope.column.rawColumnKey]?.nextIds">
-                <template v-for="item in scope.row[scope.column.rawColumnKey]?.nextIds" :key="item.targetColumnKey + item.targetRowId">
-                  <div class="first" :style="{width: item.keyInfo.firstWidth}"></div>
-                  <div class="second" :style="{height:item.keyInfo.secondHeight,top: item.keyInfo.secondTop,left: item.keyInfo.secondLeft}"></div>
-                  <div class="third" :style="{width: item.keyInfo.thirdWidth, top: item.keyInfo.thirdTop,left: item.keyInfo.thirdLeft}">
-                    <div :class="['four', item.keyInfo.fourItem]"></div>
-                  </div>
-                </template>
+    <div style="marginBottom: 50px">
+      <el-table :data="tableData" border>
+        <el-table-column label="名称" prop="category" width="150px" />
+        <el-table-column v-for="(item, index) in columns" :label="item.label" :prop="item.key" :key="item.key" :width="columnWidth" align="center">
+          <template #default="scope">
+            <div style="marginLeft: -12px" class="cell-wrapper">
+              <div class="dragg-wrap" :style="{left: -168 * index + (180 - 80) / 2 + 'px'}" v-if="scope.row[scope.column.rawColumnKey]?.chartType">
+                <VueDragResize :isResizable="false" :isActive="true" :w="80" :h="80" :x="scope.row[scope.column.rawColumnKey].left" :parentH="90" :parentW="168*columns.length" :parentLimitation="true" v-on:dragstop="event => resize(event, scope.$index, scope.column.rawColumnKey)" :key="scope.row[scope.column.rawColumnKey].key">
+                 <Component :is="`${scope.row[scope.column.rawColumnKey].chartType}`" :label="scope.row[scope.column.rawColumnKey].label" />
+                </VueDragResize>
               </div>
-            </template>
-            <template v-else>
-              {{scope.row[scope.column.rawColumnKey]?.label}}
-            </template>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
 
-  <TableNextModal v-if="showNext" @onCancel="showNext = false" />
+              <template v-else>
+                {{scope.row[scope.column.rawColumnKey]?.label}}
+              </template>
+
+              <template v-if="scope.row[scope.column.rawColumnKey]?.chartType">
+                <div :id="`Str${scope.row[scope.column.rawColumnKey]?.id}`" class="strBox"></div>
+                <div class="line-wrap" v-if="scope.row[scope.column.rawColumnKey]?.nextIds">
+                  <template v-for="item in scope.row[scope.column.rawColumnKey]?.nextIds" :key="item.targetColumnKey + item.targetRowId">
+                    <div class="first" :style="{width: item.keyInfo.firstWidth}"></div>
+                    <div class="second" :style="{height:item.keyInfo.secondHeight,top: item.keyInfo.secondTop,left: item.keyInfo.secondLeft}"></div>
+                    <div class="third" :style="{width: item.keyInfo.thirdWidth, top: item.keyInfo.thirdTop,left: item.keyInfo.thirdLeft}">
+                      <div :class="['four', item.keyInfo.fourItem]"></div>
+                    </div>
+                  </template>
+                </div>
+              </template>
+            </div>
+
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <TableNextModal v-if="showNext" @onCancel="showNext = false" />
+  </div>
 </template>
 
 <script>
-import { reactive, toRefs, nextTick } from 'vue'
+import { reactive, toRefs, nextTick, onMounted } from 'vue'
+import lodash from 'lodash'
+import VueDragResize from 'vue-drag-resize'
+
 import { columns } from './data.js'
 
 import TableNextModal from './Table.modal.vue'
@@ -48,9 +60,11 @@ import SquareCom from './Square.vue'
 import TriangleCom from './Triangle.vue'
 import CircleCom from './Circle.vue'
 
+
 export default {
   name: 'MultipleCom2',
   components: {
+    VueDragResize,
     TableNextModal,
     SquareCom,
     TriangleCom,
@@ -69,10 +83,6 @@ export default {
           nextIds: [
             {
               targetRowId: 2,
-              targetColumnKey: 'd1',
-            },
-            {
-              targetRowId: 5,
               targetColumnKey: 'd1',
             },
           ],
@@ -171,173 +181,220 @@ export default {
 
     const state = reactive({
       columns: columns,
-      tableData: (function () {
-        data.forEach((item, rowIndex) => {
-          for (let i = 0; i < columns.length; i++) {
-            const columnKey = columns[i].key
+      tableData: [],
 
-            if (item[columnKey]?.nextIds?.length) {
-              console.log(columnKey)
-
-              item[columnKey]?.nextIds?.forEach((item, nextIdIndex) => {
-                const { targetRowId, targetColumnKey } = item
-
-                const sourceColumnIndex = columns.findIndex(
-                  i => i.key === columnKey
-                )
-                const targetRowIndex = data.findIndex(i => i.id === targetRowId)
-                const targetColumnIndex = columns.findIndex(
-                  i => i.key === targetColumnKey
-                )
-
-                const tableCellHeight = 110
-
-                const tableCellWidth = 180
-
-                const firstWidth = (function () {
-                  if (targetColumnIndex === sourceColumnIndex) {
-                    return 0
-                  } 
-                  return 0.4 * tableCellWidth
-                })()
-
-                const secondLeft = (function () {
-                  if (targetColumnIndex === sourceColumnIndex) {
-                    return 0
-                  }
-                  return 0.4 * tableCellWidth
-                })()
-
-                const secondTop = (function () {
-                  if (targetRowIndex > rowIndex) {
-                    return 0
-                  } else {
-                    const diff =
-                      targetColumnIndex === sourceColumnIndex ? 0.5 : 0
-                    return (
-                      Math.abs(targetRowIndex - rowIndex + diff) *
-                      -1 *
-                      tableCellHeight
-                    )
-                  }
-                })()
-
-                const secondHeight = (function () {
-                  if (targetColumnIndex === sourceColumnIndex) {
-                    return (
-                      (Math.abs(targetRowIndex - rowIndex) - 0.5) *
-                      tableCellHeight
-                    )
-                  }
-                  return Math.abs(targetRowIndex - rowIndex) * tableCellHeight
-                })()
-
-                const thirdWidth = (function () {
-                  if (targetColumnIndex === sourceColumnIndex) {
-                    return 0
-                  }
-                  return (
-                    (targetColumnIndex - sourceColumnIndex - 1 + 0.3) *
-                    tableCellWidth
-                  )
-                })()
-
-                const fourItemClass = (function () {
-                  if (targetColumnKey === columnKey) {
-                    if (targetRowIndex - rowIndex < 0) {
-                      return 'top'
-                    } else {
-                      return 'bottom'
-                    }
-                  } else {
-                    return targetRowIndex - rowIndex < 0 ? '' : 'right'
-                  }
-                })()
-
-                const keyInfo = {
-                  firstWidth: firstWidth + 'px',
-                  secondHeight: secondHeight + 'px',
-                  secondTop: secondTop + 'px',
-                  secondLeft: secondLeft + 'px',
-                  thirdWidth: thirdWidth + 'px',
-                  thirdTop:
-                    secondHeight * (targetRowIndex - rowIndex < 0 ? -1 : 1) +
-                    'px',
-                  thirdLeft: firstWidth + 'px',
-                  fourItem: fourItemClass,
-                }
-                item.keyInfo = keyInfo
-              })
-            }
-          }
-        })
-        console.log(data)
-        return data
-      })(),
+      columnWidth: 180,
+      columnHeight: 80,
 
       showNext: false,
     })
 
-    let initWidth = 12
-    const handleShowLine = async (e, ids, scope) => {
-      const targetEvent = e.currentTarget.getBoundingClientRect()
+    const handleDraggerStart = (element, column) => {
+      console.log(element, column)
+    }
 
-      await nextTick()
 
-      console.log(window.getComputedStyle(e.currentTarget).top, ids)
+    const resize = (newRect, rowIndex, columnKey) => {
+      const nextColumnIndex = Math.floor(
+        (newRect.left + state.columnWidth / 2) / 180
+      )
 
-      const targetEventList = ids.map(id => {
-        return document.querySelector(`#Str${id}`)
-      })
+      let rowId = state.tableData[rowIndex].id
 
-      const lineElement = e.currentTarget.nextElementSibling
+      const nextColumnKey = `d${nextColumnIndex}`
+      console.log(newRect)
+      debugger
+      if (state.tableData[rowIndex][nextColumnKey] && nextColumnKey !== columnKey) {
+        alert('此处已有数据，不能停放')
 
-      const thirdList = lineElement.querySelectorAll('.third')
+        const originColumnIndex = state.columns.findIndex(i => i.key === columnKey)
+        state.tableData[rowIndex][columnKey] = {
+          ...state.tableData[rowIndex][columnKey],
+          left: originColumnIndex * 168,
+          key: new Date().getTime(),
+        }
+        return false
+      }
 
-      let maxHeight = 0,
-        minHeight = 0,
-        heightList = [],
-        secondTop = 0
+      state.tableData[rowIndex][nextColumnKey] = {
+        ...lodash.clone(state.tableData[rowIndex][columnKey]),
+        left: nextColumnIndex * 168,
+      }
 
-      thirdList.forEach((item, index) => {
-        const clientRect = targetEventList[index].getBoundingClientRect()
+      if (nextColumnIndex !== Number(columnKey.replace('d', ''))) {
+        delete state.tableData[rowIndex][columnKey]
 
-        const offX = clientRect.x - targetEvent.x - targetEvent.width
-        const offY = clientRect.y - targetEvent.y - targetEvent.height
-        minHeight = offY < 0 && offY < minHeight ? offY : minHeight
-        maxHeight = offY > 0 && offY > maxHeight ? offY : maxHeight
+        // 更新位置后，连此节点的nextIds 的targetColumnKey也要变更
+        let parentInfo = []
+        state.tableData.forEach((item, rowIndex) => {
+          state.columns.forEach(columnItem => {
+            item[columnItem.key]?.nextIds?.forEach(nexIdItem => {
+              if (
+                nexIdItem.targetColumnKey === columnKey &&
+                nexIdItem.targetRowId === rowId
+              ) {
+                nexIdItem.targetColumnKey = nextColumnKey
+                parentInfo.push({
+                  rowIndex,
+                  columnKey: columnItem.key,
+                })
+              }
+            })
+          })
+        })
 
-        // 尽量让线终点在单元格中间
-        item.style.width = (offX < 0 ? -offX - 50 : offX + 30) + 'px'
+        // 更新当前节点到子节点的 路径线数据
+        state.tableData[rowIndex][nextColumnKey].nextIds?.forEach(
+          (item, nextIdIndex) => {
+            console.log(nextColumnKey)
+            debugger
+            item.keyInfo = calcLineStyle({
+              item,
+              rowIndex,
+              columnKey: nextColumnKey,
+              nextIdIndex
+            })
+          }
+        )
 
-        if (offX < 0) {
-          item.style.transform = 'translate(-100%)'
-          item.classList.add('rightArrow')
-          item.querySelector('.four').style.left = 0
+        // 更新当前节点的 父节点到当前节点的路径线数据
+        parentInfo.forEach(pItem => {
+          state.tableData[pItem.rowIndex][pItem.columnKey]?.nextIds?.forEach(
+            (item, nextIdIndex) => {
+              console.log(nextColumnKey)
+
+              item.keyInfo = calcLineStyle({
+                item,
+                rowIndex: pItem.rowIndex,
+                columnKey: pItem.columnKey,
+                nextIdIndex
+              })
+            }
+          )
+        })
+      }
+    }
+
+    const calcLineStyle = ({ item, rowIndex, columnKey, nextIdIndex}) => {
+      const { targetRowId, targetColumnKey } = item
+
+      const sourceColumnIndex = columns.findIndex(i => i.key === columnKey)
+      const targetRowIndex = data.findIndex(i => i.id === targetRowId)
+      const targetColumnIndex = columns.findIndex(
+        i => i.key === targetColumnKey
+      )
+
+      const tableCellHeight = state.columnHeight + 20
+
+      const tableCellWidth = state.columnWidth
+
+      // 由三条件组成，横，坚，横 ,箭头
+
+      const fourItemClass = (function () {
+        if (targetColumnKey === columnKey) {
+          if (targetRowIndex - rowIndex < 0) {
+            return 'top'
+          } else {
+            return 'bottom'
+          }
         } else {
-          item.classList.add('leftArrow')
+          return targetRowIndex - rowIndex < 0 ? '' : 'right'
         }
-        if (offY < 0) {
-          secondTop = offY < secondTop ? offY : secondTop
+      })()
+
+      const firstWidth = (function () {
+        if (targetColumnIndex === sourceColumnIndex) {
+          return 0
         }
-        heightList.push(top)
-        item.style.top = offY + 'px'
+        let width = 0.5 * tableCellWidth
+        return width
+      })()
+
+      const secondLeft = (function () {
+        if (targetColumnIndex === sourceColumnIndex) {
+          return 4
+        }
+        return 0.5 * tableCellWidth
+      })()
+
+      const secondTop = (function () {
+        if (targetRowIndex > rowIndex) {
+          return 0
+        } else {
+          const diff = targetColumnIndex === sourceColumnIndex ? 0.5 : 0
+          return (
+            Math.abs(targetRowIndex - rowIndex + diff) * -1 * tableCellHeight
+          )
+        }
+      })()
+
+      const secondHeight = (function () {
+        if (targetColumnIndex === sourceColumnIndex) {
+          return (Math.abs(targetRowIndex - rowIndex) - 0.5) * tableCellHeight
+        }
+        return Math.abs(targetRowIndex - rowIndex) * tableCellHeight
+      })()
+
+      const thirdWidth = (function () {
+        if (targetColumnIndex === sourceColumnIndex) {
+          return 0
+        }
+        return (
+          (targetColumnIndex - sourceColumnIndex - 1 + 0.2) * tableCellWidth
+        )
+      })()
+
+      const thirdTop = (function () {
+        return secondHeight * (targetRowIndex - rowIndex < 0 ? -1 : 1)
+      })()
+
+      return {
+        firstWidth: firstWidth + 'px',
+        secondHeight: secondHeight + 'px',
+        secondTop: secondTop + 'px',
+        secondLeft: secondLeft + 'px',
+        thirdWidth: thirdWidth + 'px',
+        thirdTop: thirdTop + 'px',
+        thirdLeft: firstWidth + 'px',
+        fourItem: fourItemClass,
+      }
+    }
+
+    const calcItemLineStyle = (itemData, rowIndex) => {
+      for (let i = 0; i < columns.length; i++) {
+        const columnKey = columns[i].key
+
+        if (itemData[columnKey]?.nextIds?.length) {
+          itemData[columnKey]?.nextIds?.forEach((item, nextIdIndex) => {
+            item.keyInfo = calcLineStyle({ item, rowIndex, columnKey, nextIdIndex })
+          })
+        }
+      }
+    }
+
+    const calcData = data => {
+      data.forEach((item, rowIndex) => {
+        state.columns
+        for (let key in item) {
+          const index = state.columns.findIndex(i => i.key === key)
+          if (index !== -1) {
+            item[key].left = index * 168
+          }
+        }
+
+        calcItemLineStyle(item, rowIndex)
       })
-
-      lineElement.querySelector('.first').style.width = initWidth + 'px'
-      lineElement.querySelector('.second').style.height =
-        maxHeight - minHeight + 'px'
-      lineElement.querySelector('.second').style.top = secondTop + 'px'
+      return data
     }
 
-    const handleShowNextInfo = () => {
-      state.showNext = true
-    }
+    onMounted(() => {
+      state.tableData = calcData(data)
+    })
 
     return {
       ...toRefs(state),
-      handleShowLine,
-      handleShowNextInfo,
+      resize,
+      handleDraggerStart,
     }
   },
 }
@@ -350,7 +407,17 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90px;
+  height: 80px;
+}
+
+.vdr.active:before {
+  outline: none !important;
+}
+
+.dragg-wrap {
+  position: absolute;
+  width: 500px;
+  height: 80px;
 }
 
 .line-wrap {
@@ -410,7 +477,7 @@ export default {
       &::before {
         border-color: transparent transparent @color transparent;
         top: -5px;
-        left: -50%;
+        left: 250%;
       }
     }
 
@@ -418,7 +485,7 @@ export default {
       &::before {
         border-color: @color transparent transparent transparent;
         top: 2px;
-        left: -50%;
+        left: 250%;
       }
     }
   }

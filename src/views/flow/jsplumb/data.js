@@ -1,8 +1,8 @@
 /*
  * @Description: 
  * @Date: 2021-05-10 10:03:18
- * @LastEditTime: 2022-03-28 09:21:24
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\flow\data.js
+ * @LastEditTime: 2023-04-07 11:32:00
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\flow\jsplumb\data.js
  */
 /**
  * @description: 
@@ -19,25 +19,25 @@ export const getDataA = function() {
         id: "nodeA",
         name: "流程A-节点A",
         type: "task",
-        left: "26px",
-        top: "161px",
+        // left: "26px",
+        // top: "161px",
         ico: "el-icon-user-solid",
-        viewOnly: true,
+        // viewOnly: true,
       },
       {
         id: "nodeB",
         name: "流程A-节点B",
         type: "task",
-        left: "340px",
-        top: "161px",
+        // left: "340px",
+        // top: "161px",
         ico: "el-icon-goods",
       },
       {
         id: "nodeC",
         name: "流程A-节点C",
         type: "task",
-        left: "739px",
-        top: "161px",
+        // left: "739px",
+        // top: "161px",
         ico: "el-icon-present",
       },
     ],

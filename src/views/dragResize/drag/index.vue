@@ -1,7 +1,7 @@
 <!--
  * @Description:  拖拽拉伸 vue-drag-resize
  * @Date: 2021-08-06 15:16:16
- * @LastEditTime: 2023-03-01 09:46:47
+ * @LastEditTime: 2023-04-03 16:10:28
   
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\drag\index.vue
 -->
@@ -10,8 +10,9 @@
     <div class="panel-wrap">
       <VueDragResize
         :isActive="true"
-        :w="700"
+        :w="200"
         :h="200"
+        :x="100"
         :parentH="500"
         :parentW="500"
         :parentLimitation="true"

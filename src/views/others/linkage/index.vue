@@ -1,40 +1,70 @@
 <!--
  * @Description: 
  * @Date: 2022-07-07 11:09:33
- * @LastEditTime: 2022-12-02 17:40:55
+ * @LastEditTime: 2023-03-31 10:34:45
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\linkage\index.vue
 -->
 <template>
-  <div class="chart-panel">
-    <div v-for="item in 4" :key="item" class="chart-sec">
-      <div class="linkAge-sec" @mouseover="handleShowHover(item)">
-        <div class="linkAge-operate" v-show="hoverChart === item">
-          <p @click="handleSetLinkAge(item)">联动</p>
-          <p v-if="mainChart === item" @click="mainChart=''">取消联动</p>
-        </div>
-        <div class="linkAge-operate" v-if="mainChart && mainChart != item">
-          <el-checkbox v-model="chartInfoList[`a${item}`].isLink"></el-checkbox>
+  <el-tabs v-model="activeName" class="demo-tabs">
+    <el-tab-pane label="User" name="first">
+      <div v-for="item in [1,2,3]" :key="item" class="chart-sec">
+        <div class="linkAge-sec" @mouseover="handleShowHover(item)">
+          <div class="linkAge-operate" v-show="hoverChart === item">
+            <p @click="handleSetLinkAge(item)">联动</p>
+            <p v-if="mainChart === item" @click="mainChart=''">取消联动</p>
+          </div>
+          <div class="linkAge-operate" v-if="mainChart && mainChart != item">
+            <el-checkbox v-model="chartInfoList[`a${item}`].isLink"></el-checkbox>
 
-          <el-popover placement="right" :width="400" trigger="click">
-            <template #reference>
-              <span>
-                <el-icon v-if="chartInfoList[`a${item}`].isLink">
-                  <Edit />
-                </el-icon>
-              </span>
-            </template>
-            <el-table :data="[]">
-              <el-table-column width="150" property="date" label="date" />
-              <el-table-column width="100" property="name" label="name" />
-              <el-table-column width="300" property="address" label="address" />
-            </el-table>
-          </el-popover>
-
+            <el-popover placement="right" :width="400" trigger="click">
+              <template #reference>
+                <span>
+                  <el-icon v-if="chartInfoList[`a${item}`].isLink">
+                    <Edit />
+                  </el-icon>
+                </span>
+              </template>
+              <el-table :data="[]">
+                <el-table-column width="150" property="date" label="date" />
+                <el-table-column width="100" property="name" label="name" />
+                <el-table-column width="300" property="address" label="address" />
+              </el-table>
+            </el-popover>
+          </div>
+          <ChartCom :ref="chartItemRef" :unitKey="'b'+item+'a'" placement="right" />
         </div>
-        <ChartCom :ref="chartItemRef" :unitKey="'b'+item+'a'" />
       </div>
-    </div>
-  </div>
+    </el-tab-pane>
+    <el-tab-pane label="Config" name="second">
+      <div v-for="item in [4,5,6]" :key="item" class="chart-sec">
+        <div class="linkAge-sec" @mouseover="handleShowHover(item)">
+          <div class="linkAge-operate" v-show="hoverChart === item">
+            <p @click="handleSetLinkAge(item)">联动</p>
+            <p v-if="mainChart === item" @click="mainChart=''">取消联动</p>
+          </div>
+          <div class="linkAge-operate" v-if="mainChart && mainChart != item">
+            <el-checkbox v-model="chartInfoList[`a${item}`].isLink"></el-checkbox>
+
+            <el-popover placement="right" :width="400" trigger="click">
+              <template #reference>
+                <span>
+                  <el-icon v-if="chartInfoList[`a${item}`].isLink">
+                    <Edit />
+                  </el-icon>
+                </span>
+              </template>
+              <el-table :data="[]">
+                <el-table-column width="150" property="date" label="date" />
+                <el-table-column width="100" property="name" label="name" />
+                <el-table-column width="300" property="address" label="address" />
+              </el-table>
+            </el-popover>
+          </div>
+          <ChartCom :ref="chartItemRef" :unitKey="'b'+item+'a'" />
+        </div>
+      </div>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
@@ -49,6 +79,7 @@ export default {
 
   setup(props) {
     const state = reactive({
+      activeName:'first',
       hoverChart: '',
       mainChart: '',
       linkAgeList: {},
@@ -74,7 +105,9 @@ export default {
       await nextTick()
       if (el) {
         if (
-          dataChartItemRef.value.findIndex(item => item.chartRef?.name === el.chartRef.name) < 0
+          dataChartItemRef.value.findIndex(
+            item => item.chartRef?.name === el.chartRef.name
+          ) < 0
         ) {
           dataChartItemRef.value.push(el)
         }
@@ -105,10 +138,10 @@ export default {
 <style lang="less" scoped>
 .chart-panel {
   width: 100%;
-  display: flex;
 }
 .chart-sec {
-  flex: 1;
+  width: 30%;
+  display: inline-block;
 }
 
 .linkAge-sec {
