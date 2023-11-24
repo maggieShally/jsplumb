@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2023-04-06 11:33:57
+ * @LastEditTime: 2023-08-02 16:05:02
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -72,11 +72,11 @@ const routes = [
             name: 'D3Table',
             component: () => import('../views/D3/table/index.vue')
           },
-          {
-            path: '/d3/gantt',
-            name: 'D3Gantt',
-            component: () => import('../views/D3/gantt/index.vue')
-          },
+          // {
+          //   path: '/d3/gantt',
+          //   name: 'D3Gantt',
+          //   component: () => import('../views/D3/gantt/index.vue')
+          // },
           {
             path: '/d3/combineChart',
             name: 'combineChart',
@@ -150,91 +150,91 @@ const routes = [
         redirect: '/gatt/VGT',
         component: () => import('../views/gantt/index.vue'),
         children: [
-          // {
-          //   path: '/gatt/GSTC',
-          //   name: 'GSTC',
-          //   component: () => import('../views/gantt/GSTC/index.vue')
-          // },
+          {
+            path: '/gatt/GSTC',
+            name: 'GSTC',
+            component: () => import('../views/gantt/GSTC/index.vue')
+          },
           {
             path: '/gatt/VGT',
             name: 'VGT',
             component: () => import('../views/gantt/VGT/index.vue')
           }
         ]
+      },
+      {
+        path: '/antV',
+        name: 'AntV',
+        icon: 'icon-settings-2-line',
+        component: () => import('../views/antv/index.vue'),
+        children: [
+          {
+            path: '/antv/autoChart',
+            name: 'AutoChart',
+            component: () => import('../views/antv/AutoChart/index.vue')
+          },
+          {
+            path: '/antV/x6',
+            name: 'x6TreeChart',
+            component: () => import('../views/antv/x6/index.vue')
+          },
+          {
+            path: '/antV/x6Flow',
+            name: 'x6Flow',
+            component: () => import('../views/antv/x6Flow/index.vue')
+          },
+          {
+            path: '/antV/x6Tree',
+            name: 'x6Tree',
+            component: () => import('../views/antv/x6Tree/index.vue')
+          },
+          {
+            path: '/antV/nodeTree',
+            name: 'nodeTree',
+            component: () => import('../views/antv/nodeTree/index.vue')
+          },
+          {
+            path: '/antV/department',
+            name: '事业部treeDemo',
+            component: () => import('../views/antv/department/index.vue')
+          }
+        ]
+      },
+      {
+        path: '/word-cloud',
+        name: 'wordCloud',
+        icon: 'icon-settings-2-line',
+        component: () => import('../views/wordCloud/index.vue')
+      },
+      {
+        path: '/canvas',
+        name: 'Canvas',
+        icon: 'icon-dashboard-line',
+        redirect: '/canvas/clock',
+        component: () => import('../views/canvas/index.vue'),
+        children: [
+          {
+            path: '/canvas/vertify',
+            name: 'vertify',
+            component: () => import('../views/canvas/vertify/index.vue')
+          },
+          {
+            path: '/canvas/clock',
+            name: 'Clock',
+            component: () => import('../views/canvas/clock/index.vue')
+          },
+          {
+            path: '/canvas/guaguaka',
+            name: 'Guaguaka',
+            component: () => import('../views/canvas/guaguaka/index.vue')
+          },
+          {
+            path: '/canvas/canvasImg',
+            name: 'CanvasImg',
+            component: () => import('../views/canvas/canvasImg/index.vue')
+          }
+        ]
       }
-      // {
-      //   path: '/antV',
-      //   name: 'AntV',
-      //   icon: 'icon-settings-2-line',
-      //   component: () => import('../views/antv/index.vue'),
-      //   children: [
-      //     {
-      //       path: '/antv/autoChart',
-      //       name: 'AutoChart',
-      //       component: () => import('../views/antv/AutoChart/index.vue')
-      //     },
-      //     {
-      //       path: '/antV/x6',
-      //       name: 'x6TreeChart',
-      //       component: () => import('../views/antv/x6/index.vue')
-      //     },
-      //     {
-      //       path: '/antV/x6Flow',
-      //       name: 'x6Flow',
-      //       component: () => import('../views/antv/x6Flow/index.vue')
-      //     },
-      //     {
-      //       path: '/antV/x6Tree',
-      //       name: 'x6Tree',
-      //       component: () => import('../views/antv/x6Tree/index.vue')
-      //     },
-      //     {
-      //       path: '/antV/nodeTree',
-      //       name: 'nodeTree',
-      //       component: () => import('../views/antv/nodeTree/index.vue')
-      //     },
-      //     {
-      //       path: '/antV/department',
-      //       name: '事业部treeDemo',
-      //       component: () => import('../views/antv/department/index.vue')
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: '/word-cloud',
-      //   name: 'wordCloud',
-      //   icon: 'icon-settings-2-line',
-      //   component: () => import('../views/wordCloud/index.vue')
-      // },
-      // {
-      //   path: '/canvas',
-      //   name: 'Canvas',
-      //   icon: 'icon-dashboard-line',
-      //   redirect: '/canvas/clock',
-      //   component: () => import('../views/canvas/index.vue'),
-      //   children: [
-      //     {
-      //       path: '/canvas/vertify',
-      //       name: 'vertify',
-      //       component: () => import('../views/canvas/vertify/index.vue')
-      //     },
-      //     {
-      //       path: '/canvas/clock',
-      //       name: 'Clock',
-      //       component: () => import('../views/canvas/clock/index.vue')
-      //     },
-      //     {
-      //       path: '/canvas/guaguaka',
-      //       name: 'Guaguaka',
-      //       component: () => import('../views/canvas/guaguaka/index.vue')
-      //     },
-      //     {
-      //       path: '/canvas/canvasImg',
-      //       name: 'CanvasImg',
-      //       component: () => import('../views/canvas/canvasImg/index.vue')
-      //     }
-      //   ]
-      // }
     ]
   }
 ]

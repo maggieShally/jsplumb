@@ -1,7 +1,7 @@
 <!--
  * @Description: echart test
  * @Date: 2022-03-30 09:40:28
- * @LastEditTime: 2022-07-15 11:28:45
+ * @LastEditTime: 2023-08-03 13:35:34
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\index.vue
 -->
 
@@ -16,14 +16,19 @@
       <ScatterChartSame />
     </el-tab-pane>
 
-    <el-tab-pane label="图表联动" name="third">
+    <el-tab-pane label="图表联动" name="third" lazy>
       <h4>图表联动</h4>
-      <ChartGroup />
+      <ChartGroup v-if="panelName==='third'"/>
     </el-tab-pane>
 
-     <el-tab-pane label="接口图表" name="four">
+     <el-tab-pane label="接口图表" name="four" lazy>
       <h4>接口图表</h4>
-      <APIChart />
+      <APIChart v-if="panelName==='four'" />
+    </el-tab-pane>
+
+     <el-tab-pane label="测试图表" name="five">
+      <h4>接口图表</h4>
+      <TestChart />
     </el-tab-pane>
 
   </el-tabs>
@@ -35,6 +40,7 @@ import ScatterChart from './Scatter.vue'
 import ScatterChartSame from './Scatter.same.vue'
 import ChartGroup from './ChartGroup.vue'
 import APIChart from './ApiChart.vue'
+import TestChart from './TestChart.vue'
 
 export default {
   name: 'EchartTest',
@@ -42,11 +48,12 @@ export default {
     ScatterChart,
     ScatterChartSame,
     ChartGroup,
-    APIChart
+    APIChart,
+    TestChart
   },
   setup() {
     const state = reactive({
-      panelName: 'four'
+      panelName: 'five'
     })
 
     const isManual = computed(() => state.panelName === 'second')

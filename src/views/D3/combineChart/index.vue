@@ -7,14 +7,14 @@
 <template>
 
   <el-tabs v-model="activeName" class="demo-tabs">
-    <el-tab-pane label="单线" name="sigle">
+    <!-- <el-tab-pane label="单线" name="sigle">
       
       <SigleCom />
     </el-tab-pane>
     <el-tab-pane label="多线" name="multiple">
       <MultipleCom />
 
-    </el-tab-pane>
+    </el-tab-pane> -->
   <el-tab-pane label="多线" name="multiple2">
       <MultipleCom2 />
 
@@ -37,8 +37,8 @@ import MultipleCom2 from './MultipleCom2.vue'
 export default {
   name: 'Table',
   components: {
-    SigleCom,
-    MultipleCom,
+    // SigleCom,
+    // MultipleCom,
     MultipleCom2
   },
   setup() {

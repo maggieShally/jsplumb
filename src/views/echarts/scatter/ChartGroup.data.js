@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-04-28 11:17:45
- * @LastEditTime: 2022-07-14 15:58:19
+ * @LastEditTime: 2023-05-26 15:55:30
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\ChartGroup.data.js
  */
 
@@ -125,5 +125,20 @@ export const options2 = {
         color: 'rgba(180, 180, 180, 0.2)'
       }
     }
-  ]
+  ],
+  dataZoom: [
+    {
+      type: 'slider',
+      show: true,
+      xAxisIndex: [0],
+      start: 1,
+      end: 100
+    },
+    {
+      type: 'inside',
+      xAxisIndex: [0],
+      start: 1,
+      end: 100
+    }
+  ],
 }

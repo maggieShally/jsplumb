@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2021-08-10 14:03:44
- * @LastEditTime: 2021-08-12 15:36:07
- * @FilePath: \jsplumb-test\src\views\antv\index.vue
+ * @LastEditTime: 2023-04-18 11:30:36
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\AutoChart\index.vue
 -->
 <template>
   <div id="mountNode"></div>

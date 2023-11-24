@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-03-30 10:53:17
- * @LastEditTime: 2022-03-30 17:02:53
+ * @LastEditTime: 2023-05-09 10:20:26
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\data.js
  */
 
@@ -267,6 +267,137 @@ export const scatterOption = {
       data: stepData.step4Data.map(item => item.dataSet),
       ...selectedStyle
       // // markLine: markLineOpt
+    }
+  ]
+}
+
+export const testOption = {
+  legend: {},
+  tooltip: {
+    show: true,
+    trigger: 'axis'
+  },
+  xAxis: {
+    data: ['2013', '2014', '2015', '2016', '2017', '2018']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [120, 200, 150, 80, 70, 110, 130],
+      type: 'bar',
+      name: '一月',
+      showBackground: true,
+      backgroundStyle: {
+        color: 'rgba(180, 180, 180, 0.2)'
+      },
+      // emphasis: {
+      //   focus: 'series'
+      // },
+      triggerLineEvent: true
+    },
+    {
+      data: [320, 100, 250, 380, 470, 210, 430],
+      type: 'line',
+      name: '二月',
+      triggerLineEvent: true,
+      showBackground: true,
+      backgroundStyle: {
+        color: 'rgba(180, 180, 180, 0.2)'
+      }
+      // emphasis: {
+      //   focus: 'series'
+      // }
+    },
+    {
+      data: [720, 140, 450, 320, 520, 510, 230],
+      type: 'bar',
+      name: '三月',
+      showBackground: true,
+      backgroundStyle: {
+        color: 'rgba(180, 180, 180, 0.2)'
+      }
+      // emphasis: {
+      //   focus: 'series'
+      // }
+    },
+    {
+      data: [350, 200, 450, 280, 170, 310, 450],
+      type: 'bar',
+      name: '四月',
+      showBackground: true,
+      backgroundStyle: {
+        color: 'rgba(180, 180, 180, 0.2)'
+      }
+      // emphasis: {
+      //   focus: 'series'
+      // }
+    }
+  ].map(item => {
+    return {
+      ...item,
+      selectedMode: 'series',
+      select: {
+        disabled: false,
+        labelLine: {
+          show: true
+        },
+        label: {
+          show: true,
+          position: 'top'
+        },
+        itemStyle: {
+          color: '#fff',
+          borderColor: '#000',
+          borderWidth: 10
+        },
+        lineStyle: {
+          normal: {
+            width: 4
+          }
+        }
+      }
+    }
+  })
+}
+
+export const treeMapOptions = {
+  series: [
+    {
+      type: 'treemap',
+      data: [
+        {
+          name: 'nodeA',
+          value: 10,
+          children: [
+            {
+              name: 'nodeAa',
+              value: 4
+            },
+            {
+              name: 'nodeAb',
+              value: 6
+            }
+          ]
+        },
+        {
+          name: 'nodeB',
+          value: 20,
+          children: [
+            {
+              name: 'nodeBa',
+              value: 20,
+              children: [
+                {
+                  name: 'nodeBa1',
+                  value: 20
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,14 +1,17 @@
 <!--
  * @Description: 
  * @Date: 2022-01-13 09:42:18
- * @LastEditTime: 2022-07-12 14:23:07
+ * @LastEditTime: 2023-11-24 17:30:13
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\index.vue
 -->
 
 <template>
   <el-button @click="handleChangeNode">change</el-button>
   <div class="wrap">
+
     <div id="container" class="left-content" style="height: 700px"></div>
+    <TeleportContainer />
+
     <div class="right-content">
       <p>指标</p>
       <div v-for="node in zbNodeList" :key="node.id">
@@ -26,9 +29,10 @@
 
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
-import { Graph, ObjectExt, Cell } from '@antv/x6'
-import { DagreLayout, CircularLayout, ForceLayout,RadialLayout } from '@antv/layout'
-import '@antv/x6-vue-shape'
+import { Graph } from '@antv/x6'
+
+import { DagreLayout, CircularLayout, ForceLayout, RadialLayout } from '@antv/layout'
+import { register, getTeleport } from '@antv/x6-vue-shape'
 import dagre from 'dagre'
 
 import layout from './layout.js'
@@ -37,8 +41,19 @@ import { initData, data2 } from './data.js'
 
 import NodeCom from './NodeCom.vue'
 
+
+register({
+  shape: 'custom-vue-node',
+  components: NodeCom,
+})
+const TeleportContainer = getTeleport()
+
+
 export default {
   name: 'X6Panel',
+  components: {
+    TeleportContainer
+  },
   setup() {
     const state = reactive({
       initData: initData,
@@ -47,16 +62,7 @@ export default {
     let graph
 
     const registerGraph = function () {
-      Graph.registerVueComponent(
-        'NodeCom',
-        {
-          template: `<NodeCom />`,
-          components: {
-            NodeCom,
-          },
-        },
-        true
-      )
+
 
       Graph.registerEdge(
         'org-edge',
@@ -107,7 +113,7 @@ export default {
         nodes: state.initData.nodes.map(item => {
           return {
             ...item,
-            shape: 'vue-shape',
+            shape: 'custom-vue-node',
             width: 150,
             height: item.type === 'zb' ? 140 : 100,
             component: {
@@ -254,6 +260,7 @@ export default {
 <style lang="less" scoped>
 .wrap {
   display: flex;
+
   .left-content {
     flex: 1;
   }

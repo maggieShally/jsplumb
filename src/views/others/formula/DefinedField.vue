@@ -1,12 +1,11 @@
 <!--
  * @Description: 自定义
  * @Date: 2023-02-28 14:30:22
- * @LastEditTime: 2023-03-16 11:02:26
+ * @LastEditTime: 2023-09-08 18:28:20
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\formula\DefinedField.vue
 -->
 
 <template>
-
   <div>
     <el-form ref="addFormRef" :model="addForm" :rules="addFormRule" label-width="100px">
       <el-form-item label="指标名" prop="targetName">
@@ -21,14 +20,16 @@
       <el-row :gutter="24">
         <el-col :span="18">
           <el-form-item prop="desc" label="公式">
-            <el-input ref="textareaRef" id="textarea" v-model="addForm.desc" type="textarea" :rows="12" @drop="handleDrop($event)" @dragover="handleDragOver($event)"></el-input>
+            <BaseEdit v-model:value="addForm.desc" />
+            <!-- <el-input ref="textareaRef" id="textarea" v-model="addForm.desc" type="textarea" :rows="12" @drop="handleDrop($event)" @dragover="handleDragOver($event)"></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-scrollbar height="262px">
             <div class="field-list">
-              <div class="field-item" v-for="item in fieldOption" :key="item.key" @dblclick="handleAddField(item)" :draggable="item.isPublic === 1 ? true : false" @dragstart="handleDragStart($even, item)">
-                {{item.label}}
+              <div class="field-item" v-for="item in fieldOption" :key="item.key" @dblclick="handleAddField(item)" :draggable="item.isPublic === 1 ? true : false"
+                @dragstart="handleDragStart($even, item)">
+                {{ item.label }}
               </div>
             </div>
           </el-scrollbar>
@@ -64,16 +65,19 @@ import {
   onMounted,
   watch,
 } from 'vue'
+import BaseEdit from '@/components/BaseEdit.vue'
 
 export default {
   name: 'FormulaCom',
+  components: {
+    BaseEdit
+  },
   props: {
     initData: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
-  components: {},
   setup(props, context) {
     let myField
 
@@ -269,9 +273,11 @@ export default {
 
     onMounted(async () => {
       // getAllTargetList()
-    console.log('xxxxxxxxxxxxxxxx')
+      console.log('xxxxxxxxxxxxxxxx')
       await nextTick()
       myField = document.querySelector('#textarea')
+
+      sessionStorage.setItem('testtest',111)
     })
 
     return {
@@ -361,9 +367,11 @@ function getTemplateInfo(template, data) {
   .check-icon-success {
     color: #67c23a;
   }
+
   .check-icon-error {
     color: #f56c6c;
   }
+
   .check-icon-success {
     color: #67c23a;
   }

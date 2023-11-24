@@ -1,22 +1,19 @@
 <!--
  * @Description: 
  * @Date: 2022-03-24 11:27:32
- * @LastEditTime: 2022-03-24 15:09:17
+ * @LastEditTime: 2023-10-13 17:31:08
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\posDrag\PosLeft.vue
 -->
 <template>
   <ul class="menu-list">
-    <draggable
-      :group="{ name: 'site', pull: 'clone', put: true }"
-      v-model="leftList"
-      :move="onMove"
-      @end="onEnd"
-      item-key="id"
-    >
+    <draggable :group="{ name: 'site', pull: 'clone', put: true }" v-model="leftList" :move="onMove" @end="onEnd" item-key="id">
       <template #item="{ element }">
-        <li :type="element.type">
-          {{ element.name }}
-        </li>
+        <div>
+          <li :type="element.type">
+            {{ element.name }}
+          </li>
+        </div>
+
       </template>
     </draggable>
   </ul>
@@ -45,9 +42,9 @@ export default {
 
     const onMove = (e, originalEvent) => {
       console.log(e.draggedContext.element.id)
-      const acitveId = e.draggedContext.element.id
-      state.activeId = acitveId
-     
+      const activeId = e.draggedContext.element.id
+      state.activeId = activeId
+
     }
 
     const onEnd = evt => {
@@ -76,6 +73,7 @@ export default {
   list-style: none;
   display: inline-block;
   vertical-align: top;
+
   li {
     line-height: 2em;
     margin: 10px 0;

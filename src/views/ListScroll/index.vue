@@ -1,46 +1,45 @@
 <!--
  * @Description: 
  * @Date: 2021-07-08 14:34:29
- * @LastEditTime: 2021-09-01 11:34:48
- * @FilePath: \jsplumb-test\src\views\ListScroll\index.vue
+ * @LastEditTime: 2023-10-07 17:54:56
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\ListScroll\index.vue
 -->
 
 <template>
-  <css-seamless-scroll :datas="itemList" v-model="scroll" hover duration="3" class="scroll">
-    <div class="item" v-for="(item, index) in itemList" :key="index">
-      <span>{{item.name}}</span>
-    </div>
-  </css-seamless-scroll>
+  <el-row>
+    <el-col :span="4">
+      <css-seamless-scroll :datas="itemList" v-model="scroll" hover duration="3" class="scroll">
+        <div class="item" v-for="(item, index) in itemList" :key="index">
+          <span>{{item.name}}</span>
+        </div>
+      </css-seamless-scroll>
+    </el-col>
+    <el-col :span="4">
+      <TestModel />
+    </el-col>
+    <el-col :span="4"></el-col>
+  </el-row>
+ 
 </template>
 
 <script>
-import { computed, reactive, toRefs } from 'vue'
+import { computed,ref, reactive, toRefs } from 'vue'
 import { jsSeamlessScroll, cssSeamlessScroll } from 'vue3-seamless-scroll'
+
+import TestModel from './components/TestModel.vue'
 
 export default {
   components: {
+    TestModel,
     cssSeamlessScroll,
     // jsSeamlessScroll,
   },
   setup() {
     const state = reactive({
       scroll: true,
-      itemList: [
-        { name: 1 },
-        { name: 2 },
-        { name: 3 },
-        { name: 4 },
-        { name: 3 },
-        { name: 4 },
-        { name: 3 },
-        { name: 4 },
-        { name: 3 },
-        { name: 4 },
-        { name: 3 },
-        { name: 4 },
-        { name: 5 },
-        { name: 6 },
-      ],
+      itemList: new Array(6).fill('').map((_,index) => {
+        return { name: index}
+      }),
       tableData: [
         {
           date: '2016-05-02',
@@ -69,7 +68,10 @@ export default {
       ],
     })
 
+    
+
     return {
+   
       ...toRefs(state),
     }
   },

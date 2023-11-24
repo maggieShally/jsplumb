@@ -27,7 +27,7 @@ export default {
 
     var types = [
       { name: 'JS Heap', color: '#7b9ce1' },
-      { name: 'Documents', color: '#bd6d6c' },
+      { name: 'Documents', color: '#7b9ce1' },
       { name: 'Nodes', color: '#75d874' },
       { name: 'Listeners', color: '#e0bc78' },
       { name: 'GPU Memory', color: '#dc77dc' },
@@ -78,6 +78,7 @@ export default {
           type: 'rect',
           transition: ['shape'],
           shape: rectShape,
+          style: api.style()
         }
       )
     }

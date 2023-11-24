@@ -1,12 +1,12 @@
 <!--
  * @Description: JS 移动缩放练习
  * @Date: 2022-03-23 17:36:13
- * @LastEditTime: 2022-12-07 10:47:52
+ * @LastEditTime: 2023-08-14 14:39:57
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\posDrag\JSDrag.vue
 -->
 <template>
   <div class="drag-wrap">
-    <div class="drag-sec" id="dragable">
+    <div class="drag-sec" id="draggable">
       <span class="mouse" id="mouse">\</span>
     </div>
   </div>
@@ -18,11 +18,11 @@ import { onMounted } from 'vue'
 export default {
   name: 'JSDrag',
   setup() {
-    const dragable = function() {
-      const target = document.querySelector('#dragable')
+    const draggable = function() {
+      const target = document.querySelector('#draggable')
 
       target.onmousedown = function(event) {
-        if (event.target.id !== 'dragable') return false
+        if (event.target.id !== 'draggable') return false
 
         const target = event.target
         const targetLeft = target.offsetLeft
@@ -72,9 +72,9 @@ export default {
       }
     }
 
-    const dragableSize = function() {
+    const draggableSize = function() {
       const target = document.querySelector('#mouse')
-      const parentNode = document.querySelector('#dragable')
+      const parentNode = document.querySelector('#draggable')
 
       const minWidth = parentNode.offsetWidth * 0.2
       const minHeight = parentNode.offsetHeight * 0.2
@@ -114,10 +114,14 @@ export default {
       }
     }
 
+   
     onMounted(() => {
-      dragable()
-      dragableSize()
+      draggable()
+      draggableSize()
     })
+
+    return {
+    }
   }
 }
 </script>

@@ -17,7 +17,7 @@
             </div>
             <div class="mirror-code" @click="handleGetPos" v-click-outside="handleOutSideMirrorClick">
               <span class="mirror-cursors" :style="{left: cursorPos.left + 'px', top: cursorPos.top + 'px'}">|</span>
-              <el-input v-if="inputFouces" ref="inputRef" v-model="inputText" autofocus class="mirror-input" :style="{left: (cursorPos.left + 2) + 'px', top: cursorPos.top + 'px'}" @input="handlChangeInput" />
+              <el-input v-if="inputFouces" ref="inputRef" v-model="inputText" autofocus class="mirror-input" :style="{left: (cursorPos.left + 2) + 'px', top: cursorPos.top + 'px'}" @input="handleChangeInput" />
               <!-- <div class="mirror-list" v-for="item in addFieldList" :key="item.value">
                 <span :class="item.type === 'field' ? 'text-success': ''">{{item.label}}</span>
               </div> -->
@@ -337,18 +337,6 @@ export default {
 
     // 获取字段
     const getAllTargetList = async () => {
-      // const { data } = await resourceApi.getAllTargetList()
-      // console.log(data)
-      // state.fieldList = data
-      //   .filter(item => item.isPublic === 1)
-      //   .map(item => {
-      //     return {
-      //       ...item,
-      //       label: item.targetName,
-      //       key: item.targetField || item.targetFormula,
-      //     }
-      //   })
-
       state.fieldList = mockField.map(i => {
         return {
           ...i,
@@ -363,6 +351,7 @@ export default {
 
     // 获取光标输入位置
     const handleGetPos = event => {
+      debugger
       state.inputText = ''
       let { layerX, layerY } = event
       console.log(layerX, layerY, event)
@@ -447,7 +436,7 @@ export default {
     }
 
     // input值改变时，给 rowList
-    const handlChangeInput = value => {
+    const handleChangeInput = value => {
       const { rowIndex, subIndex } = activeRowColumnData
 
       // 点击位置的 内容
@@ -519,7 +508,7 @@ export default {
       handleDragOver,
 
       handleGetPos,
-      handlChangeInput,
+      handleChangeInput,
       handleOutSideMirrorClick,
     }
   },
