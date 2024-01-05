@@ -33,6 +33,18 @@ export default {
       allData: mockData
     })
 
+    // 创建节点
+    const createNode = (id, data, index) => {
+      return {
+        id,
+        data: {
+          ...data,
+          index
+        },
+        shape: 'NodeCom'
+      }
+    }
+
     // 创建边
     const createEdge = item => {
       console.log(item)
@@ -65,9 +77,7 @@ export default {
             NodeCom
           },
           setup() {
-
             const allData = state.allData
-
             // 取消高亮状态
             const resetHightLight = () => {
               const nodes = graph.getNodes()
@@ -102,15 +112,8 @@ export default {
               const parentNode = nodeList.find(i => i.nodeId === parentNodeId)
               const parentEdges = getEdgesByNodeId(parentNodeId, allData, graph)
 
-              graph.addNode({
-                id: parentNode.nodeId,
-                data: {
-                  ...parentNode,
-                  index: node.data.index
-                },
-                shape: 'NodeCom'
-              })
-
+              graph.addNode(createNode(parentNode.nodeId, parentNode, node.data.index))
+             
               for (let item of parentEdges) {
                 graph.addEdge(createEdge(item))
               }
@@ -120,7 +123,7 @@ export default {
 
             // 展开下一层
             const handleShowNext = node => {
-              
+
               // 获取要添加的 子节点 与 边
               const { nodes, edges } = getChildrenNodesAndEdges(node, allData, graph)
 
@@ -131,16 +134,8 @@ export default {
 
               // 添加子节点与边
               for (let item of nodes) {
-                graph.addNode({
-                  shape: 'NodeCom',
-                  id: item.nodeId,
-                  data: {
-                    ...item,
-                    index: node.data.index
-                  },
-                })
+                graph.addNode(createNode(item.nodeId, item, node.data.index))
               }
-
               for (let item of edges) {
                 graph.addEdge(createEdge(item))
               }
@@ -255,14 +250,7 @@ export default {
       })
       const data = {
         nodes: levelNode.sort((a, b) => a.sort - b.sort).map((item, index) => {
-          return {
-            id: item.nodeId,
-            data: {
-              ...item,
-              index
-            },
-            shape: 'NodeCom'
-          }
+          return createNode(item.nodeId, item, index)
         }),
         edges: levelEdge.map(item => createEdge(item))
       }

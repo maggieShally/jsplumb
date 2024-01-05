@@ -2,7 +2,6 @@
 <template>
     <ContextMenu :actions="menuList">
       <div :class="{ 'node-sec': true, 'isActive': isChecked}" @click="handleGetRouter">
-
         <div>
           <span v-if="nodeInfo.level >= 1">{{ nodeInfo.itemProduct }} / {{ nodeInfo.level }} / {{ nodeInfo.nodeId }} / {{ nodeInfo.jobName }}</span>
           <span v-if="nodeInfo.level >= 2"> / {{ nodeInfo.itemNum }} </span>
@@ -24,9 +23,6 @@
 import { toRefs, reactive, inject, onMounted, ref } from 'vue'
 import { ElIcon } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-
-import VueDragResize from 'vue-drag-resize'
-
 
 import ContextMenu from '@/components/contextMenu'
 
@@ -80,7 +76,6 @@ export default {
       context.emit('onHightLight', node)
     }
 
-
     onMounted(() => {
       node.on('change:data', ({ current }) => {
         state.isChecked = current.isChecked
@@ -104,10 +99,10 @@ export default {
   height: 100%;
   text-align: center;
   border: 3px solid #dadada;
-  background: #fff;
+  background: rgba(255,255,255, .5);
 
   &.isActive {
-    border-color: #c02828
+    border-color: #c02828 
   }
 }
 

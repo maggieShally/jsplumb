@@ -6,9 +6,10 @@ const getColumns = len => {
   return 5
 }
 
-// 获取 每组起始位置
-const getCombineSort = nodes => {
+// 获取 每组起始 X位置
+const getCombineSortXPos = nodes => {
   let combineSort = new Array(9).fill(0)
+  // 每组 节点个数
   let lengthArr = new Array(9).fill(0)
   for (let i = 0; i < combineSort.length; i++) {
     const allData = nodes.filter(n => n.data.sort === i)
@@ -22,7 +23,6 @@ const getCombineSort = nodes => {
         (len ? getColumns(len) * nodeWidth + GroupSpace : 0)
     }
   }
-  // console.log(combineSort)
   return {
     combineSort,
     lengthArr
@@ -38,7 +38,7 @@ export function layout(graph) {
   let nodes = graph.getNodes()
   let edges = graph.getEdges()
 
-  const { combineSort, lengthArr } = getCombineSort(nodes)
+  const { combineSort, lengthArr } = getCombineSortXPos(nodes)
   const maxLen = Math.max.apply(null, lengthArr)
 
   for (let i = 0; i < 9; i++) {
@@ -52,11 +52,13 @@ export function layout(graph) {
       const x =
         combineSort[sort - 1] + (index % columns) * nodeWidth + GroupSpace
 
+      // 根据行最多的组为参照，计算 Y 起始位置 (节点相对居中显示)
       const startY =
         ((Math.ceil(maxLen / getColumns(maxLen)) -
           Math.ceil(lengthArr[sort] / getColumns(lengthArr[sort]))) /
           2) *
         nodeHeight
+        
       const y = startY + Math.floor(index / columns) * nodeHeight
       item.position(x, y)
       item.setData({ index })
@@ -89,11 +91,9 @@ export const getChildrenNodesAndEdges = (node, allData, graph) => {
       return (
         targetId !== nodeId &&
         sourceId !== nodeId &&
+        targetId !== sourceId &&
         [targetId, sourceId].some(i => allNodeIds.includes(i)) &&
         [targetId, sourceId].every(i => allShowNodesIds.includes(i))
-        // ((allNodeIds.includes(sourceId) &&
-        //   allShowNodesIds.includes(targetId)) ||
-        //   (allShowNodesIds.includes(sourceId) && allNodeIds.includes(targetId)))
       )
     })
     .map(i => i.sourceId + ' ' + i.targetId + ' ' + i.lineType)
@@ -120,7 +120,7 @@ export const getNeighborNode = (node, allData, graph) => {
   )
 }
 
-// 获取 节点 及 输入输出边
+// 获取 节点的输入输出边
 export const getEdgesByNodeId = (nodeId, allData, graph) => {
   const { nodeList, edgesList } = allData
   const showNodesIds = graph.getNodes().map(i => i.id)
