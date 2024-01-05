@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-03-22 16:28:10
- * @LastEditTime: 2022-07-12 14:16:01
+ * @LastEditTime: 2023-11-27 10:25:21
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\NodeCom.vue
 -->
 
@@ -35,14 +35,8 @@ import { reactive, toRefs, onMounted, inject } from 'vue'
 import { Graph, ObjectExt, Cell } from '@antv/x6'
 import { ElButton } from 'element-plus'
 export default {
-  name: 'X6Panel',
+  name: 'NodeCom',
   components: { ElButton },
-  props: {
-    nodes: {
-      type: Array,
-      default: () => [],
-    },
-  },
   emits: ['onShowZb'],
   setup(props, context) {
     const getNode = inject('getNode')
@@ -89,6 +83,7 @@ export default {
     }
 
     const handleShowZb = () => {
+      console.log(node, context)
       context.emit('onShowZb', node)
     }
 

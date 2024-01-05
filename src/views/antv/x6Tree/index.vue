@@ -1,14 +1,13 @@
 <!--
  * @Description: 
  * @Date: 2022-01-13 09:42:18
- * @LastEditTime: 2023-11-24 17:30:13
+ * @LastEditTime: 2024-01-02 11:00:42
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\index.vue
 -->
 
 <template>
   <el-button @click="handleChangeNode">change</el-button>
   <div class="wrap">
-
     <div id="container" class="left-content" style="height: 700px"></div>
     <TeleportContainer />
 
@@ -28,11 +27,11 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from 'vue'
-import { Graph } from '@antv/x6'
-
+import { reactive, toRefs, onMounted, h } from 'vue'
+import { Graph, ObjectExt, Cell } from '@antv/x6'
 import { DagreLayout, CircularLayout, ForceLayout, RadialLayout } from '@antv/layout'
 import { register, getTeleport } from '@antv/x6-vue-shape'
+
 import dagre from 'dagre'
 
 import layout from './layout.js'
@@ -41,18 +40,21 @@ import { initData, data2 } from './data.js'
 
 import NodeCom from './NodeCom.vue'
 
-
 register({
   shape: 'custom-vue-node',
-  components: NodeCom,
+  width: 100,
+  height: 100,
+  component: NodeCom,
 })
+
+
 const TeleportContainer = getTeleport()
 
 
 export default {
   name: 'X6Panel',
   components: {
-    TeleportContainer
+    TeleportContainer: h(TeleportContainer)
   },
   setup() {
     const state = reactive({
@@ -63,6 +65,18 @@ export default {
 
     const registerGraph = function () {
 
+
+
+      // Graph.registerNode(
+      //   'NodeCom',
+      //   {
+      //     template: `<NodeCom />`,
+      //     components: {
+      //       NodeCom,
+      //     },
+      //   },
+      //   true
+      // )
 
       Graph.registerEdge(
         'org-edge',
@@ -90,7 +104,6 @@ export default {
         height: 700,
         grid: true,
         scroller: true,
-        interacting: false,
         connecting: {
           anchor: 'orth',
           connector: 'rounded',
@@ -116,36 +129,36 @@ export default {
             shape: 'custom-vue-node',
             width: 150,
             height: item.type === 'zb' ? 140 : 100,
-            component: {
-              template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
-              components: {
-                NodeCom,
-              },
-              setup() {
-                const handleShowZb = node => {
-                  console.log(node.data)
-                  const nextIds = initData.edges
-                    .filter(item => {
-                      return item.source.cell === node.data.id
-                    })
-                    .map(item => item.target.cell)
+            // component: {
+            //   template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
+            //   components: {
+            //     NodeCom,
+            //   },
+            //   setup() {
+            //     const handleShowZb = node => {
+            //       console.log(node.data)
+            //       const nextIds = initData.edges
+            //         .filter(item => {
+            //           return item.source.cell === node.data.id
+            //         })
+            //         .map(item => item.target.cell)
 
-                  const zbNodeList = initData.nodes.filter(item => {
-                    return (
-                      nextIds.findIndex(n => n === item.id) > 0 &&
-                      item.type === 'zb'
-                    )
-                  })
+            //       const zbNodeList = initData.nodes.filter(item => {
+            //         return (
+            //           nextIds.findIndex(n => n === item.id) > 0 &&
+            //           item.type === 'zb'
+            //         )
+            //       })
 
-                  console.log(zbNodeList)
-                  state.zbNodeList = zbNodeList
-                }
+            //       console.log(zbNodeList)
+            //       state.zbNodeList = zbNodeList
+            //     }
 
-                return {
-                  handleShowZb,
-                }
-              },
-            },
+            //     return {
+            //       handleShowZb,
+            //     }
+            //   },
+            // },
             data: item,
             ports: {
               groups: {
@@ -204,6 +217,12 @@ export default {
                 },
               ],
             },
+            tools: [
+              {
+                name: 'button-remove',
+                args: { x: 10, y: 10 },
+              },
+            ],
           }
         }),
         edges: state.initData.edges.map(item => {

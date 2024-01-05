@@ -61,7 +61,7 @@ export default {
     }
 
     const initMethods = () => {
-      state.chartRef.chartRef.chart.on('click', params => {
+      state.chartRef.chartRef?.chart?.on('click', params => {
         selected(params)
       })
     }

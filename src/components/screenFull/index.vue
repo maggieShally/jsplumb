@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-12-02 16:06:16
- * @LastEditTime: 2023-04-06 17:58:32
+ * @LastEditTime: 2023-12-15 16:22:31
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\screenFull\index.vue
 -->
 <template>
@@ -155,8 +155,8 @@ export default {
       let maxZIndex = Number(localStorage.getItem('floatMaxZIndex') || 0)
 
       if (zIndex < maxZIndex) {
-        state.zIndex = maxZIndex + 1
         maxZIndex = maxZIndex + 1
+        state.zIndex = maxZIndex
         localStorage.setItem('floatMaxZIndex', maxZIndex)
       } else {
         localStorage.setItem('floatMaxZIndex', zIndex + 1)

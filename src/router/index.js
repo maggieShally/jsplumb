@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2023-08-02 16:05:02
+ * @LastEditTime: 2023-12-01 11:30:48
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -168,6 +168,11 @@ const routes = [
         icon: 'icon-settings-2-line',
         component: () => import('../views/antv/index.vue'),
         children: [
+          {
+            path: '/antv/routerPath',
+            name: 'RouterPath',
+            component: () => import('../views/antv/routerPath/index.vue')
+          },
           {
             path: '/antv/autoChart',
             name: 'AutoChart',

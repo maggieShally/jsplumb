@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-19 14:57:57
- * @LastEditTime: 2023-11-21 18:27:31
+ * @LastEditTime: 2023-12-01 17:05:52
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\tailwindcss\index.vue
 -->
 <template>
@@ -22,9 +22,7 @@
     </el-tab-pane>
     <el-tab-pane name="2" label="form">
       <el-form :model="searchForm" inline>
-        <SearchItem v-show="visible" :initForm="searchForm" v-model:sex="searchForm.sex" />
-
-
+        <SearchItem v-show="visible" :initForm="searchForm" v-model:sex="searchForm.sex" />        
         <el-form-item label="爱好">
           <el-select v-model="searchForm.hobby">
             <el-option value="eat" label="吃"></el-option>
@@ -44,7 +42,9 @@
 </template> 
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, onMounted } from 'vue'
+import requestApi from '@/services/index.js'
+
 
 import SearchItem from './SearchItem.vue'
 
@@ -72,6 +72,34 @@ export default {
     const handleSearch = () => {
       console.log(state.searchForm)
     }
+
+
+    const getType1 = async () => {
+      const { data } = await requestApi.getByDictType({
+        dictType: 'function_list'
+      })
+      return data
+    }
+
+    const getType2 = async () => {
+      const { data } = await requestApi.getByDictType({
+        dictType: 'product_process'
+      })
+      return data
+    }
+
+    const promiseType3 = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(12)
+        }, 1000)
+      })
+    }
+
+    onMounted(async () => {
+      const data = await Promise.all([getType1(), getType2(), promiseType3()])
+      console.log(data)
+    })
 
     return {
       count,

@@ -1,12 +1,26 @@
 <!--
  * @Description: echarts基础封装，返回 echarts实例
  * @Date: 2021-10-14 17:05:49
- * @LastEditTime: 2022-12-02 17:09:47
+ * @LastEditTime: 2023-11-27 13:32:23
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseChart\ChartPie.vue
 -->
 
 <template>
-  <div :id="`${name}_chart`" class="chart"></div>
+  <div class="chart-wrap">
+
+    <div class="title-sec" v-if="isDivider">
+      <TipsNodeCom :content="description">
+        <div class="title-main">{{ title }}
+        </div>
+      </TipsNodeCom>
+      <slot name="tips"></slot>
+      <div class="title-sub">{{ subText }}</div>
+    </div>
+    <ContextMenu :actions="menuList">
+      <div :id="`${name}_chart`" class="chart"></div>
+    </ContextMenu>
+
+  </div>
 </template>
 
 <script>
@@ -19,19 +33,36 @@ import {
   getCurrentInstance,
   nextTick,
   computed,
+  reactive,
+  toRefs,
 } from 'vue'
 import { useStore } from 'vuex'
-import { merge } from 'lodash'
+import lodash from 'lodash'
 import dayjs from 'dayjs'
 import ResizeListener from 'element-resize-detector'
 import * as echarts from 'echarts'
+import { localGet, copyText } from '@/utils'
+import waterConfig from './config.js'
+
+import TipsNodeCom from '../TipsNodeCom'
+
+import ContextMenu from '../contextMenu'
+
 export default {
   name: 'ChartPie',
+  components: {
+    TipsNodeCom,
+    ContextMenu,
+  },
   props: {
     name: String,
+    chartType: {
+      type: String,
+      default: 'normal',
+    },
     seriesData: {
       type: Object,
-      requried: true,
+      required: true,
       default: () => ({}),
     },
     extraOption: {
@@ -41,6 +72,27 @@ export default {
     mode: {
       type: String,
       default: 'Node',
+    },
+    hasWater: {
+      type: Boolean,
+      default: true,
+    },
+    waterType: {
+      type: String,
+      default: 'normal',
+    },
+    isDivider: {
+      // 是否分开显示 标题
+      type: Boolean,
+      default: false,
+    },
+    contextMenuMap: {
+      type: Map,
+      defaut: () => new Map(),
+    },
+    copyType: {
+      type: Array,
+      default: () => ['text', 'subtext'],
     },
   },
   setup(props, context) {
@@ -57,26 +109,14 @@ export default {
     const chart = shallowRef(null)
     const currentNode = shallowRef(getNode && getNode())
 
-    watch(
-      () => props.seriesData,
-      () => {
-        updateChartView()
-        addChartResizeListener()
-        chart.value.resize()
-      },
-      { deep: true }
-    )
+    const state = reactive({
+      isDivider: props.isDivider,
+      chartHeight: props.isDivider ? 'calc(100% - 50px)' : '100%',
+      menuList: [],
 
-    watch(
-      () => isManual.value,
-      async val => {
-        console.log(val)
-        if (val) {
-          await nextTick()
-          chart.value.resize()
-        }
-      }
-    )
+      activeClickIndex: 0,
+      activeClickNodeInfo: {},
+    })
 
     const handleWindowResize = () => {
       if (!chart.value) return false
@@ -85,45 +125,15 @@ export default {
 
     // merge option配置项
     const assembleDataToOption = () => {
-      const posArr = [
-        {
-          left: '0%',
-          top: '10%',
-          rotation: '170',
-        },
-        {
-          left: '20%',
-          top: '30%',
-          rotation: '170',
-        },
-        {
-          left: '40%',
-          top: '50%',
-          rotation: '170',
-        },
-        {
-          right: '0%',
-          top: '10%',
-          rotation: '100',
-        },
-        {
-          right: '20%',
-          top: '40%',
-          rotation: '100',
-        },
-      ]
-      return merge(
+      // const userInfo = localGet('userInfo')
+
+      return lodash.merge(
         {},
         {
           ...props.seriesData,
-          graphic: [
-            {
-              type: 'group',
-              width: '100%',
-              height: '100%',
-              bounding: 'raw',
-            },
-          ],
+          // graphic: props.hasWater
+          //   ? waterConfig[props.waterType](userInfo)
+          //   : null,
         },
         props.extraOption
       )
@@ -133,8 +143,6 @@ export default {
     const updateChartView = async () => {
       if (!chart.value) return false
       const fullOptoin = assembleDataToOption()
-      console.log(fullOptoin)
-
       chart.value.setOption(fullOptoin, true)
     }
 
@@ -146,46 +154,171 @@ export default {
       instance.listenTo(
         document.querySelector(`#${props.name}_chart`),
         async () => {
-          console.log('xxxxxxxxxxxxxxx')
           if (!chart.value) return false
           chart.value.resize()
         }
       )
     }
 
-    const initMethods = () => {
-      // 点击 标题 复制标题
-      chart.value.on('click', function (params) {
-        if (params.componentType === 'title') {
-          copyText(
-            (props.seriesData.title.text || props.seriesData.title[0].text) +
-              (props.seriesData.title.subtext ||
-                props.seriesData.title[0].subtext ||
-                ''),
-            () => {
-              proxy.$resetMessage.success('已复制标题')
-            }
-          )
+    watch(
+      () => props.seriesData,
+      async () => {
+        await nextTick()
+        updateChartView()
+        addChartResizeListener()
+        chart.value?.resize()
+      },
+      { deep: true }
+    )
+
+    watch(
+      () => isManual.value,
+      async val => {
+        await nextTick()
+        chart.value.resize()
+      }
+    )
+
+    //标题
+    const title = computed(() => {
+      let title = {}
+      if (lodash.isArray(props.seriesData?.title)) {
+        title = props.seriesData?.title[0]
+      } else {
+        title = props.seriesData?.title
+      }
+
+      return title?.text
+    })
+
+    //副标题
+    const subText = computed(() => {
+      let title = {}
+      if (lodash.isArray(props.seriesData?.title)) {
+        title = props.seriesData?.title[0]
+      } else {
+        title = props.seriesData?.title
+      }
+
+      return title?.subtext
+    })
+
+    //详细信息
+    const description = computed(() => {
+      let title = {}
+      if (lodash.isArray(props.seriesData?.title)) {
+        title = props.seriesData?.title[0]
+      } else {
+        title = props.seriesData?.title
+      }
+
+      return title.itemLongDesc
+    })
+
+    // 柱图 用的 右键
+    const normalContextMenu = () => {
+      if (!props.contextMenuMap?.keys()) return false
+
+      chart.value.getZr().on('contextmenu', function (params) {
+        let pointInPixel = [params.offsetX, params.offsetY]
+        let xIndex
+
+        // 找到当前点击区域 grid Index
+        if (chart.value.containPixel('grid', pointInPixel)) {
+          xIndex = chart.value.convertFromPixel({ seriesIndex: 0 }, [
+            params.offsetX,
+            params.offsetY,
+          ])[0]
         }
+        const series = chart.value.getOption().series
+        let menuList = []
+
+        for (let [label, valueList] of props.contextMenuMap) {
+          const targetValue = series.find(item => item.name === label).data[
+            xIndex
+          ]
+          if (targetValue !== null) {
+            menuList.push(...valueList)
+          }
+        }
+        console.log(menuList)
+        state.menuList = menuList
+        state.activeClickIndex = xIndex
+
+        chart.value.dispatchAction({
+          type: 'hideTip',
+        })
       })
     }
 
-    function copyText(text, callback) {
-      // text: 要复制的内容， callback: 回调
-      var tag = document.createElement('input')
-      tag.setAttribute('id', 'cp_input')
-      tag.value = text
-      document.getElementsByTagName('body')[0].appendChild(tag)
-      document.getElementById('cp_input').select()
-      document.execCommand('copy')
-      document.getElementById('cp_input').remove()
+    // 桑基图右键
+    const sankeyContextMenu = () => {
+      chart.value.on('contextmenu', function (params) {
+        console.log(params.data)
 
-      if (callback) {
-        callback(text)
+        let menuList = []
+        if (params.dataType === 'node') {
+          for (let [label, valueList] of props.contextMenuMap) {
+            if (params.data[label] || label === 'all') {
+              menuList.push(...valueList)
+            }
+          }
+          state.activeClickNodeInfo = params.data
+        }
+        console.log(menuList)
+        chart.value.dispatchAction({
+          type: 'hideTip',
+        })
+        state.menuList = menuList
+      })
+    }
+
+    // 矩阵图 左键
+    const treemapContextMenu = () => {
+      chart.value.on('contextmenu', function (params) {
+        console.log(params.data)
+        let menuList = []
+      
+        for (let [label, valueList] of props.contextMenuMap) {
+          if (params.data[label] || label === 'all') {
+            menuList.push(...valueList)
+          }
+        }
+        state.activeClickNodeInfo = params.data
+     
+        console.log(menuList)
+        chart.value.dispatchAction({
+          type: 'hideTip',
+        })
+        state.menuList = menuList
+      })
+    }
+
+    const initMethods = () => {
+      // 点击 标题 复制标题
+
+      chart.value.on('click', function (params) {
+        if (params.componentType === 'title') {
+          const title = chart.value.getOption().title[0]
+          const copyTextStr = props.copyType.map(i => title[i] || ' ').join(' ')
+          console.log(copyTextStr)
+          copyText(copyTextStr, () => {
+            proxy.$resetMessage.success('已复制标题')
+          })
+        }
+      })
+
+      if (props.chartType === 'normal') {
+        normalContextMenu()
+      } else if (props.chartType === 'sankey') {
+        sankeyContextMenu()
+      } else if (props.chartType === 'treemap') {
+        treemapContextMenu()
       }
     }
 
-    onMounted(() => {
+    onMounted(async () => {
+      await nextTick()
       chart.value = ec.init(
         document.querySelector(`#${props.name}_chart`),
         {},
@@ -193,37 +326,60 @@ export default {
           // renderer: 'svg',
         }
       )
-
       updateChartView()
       addChartResizeListener()
-
       initMethods()
     })
 
-    const chartResize = () => {
-       chart.value.resize()
-    }
-
     onUnmounted(() => {
-      chart.value.dispose()
+      chart.value?.dispose()
       window.removeEventListener('resize', handleWindowResize)
     })
 
     return {
+      title,
+      subText,
+      description,
       chart,
       currentNode,
-      chartResize
+      ...toRefs(state),
+      handleWindowResize,
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
-.chart {
+.chart-wrap {
   width: 100%;
   height: 100%;
   min-width: 40px;
-  min-height: 400px;
+  min-height: 40px;
+
+  .title-sec {
+    padding: 0 5px;
+    text-align: left;
+
+    .title-main {
+      display: inline;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+      font-family: auto;
+    }
+
+    .title-sub {
+      font-size: 12px;
+      color: rgba(106, 105, 105, 0.9);
+    }
+  }
+}
+
+.chart {
+  width: 100%;
+  height: v-bind(chartHeight);
+  min-width: 40px;
+  min-height: 40px;
   overflow: hidden;
 }
 </style>

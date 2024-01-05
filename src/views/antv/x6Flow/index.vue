@@ -1,7 +1,7 @@
 <!--
  * @Description: 流程图
  * @Date: 2022-01-11 17:15:49
- * @LastEditTime: 2022-04-27 14:44:21
+ * @LastEditTime: 2024-01-03 10:15:43
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Flow\index.vue
 -->
 <template>
@@ -17,7 +17,7 @@
     <el-col :span="16">
       <el-button type="primary" @click="handleToJson">toJSON</el-button>
       <ContextMenu :nodeEvent="nodeEvent" @onRunNode="handleRunNode">
-        <div >
+        <div>
           <div id="container"></div>
         </div>
       </ContextMenu>
@@ -31,7 +31,10 @@
 </template>
 <script>
 import { onMounted, reactive, toRefs } from "vue"
-import { Graph, Addon, EdgeView, Vector } from '@antv/x6';
+import { Graph, EdgeView, Vector } from '@antv/x6';
+import { Dnd } from '@antv/x6-plugin-dnd'
+import { Selection } from '@antv/x6-plugin-selection'
+
 import lodash from 'lodash'
 import ContextMenu from './ContextMenu.vue'
 
@@ -131,12 +134,6 @@ export default {
     let graph
     let dnd
 
-
-  
-  
-
-
-
     const initGraph = () => {
       graph = new Graph({
         container: document.getElementById('container'),
@@ -148,10 +145,6 @@ export default {
           size: 10,      // 网格大小 10px
           visible: true, // 渲染网格背景
         },
-        selecting: {
-          enabled: true,
-          showNodeSelectionBox: true,
-        },
         connecting: {
           snap: true,
           allowBlank: false,
@@ -159,8 +152,19 @@ export default {
           allowLoop: false,
           allowNode: false,
           allowEdge: false,
-        }
-      });
+        },
+        background: {
+          color: '#F2F7FA',
+        },
+      })
+
+
+      graph.use(
+        new Selection({
+          enabled: true,
+          showNodeSelectionBox: true
+        })
+      )
 
       // 节点右键
       graph.on('cell:contextmenu', (data) => {
@@ -184,13 +188,12 @@ export default {
           current: node,
           prev: current
         }
-
       })
     }
 
     // 创建dnd实例 制定拖拽行为
     const ininLeftNode = () => {
-      dnd = new Addon.Dnd({
+      dnd = new Dnd({
         target: graph,
         getDragNode: node => {
           return graph.createNode(node)
@@ -239,7 +242,7 @@ export default {
     // 把参数加到 node
     const handleSubmitParams = data => {
       console.log(state.currentNode)
-        console.log(data)
+      console.log(data)
       state.currentNode.prev?.setData(data)
     }
 
@@ -262,5 +265,4 @@ export default {
 }
 
 </script>
-<style>
-</style>
+<style></style>
