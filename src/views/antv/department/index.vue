@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-12 10:46:35
- * @LastEditTime: 2022-07-27 15:23:54
+ * @LastEditTime: 2024-01-16 18:14:33
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\index.vue
 -->
 
@@ -22,7 +22,8 @@
 
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
-import { Graph, ObjectExt, Cell } from '@antv/x6'
+import { Graph } from '@antv/x6'
+import { register, getTeleport } from '@antv/x6-vue-shape'
 import {
   DagreLayout,
   CircularLayout,
@@ -46,11 +47,11 @@ export default {
         itemNo: '我是一个料号',
         pn: '我是一个PN',
         status: '我是一个状态'
-      },{
+      }, {
         itemNo: '我是一个料号',
         pn: '我是一个PN',
         status: '我是一个状态'
-      },{
+      }, {
         itemNo: '我是一个料号',
         pn: '我是一个PN',
         status: '我是一个状态'
@@ -59,16 +60,42 @@ export default {
     let graph
 
     const registerGraph = function () {
-      Graph.registerVueComponent(
-        'NodeCom',
-        {
-          template: `<NodeCom />`,
+      register({
+        shape: 'NodeCom',
+
+        component: {
+          template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
           components: {
             NodeCom,
           },
+          setup() {
+
+            const handleShowZb = node => {
+              console.log(node.data)
+              // const nextIds = initData.edges
+              //   .filter(item => {
+              //     return item.source.cell === node.data.id
+              //   })
+              //   .map(item => item.target.cell)
+
+              // const zbNodeList = initData.nodes.filter(item => {
+              //   return (
+              //     nextIds.findIndex(n => n === item.id) > 0 &&
+              //     item.type === 'zb'
+              //   )
+              // })
+
+              // console.log(zbNodeList)
+              // state.zbNodeList = zbNodeList
+            }
+
+            return {
+              handleShowZb,
+            }
+          },
         },
-        true
-      )
+
+      })
 
       Graph.registerEdge(
         'org-edge',
@@ -115,39 +142,9 @@ export default {
         nodes: state.initData.nodes.map(item => {
           return {
             ...item,
-            shape: 'vue-shape',
+            shape: 'NodeCom',
             width: 150,
             height: 100,
-            component: {
-              template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
-              components: {
-                NodeCom,
-              },
-              setup() {
-                const handleShowZb = node => {
-                  console.log(node.data)
-                  const nextIds = initData.edges
-                    .filter(item => {
-                      return item.source.cell === node.data.id
-                    })
-                    .map(item => item.target.cell)
-
-                  const zbNodeList = initData.nodes.filter(item => {
-                    return (
-                      nextIds.findIndex(n => n === item.id) > 0 &&
-                      item.type === 'zb'
-                    )
-                  })
-
-                  console.log(zbNodeList)
-                  state.zbNodeList = zbNodeList
-                }
-
-                return {
-                  handleShowZb,
-                }
-              },
-            },
             data: item,
           }
         }),
@@ -206,6 +203,7 @@ export default {
 <style lang="less" scoped>
 .wrap {
   display: flex;
+
   .left-content {
     flex: 1;
   }

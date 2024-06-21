@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2022-04-06 09:40:18
- * @LastEditTime: 2022-04-11 17:37:14
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\barChart\Table.vue
+ * @LastEditTime: 2024-04-28 15:23:35
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\tableLine\Table.vue
 -->
 <template>
 
@@ -133,7 +133,6 @@
 </template>
 
 <script>
-import { reactive, toRefs, nextTick } from 'vue'
 import { weeks, columns } from './data.js'
 
 import TableNextModal from './Table.modal.vue'

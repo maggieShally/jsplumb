@@ -1,14 +1,14 @@
 
 <template>
     <ContextMenu :actions="menuList">
-      <div :class="{ 'node-sec': true, 'isActive': isChecked}" @click="handleGetRouter">
+      <div :class="{ 'node-sec': true, 'isActive': isChecked}" :style="{'background-color': nodeBgCode, 'opacity': opacity }" @click="handleGetRouter">
         <div>
           <span v-if="nodeInfo.level >= 1">{{ nodeInfo.itemProduct }} / {{ nodeInfo.level }} / {{ nodeInfo.nodeId }} / {{ nodeInfo.jobName }}</span>
           <span v-if="nodeInfo.level >= 2"> / {{ nodeInfo.itemNum }} </span>
           <span v-if="nodeInfo.level >= 3">/ {{ nodeInfo.nodeId }}</span>
         </div>
 
-        <div class="plus-item">
+        <div class="plus-item" v-if="uKey === 'main'">
           <span v-if="nodeInfo.level < 3" class="icon-plus" @click.stop="getNextLevel">
             <el-icon :size="18">
               <Plus />
@@ -24,7 +24,10 @@ import { toRefs, reactive, inject, onMounted, ref } from 'vue'
 import { ElIcon } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 
+
 import ContextMenu from '@/components/contextMenu'
+
+import { processConfig } from './config.js'
 
 export default {
   name: 'NodeCom',
@@ -32,10 +35,10 @@ export default {
     Plus, ElIcon,
     ContextMenu,
   },
-  props: {
-    data: Object
+  props:{
+    uKey: String
   },
-  emits: ['onNext', 'onPre', 'onHightLight'],
+  emits: ['onNext', 'onPre'],
   setup(props, context) {
     const getNode = inject('getNode')
     const getGraph = inject('getGraph')
@@ -43,14 +46,19 @@ export default {
 
     const node = getNode()
 
+    const nodeRef = ref(null)
+
     const state = reactive({
       nodeInfo: node.data,
-      isChecked: false, // 要高亮的节节点
+      isChecked: false, // 要高亮的节点
+      opacity: 1,
       index: node.data.index,
       menuList: getMenuList(node.data),
       isSelected: node.data.isSelected, // 被先中的节点
-    })
 
+      nodeBgCode: processConfig.find(i => i.jobId === node.data.jobId)?.color
+    })
+    
     function getMenuList(data) {
       let menuList = []
       if (data.level > 1) {
@@ -73,14 +81,15 @@ export default {
     }
 
     const handleGetRouter = () => {
-      context.emit('onHightLight', node)
+      // context.emit('onHightLight', node)
     }
-
+    
     onMounted(() => {
       node.on('change:data', ({ current }) => {
         state.isChecked = current.isChecked
         state.index = current.index
         state.isSelected = current.isSelected
+        state.opacity = current.opacity
       })
     })
 
@@ -97,9 +106,14 @@ export default {
 .node-sec {
   width: 100%;
   height: 100%;
+  font-size: 12px;
   text-align: center;
   border: 3px solid #dadada;
-  background: rgba(255,255,255, .5);
+  background: rgba(0,0,0, .5);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   &.isActive {
     border-color: #c02828 
@@ -107,12 +121,20 @@ export default {
 }
 
 .plus-item {
-  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
   text-align: center;
 
   .icon-plus {
-    border: 1px solid #ddd;
-    padding: 3px 5px;
+    display: flex;
+    width: 25px;
+    height: 25px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0, .5);
+    border-radius: 5px;
+    
   }
 }
 </style>

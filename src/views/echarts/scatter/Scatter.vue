@@ -1,7 +1,7 @@
 <!--
  * @Description: 散点图
  * @Date: 2022-03-30 09:41:18
- * @LastEditTime: 2023-11-27 11:32:04
+ * @LastEditTime: 2024-05-15 14:13:24
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\Scatter.vue
 -->
 <template>
@@ -64,12 +64,8 @@ export default {
 
     const initMethods = () => {
       state.chartRef.chartRef?.chart?.on('click', params => {
-        
         // highlight(params)
-
         selected(params)
-        
-
 
       })
     }

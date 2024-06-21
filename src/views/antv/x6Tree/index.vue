@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-01-13 09:42:18
- * @LastEditTime: 2024-01-02 11:00:42
+ * @LastEditTime: 2024-01-16 18:19:35
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6Tree\index.vue
 -->
 
@@ -40,12 +40,6 @@ import { initData, data2 } from './data.js'
 
 import NodeCom from './NodeCom.vue'
 
-register({
-  shape: 'custom-vue-node',
-  width: 100,
-  height: 100,
-  component: NodeCom,
-})
 
 
 const TeleportContainer = getTeleport()
@@ -66,17 +60,41 @@ export default {
     const registerGraph = function () {
 
 
+      register({
+        shape: 'custom-vue-node',
+        width: 100,
+        height: 100,
+        component: {
+          template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
+          components: {
+            NodeCom,
+          },
+          setup() {
+            const handleShowZb = node => {
+              console.log(node.data)
+              const nextIds = initData.edges
+                .filter(item => {
+                  return item.source.cell === node.data.id
+                })
+                .map(item => item.target.cell)
 
-      // Graph.registerNode(
-      //   'NodeCom',
-      //   {
-      //     template: `<NodeCom />`,
-      //     components: {
-      //       NodeCom,
-      //     },
-      //   },
-      //   true
-      // )
+              const zbNodeList = initData.nodes.filter(item => {
+                return (
+                  nextIds.findIndex(n => n === item.id) > 0 &&
+                  item.type === 'zb'
+                )
+              })
+
+              console.log(zbNodeList)
+              state.zbNodeList = zbNodeList
+            }
+
+            return {
+              handleShowZb,
+            }
+          },
+        },
+      })
 
       Graph.registerEdge(
         'org-edge',
@@ -104,6 +122,10 @@ export default {
         height: 700,
         grid: true,
         scroller: true,
+        autoResize: true,
+        panning: true,
+        mousewheel: true,
+
         connecting: {
           anchor: 'orth',
           connector: 'rounded',
@@ -129,36 +151,7 @@ export default {
             shape: 'custom-vue-node',
             width: 150,
             height: item.type === 'zb' ? 140 : 100,
-            // component: {
-            //   template: `<NodeCom @onShowZb="handleShowZb" ></NodeCom>`,
-            //   components: {
-            //     NodeCom,
-            //   },
-            //   setup() {
-            //     const handleShowZb = node => {
-            //       console.log(node.data)
-            //       const nextIds = initData.edges
-            //         .filter(item => {
-            //           return item.source.cell === node.data.id
-            //         })
-            //         .map(item => item.target.cell)
 
-            //       const zbNodeList = initData.nodes.filter(item => {
-            //         return (
-            //           nextIds.findIndex(n => n === item.id) > 0 &&
-            //           item.type === 'zb'
-            //         )
-            //       })
-
-            //       console.log(zbNodeList)
-            //       state.zbNodeList = zbNodeList
-            //     }
-
-            //     return {
-            //       handleShowZb,
-            //     }
-            //   },
-            // },
             data: item,
             ports: {
               groups: {

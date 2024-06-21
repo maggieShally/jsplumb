@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2023-09-25 17:02:40
- * @LastEditTime: 2023-11-21 17:59:02
+ * @LastEditTime: 2024-01-15 09:30:18
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\tailwindcss\SearchItem.vue
 -->
 <template>
@@ -11,7 +11,7 @@
   </el-form-item>
   
   <el-form-item label="姓别">
-    <el-select v-model="searchForm.sex">
+    <el-select v-model="searchSex">
       <el-option value="male" label="男"></el-option>
       <el-option value="female" label="女"></el-option>
     </el-select>
@@ -42,6 +42,7 @@ export default {
       default: ''
     }
   },
+  emits:['update:sex'],
   setup(props, { emit  }) {
 
     const { count , increment } = useGlobalState()

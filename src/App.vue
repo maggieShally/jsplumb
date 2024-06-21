@@ -1,12 +1,12 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2023-06-12 16:12:04
+ * @LastEditTime: 2024-05-09 16:02:02
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\App.vue
 -->
 <template>
   <el-config-provider :locale="elementLocale">
-    <el-button mb-2 @click="handleChangeLanguage">Switch Language</el-button>
+    <!-- <el-button mb-2 @click="handleChangeLanguage">Switch Language</el-button> -->
     <el-container>
       <el-header>Header</el-header>
       <el-container class="wrapper">

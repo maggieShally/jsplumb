@@ -5,7 +5,9 @@
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\ApiChart.vue
 -->
 <template>
-  <BaseChart ref="chartRef" name="apiChart" :seriesData="seriesData" />
+  <div class="chart">
+    <BaseChart ref="chartRef" name="apiChart" :seriesData="seriesData" />
+  </div>
 </template>
 
 <script>
@@ -32,5 +34,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.chart {
+  height: 400px;
+}
 </style>

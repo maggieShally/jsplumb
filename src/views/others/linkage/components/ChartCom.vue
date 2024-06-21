@@ -1,11 +1,11 @@
 <!--
  * @Description: 
  * @Date: 2022-07-15 16:43:48
- * @LastEditTime: 2023-03-31 11:01:23
+ * @LastEditTime: 2024-03-21 13:50:15
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\linkage\components\ChartCom.vue
 -->
 <template>
-  <ScreenFullCom @onExit="handleExit" :unitKey="unitKey" :placement="placement">
+  <ScreenFullCom @onToggle="handleToggle" :unitKey="unitKey" :placement="placement">
     <el-form :model="addForm" :inline="true">
       <el-form-item label="名称">
         <el-input v-model="addForm.name"></el-input>
@@ -34,6 +34,7 @@ import BaseChart from '@/components/BaseChart'
 import ScreenFullCom from '@/components/screenFull'
 
 import { countOption } from './ApiChart.data.js'
+import { isFullscreen } from 'screenfull'
 
 export default {
   name: 'ChartCom',
@@ -45,7 +46,7 @@ export default {
     unitKey: String,
     placement: String,
   },
-  setup() {
+  setup(props) {
     const chartRef = ref(null)
     const state = reactive({
       seriesData: countOption(),
@@ -56,22 +57,20 @@ export default {
       },
     })
 
-    const handleExit = async () => {
-      console.log('handleExit')
+    const handleToggle = async isFullscreen => {
       await nextTick()
-      chartRef.value.chartRef.chartResize()
+      chartRef.value.chartRef.chart.resize()
     }
 
     const handleSubmit = () => {
       console.log(state.addForm)
     }
 
-
     return {
       chartRef,
       ...toRefs(state),
-      handleExit,
       handleSubmit,
+      handleToggle
     }
   },
 }

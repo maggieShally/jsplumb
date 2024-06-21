@@ -1,9 +1,9 @@
 // 一行的节点个数
 const getColumns = len => {
   if (len < 5) return 1
-  if (len < 15) return 3
-  if (len < 30) return 4
-  return 5
+  if (len < 50 ) return Math.floor(len / 5)
+  if (len < 80 ) return Math.floor(len / 8)
+  return 10
 }
 
 // 获取 每组起始 X位置
@@ -29,9 +29,9 @@ const getCombineSortXPos = nodes => {
   }
 }
 
-const nodeWidth = 220,
-  nodeHeight = 180,
-  GroupSpace = 170
+const nodeWidth = 130,
+  nodeHeight = 150,
+  GroupSpace = 140
 
 // 布局计算节点位置
 export function layout(graph) {
@@ -68,6 +68,7 @@ export function layout(graph) {
 
 // 获取 子节点及子节点边
 export const getChildrenNodesAndEdges = (node, allData, graph) => {
+  debugger
   const { sort, level, nodeId } = node.data
   const { edgesList, nodeList } = allData
   const nodes = nodeList.filter(item => {

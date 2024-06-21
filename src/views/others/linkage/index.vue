@@ -1,7 +1,7 @@
 <!--
  * @Description: 联动 动态使用 grid-layout
  * @Date: 2022-07-07 11:09:33
- * @LastEditTime: 2023-08-10 11:55:42
+ * @LastEditTime: 2024-05-17 13:57:22
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\linkage\index.vue
 -->
 
@@ -23,8 +23,6 @@
         <LinkageCom v-if="item.type === 'chart'" :id="item.id" :mainId="mainChartId" @onGetMain="handleGetMain" @onDelete="handleDelItem">
           <ChartCom :ref="getChartRefs" :unitKey="item.id" placement="right" />
         </LinkageCom>
-        <TabCom :ref="getTabRefs" :id="item.id" :itemData="item" v-if="item.type === 'tab'" :mainId="mainChartId" @onDelete="() => handleDelItem(item.id)" @onAddPane="() => handleTabAddPane(item.id)"
-          @onDelChart="handleTabChart"></TabCom>
       </template>
     </GridLayoutCom>
 
@@ -66,34 +64,26 @@ export default {
 
       chartList: [
         {
-          id: 'tab22',
-          type: 'tab',
+          id: '111',
+          type: 'chart',
+          pos: {
+            x: 2,
+            y: 4,
+            w: 2,
+            h: 2,
+            i: '111',
+          },
+        },
+        {
+          id: '222',
+          type: 'chart',
           pos: {
             x: 0,
             y: 0,
-            w: 6,
+            w: 2,
             h: 2,
-            i: 'tab22',
+            i: '222',
           },
-          data: {
-            paneList: [{
-              name: 'tab1',
-              title: 'tab1',
-              chartList: [
-                // {
-                //   id: 'chart-tab-123',
-                //   type: 'chart',
-                //   pos: {
-                //     x: 0,
-                //     y: 0,
-                //     w: 6,
-                //     h: 2,
-                //     i: 'chart-tab-123',
-                //   },
-                // }
-              ]
-            }]
-          }
         },
       ],
     })

@@ -90,7 +90,7 @@ export default {
 
 <style lang="less" scoped>
 .chart {
-  width: 1500px;
-  height: 18850px;
+  width: 100%;
+  height: 11450px;
 }
 </style>

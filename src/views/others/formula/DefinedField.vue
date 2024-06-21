@@ -1,162 +1,257 @@
 <!--
- * @Description: 自定义
+ * @Description: 计算字段
  * @Date: 2023-02-28 14:30:22
- * @LastEditTime: 2023-09-08 18:28:20
+ * @LastEditTime: 2024-06-20 16:46:39
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\formula\DefinedField.vue
 -->
-
 <template>
-  <div>
-    <el-form ref="addFormRef" :model="addForm" :rules="addFormRule" label-width="100px">
-      <el-form-item label="指标名" prop="targetName">
-        <el-input v-model="addForm.targetName" :maxlength="10" placeholder="指标名" style="width: 465px"></el-input>
-      </el-form-item>
-      <el-form-item label="指标单位" prop="targetUnit">
-        <el-select v-model="addForm.targetUnit" clearable>
-          <el-option value="K" label="K"></el-option>
-          <el-option value="%" label="%"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-row :gutter="24">
-        <el-col :span="18">
-          <el-form-item prop="desc" label="公式">
-            <BaseEdit v-model:value="addForm.desc" />
-            <!-- <el-input ref="textareaRef" id="textarea" v-model="addForm.desc" type="textarea" :rows="12" @drop="handleDrop($event)" @dragover="handleDragOver($event)"></el-input> -->
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-scrollbar height="262px">
-            <div class="field-list">
-              <div class="field-item" v-for="item in fieldOption" :key="item.key" @dblclick="handleAddField(item)" :draggable="item.isPublic === 1 ? true : false"
-                @dragstart="handleDragStart($even, item)">
-                {{ item.label }}
-              </div>
+  <!-- <div v-dialogChange="true">
+    <el-dialog draggable v-model="visible" :title="`${isEdit ? '编辑' : '新增'}自定义字段`" width="1200px" :before-close="handleCancel" :close-on-click-modal="false"> -->
+
+  <el-form ref="addFormRef" :model="addForm" :rules="addFormRule" label-width="150px" style="min-width: 800px">
+    <el-form-item label="字段(中文)" prop="newCnColumn">
+      <el-input v-model="addForm.newCnColumn" placeholder="字段(中文)" style="width: 465px"></el-input>
+    </el-form-item>
+
+    <el-form-item label="字段(英文)" prop="newEnColumn">
+      <el-input v-model="addForm.newEnColumn" placeholder="字段(英文)" style="width: 465px"></el-input>
+    </el-form-item>
+
+
+    <el-row :gutter="24">
+      <el-col :span="16">
+        <el-form-item prop="descText" label="公式">
+          <div style="position: absolute;top: -30px;right: 10px;">
+            <el-link href="https://doris.apache.org/zh-CN/docs/sql-manual/sql-functions/window-functions/WINDOW-FUNCTION" target="_blank" type="primary" :underline="false">窗口函数官方文档</el-link>
+          </div>
+          <div class="editor-wrap">
+
+            <BaseAceEditor ref="aceEditorRef" v-model:value="addForm.descText" lang="sql" />
+
+            <div>
+              <el-scrollbar min-height="272px" max-height="400px">
+                <div class="calculate-wrap">
+                  <div class="calculate-item" v-for="item in calculateOptions" :key="item.label" @click="handleAddField(item, 'operator')">
+                    <span class="content">{{ item.label }}</span>
+                    <el-tooltip effect="dark" :content="item.tips" placement="top-start">
+                      <el-icon>
+                        <QuestionFilled />
+                      </el-icon>
+                    </el-tooltip>
+                  </div>
+                </div>
+              </el-scrollbar>
             </div>
-          </el-scrollbar>
-        </el-col>
-      </el-row>
-    </el-form>
-    <div class="check-tips-sec">
-      <span>公式检测：</span>
-      <el-icon v-if="checkStatus === 0" class="is-loading" color="#ccc">
-        <Loading />
-      </el-icon>
-      <el-icon v-else-if="checkStatus === 1" class="check-icon-success">
-        <CircleCheck />
-      </el-icon>
-      <el-icon v-else-if="checkStatus === 2" class="check-icon-error">
-        <CircleCloseFilled />
-      </el-icon>
-      <span v-else>待校验</span>
-    </div>
+
+            <div class="field-list">
+              <el-input v-model="searchName" placeholder="搜索" suffix-icon="Search" />
+              <el-scrollbar min-height="272px" max-height="400px">
+                <div class="field-item" v-for="item in fieldList.filter(i => i.column?.toLowerCase().indexOf(searchName?.toLowerCase()) !== -1)" :key="item.columnId"
+                  @click="handleAddField(item, 'field')">
+                  <span class="content">{{ item.label }}</span>
+                </div>
+              </el-scrollbar>
+            </div>
+          </div>
+        </el-form-item>
+
+        <el-form-item>
+          <div class="check-tips-sec">
+            <span>公式检测：</span>
+            <el-icon v-if="checkStatus === 0" class="is-loading" color="#ccc">
+              <Loading />
+            </el-icon>
+            <el-icon v-else-if="checkStatus === 1" class="check-icon-success">
+              <CircleCheck />
+            </el-icon>
+            <el-icon v-else-if="checkStatus === 2" class="check-icon-error">
+              <CircleCloseFilled />
+            </el-icon>
+            <span v-else>待校验</span>
+          </div>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
+
+
+  <el-row justify="end">
     <el-button type="default" @click="handleCancel">取 消</el-button>
     <el-button type="primary" @click="handleSubmit">保 存</el-button>
-
-  </div>
+  </el-row>
+  <!-- <template #footer>
+        <el-button type="default" @click="handleCancel">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">保 存</el-button>
+      </template>
+<div class="mouse">
+  <el-icon>
+    <rank />
+  </el-icon>
+</div>
+</el-dialog>
+</div> -->
 </template>
 
 <script>
-import {
-  reactive,
-  getCurrentInstance,
-  nextTick,
-  toRefs,
-  ref,
-  onMounted,
-  watch,
-} from 'vue'
-import BaseEdit from '@/components/BaseEdit.vue'
+import { reactive, getCurrentInstance, unref, toRefs, ref, onMounted, watch } from 'vue'
+import BaseAceEditor from '@/components/BaseEdit.vue'
+
+import { dataViewApi } from '@/services'
+import { localGet } from '@/utils'
+import useGetUuid from '@/hooks/useGetUuid'
+
 
 export default {
-  name: 'FormulaCom',
+  name: 'CalculateModal',
   components: {
-    BaseEdit
+    BaseAceEditor
   },
   props: {
+    originFieldList: {
+      type: Array,
+      default: () => [],
+    },
+
+    calculateOptions: Array, // 公式
+
     initData: {
       type: Object,
       default: () => { },
     },
+    dataSetId: {
+      type: String,
+      default: '',
+    },
   },
+  emits: ['onCancel', 'onOk'],
   setup(props, context) {
-    let myField
+    const { uuid, getUuid } = useGetUuid()
 
     const { proxy } = getCurrentInstance()
 
     const addFormRef = ref(null)
     const textareaRef = ref(null)
+    const aceEditorRef = ref(null)
 
     const state = reactive({
       visible: true,
-
+      searchName: '',
+      isEdit: !!(props.initData?.columnId || props.initData?.newColumnId),
       checkStatus: 1, // -1待校验，0校验中， 1校验成功，2校验失败
 
       addFormRule: {
-        targetName: [
+        newCnColumn: [
           {
             required: true,
-            message: '请填写指标名',
+            message: '请填写公式名',
             trigger: 'blur',
           },
         ],
-        desc: [
+        descText: [
           {
             required: true,
-            message: '请填写指标公式',
+            message: '请填写公式',
             trigger: 'blur',
           },
         ],
       },
 
       addForm: calcInitData(),
-      fieldOption: [
-        {
-          label: '区域',
-          key: '001',
-          isPublic: 1
-        },
-        {
-          label: '省份',
-          key: '002',
-          isPublic: 1
-        },
-      ],
+      fieldList: calcFieldList(props.originFieldList),
       activeKey: '',
+      calculateFormula: props.initData?.value, // 校验成功的 公式
     })
 
     watch(
-      () => state.addForm.desc,
+      () => state.addForm.descText,
       async val => {
-        // let fieldObj = {}
-        // for (let item of state.fieldOption) {
-        //   fieldObj[item.label] = item.key
-        // }
-        // const valueData = getTemplateInfo(val, fieldObj)
+
+        let fieldObj = {}
+        for (let item of state.fieldList) {
+          fieldObj[item.label] = item.value
+        }
+        const calculateFormula = getTemplateInfo(val, fieldObj)
+
+        console.log(calculateFormula)
         // state.checkStatus = 0
         // try {
-        //   await resourceApi.checkTargetFormula({
-        //     targetFormula: valueData.templateValue,
-        //     targetFormulaVar: valueData.resultKey,
+        //   await dataViewApi.checkColumnCustomRule({
+        //     customRule: calculateFormula.templateValue,
+        //     dataSetId: props.dataSetId,
+        //     preSql: props.initData.thisSql,
+        //     tableColumnList: state.fieldList,
         //   })
         //   state.checkStatus = 1
+        //   state.calculateFormula = calculateFormula.templateValue
         // } catch (err) {
         //   state.checkStatus = 2
         // }
+      },
+      {
+        deep: true,
       }
     )
 
+    // 处理同名相同的 加个数字
+    function calcFieldList(originFieldList) {
+      return originFieldList.map((item, index, arr) => {
+        const len = arr.slice(0, index + 1).filter(i => i.column === item.column)?.length
+        return {
+          ...item,
+          label: len > 1 ? `${item.column}[${len - 1}]` : item.column,
+          value: item.columnId,
+        }
+      })
+    }
+
     function calcInitData() {
-      if (Object.keys(props.initData || {})?.length) {
+      if (props.initData?.columnId || props.initData?.newColumnId) {
+        const val = props.initData.value
+        let tempArr = val.match(/[a-zA-Z0-9]+/g)
+        let valueText = val
+        tempArr?.forEach(item => {
+          const fieldItem = calcFieldList(props.originFieldList).find(i => i.value === item.trim())
+          if (fieldItem) {
+            valueText = valueText.replace(item, '{{' + fieldItem.label + '}}')
+            console.log('item', valueText)
+          }
+        });
+
         return {
           ...props.initData,
-          desc: props.initData.targetFormulaOriginal,
+          descText: valueText,
         }
       } else {
         return {
-          targetName: '',
-          desc: '',
-          targetUnit: '',
+          newEnColumn: '',
+          newCnColumn: '',
+          descText: '',
         }
+      }
+    }
+
+
+    // 规换{{}}内容
+    function getTemplateInfo(template, data) {
+      let resultKey = []
+
+      const templateValue = renderTemplate(template, data)
+
+      return {
+        templateValue,
+        resultKey: Array.from(new Set(resultKey)).join(','),
+      }
+
+      function renderTemplate(template, data) {
+        const reg = /\s*\{\{([\w()（）%&#~$——+-x_/\u4e00-\u9fa5\s]+)\}\}\s*/
+        if (reg.test(template)) {
+          const name = reg.exec(template)[1]
+          resultKey.push(data[name])
+          template = template.replace(reg, ` ${data[name]} `)
+          console.log(template)
+          return renderTemplate(template, data)
+        }
+        return template
       }
     }
 
@@ -165,198 +260,134 @@ export default {
     }
 
     const handleSubmit = () => {
-      const { targetName, desc, targetUnit } = state.addForm
-
-      addFormRef.value.validate(valid => {
+      const { newCnColumn, newEnColumn, descText } = state.addForm
+      const { calculateFormula } = state
+      addFormRef.value.validate(async valid => {
         if (valid) {
           if (state.checkStatus !== 1) {
             proxy.$resetMessage.warning('请填写正确的公式')
             return false
           }
-
-          let fieldObj = {}
-          for (let item of state.fieldOption) {
-            fieldObj[item.label] = item.key
+          let params = {
+            newCnColumn,
+            newEnColumn,
+            value: calculateFormula,
+            valueJson: descText,
+            valueText: descText.replace(/[\s*{{]/g, ' ').replace(/}}\s*/g, ' '),
+            column: localGet('lang') === 'cn' ? newCnColumn : newEnColumn,
           }
-          const valueData = getTemplateInfo(desc, fieldObj)
 
-          const { templateValue, resultKey } = valueData
-
-          const value = templateValue.replace(/\s+/g, '')
-
-          const params = {
-            ...props.initData,
-            targetName,
-            targetFormula: value,
-            targetUnit,
-            targetFormulaVar: resultKey,
-            targetField: 'user' + targetName,
-            targetFormulaOriginal: desc,
+          if (!state.isEdit) {
+            await getUuid()
+            params = {
+              ...params,
+              newColumnId: unref(uuid),
+            }
+          } else {
+            params = {
+              ...params,
+              columnId: props.initData.columnId,
+              newColumnId: props.initData.newColumnId,
+            }
           }
           console.log(params)
+          context.emit('onOk', params)
           handleCancel()
         }
       })
     }
 
     //双击 添加字段
-    const handleAddField = item => {
-      if (item.isPublic === 1) {
-        handleInsertParams(`{{${item.label}}}`)
+    const handleAddField = async (item, type = 'operator') => {
+      if (item.isParent) return false
+      const label = type === 'field' ? '{{' + item.label + '}}' : item.content
+      if (type === 'operator') {
+        aceEditorRef.value.editorRef._editor.setValue('')
       }
+      aceEditorRef.value.editorRef._editor.insert(label)
     }
 
-    //拖动 添加字段
-    const handleDrop = event => {
-      handleInsertParams(`{{${state.activeKey.label}}}`)
-    }
-
-    //拖动 的值
-    const handleDragStart = (event, item) => {
-      state.activeKey = item
-    }
-
-    // 拖动 计算光标位置
-    const handleDragOver = async event => {
-      event.preventDefault()
-      // 获取文本域内容 px 长度
-      const textWidth = measureUseCanvas(14, state.addForm.desc)
-      const strLength = state.addForm.desc.length
-      const layerX = event.layerX
-      let pos = 0
-
-      // 计算鼠标位置与 文本域内容 px 长度关系 计算要插入文本的光标位置
-      if (layerX >= textWidth) {
-        pos = strLength
-      } else {
-        pos =
-          strLength - Math.floor((textWidth - layerX) / (textWidth / strLength))
-      }
-      await nextTick()
-      myField.focus()
-      myField.setSelectionRange(pos, pos)
-    }
-
-    const handleInsertParams = async myValue => {
-      if (myField.selectionStart || myField.selectionStart === 0) {
-        var startPos = myField.selectionStart
-        var endPos = myField.selectionEnd
-        state.addForm.desc =
-          myField.value.substring(0, startPos) +
-          myValue +
-          myField.value.substring(endPos, myField.value.length)
-        await nextTick()
-        myField.focus()
-        myField.setSelectionRange(
-          endPos + myValue.length,
-          endPos + myValue.length
-        )
-      } else {
-        state.addForm.desc += myValue
-      }
-    }
-
-    // 获取字段
-    const getAllTargetList = async () => {
-      // const { data } = await resourceApi.getAllTargetList()
-      // console.log(data)
-      // state.fieldOption = data
-      //   .filter(item => item.isPublic === 1)
-      //   .map(item => {
-      //     return {
-      //       ...item,
-      //       label: item.targetName,
-      //       key: item.targetField || item.targetFormula,
-      //     }
-      //   })
-    }
-
-    onMounted(async () => {
-      // getAllTargetList()
-      console.log('xxxxxxxxxxxxxxxx')
-      await nextTick()
-      myField = document.querySelector('#textarea')
-
-      sessionStorage.setItem('testtest',111)
-    })
+    onMounted(() => { })
 
     return {
       textareaRef,
+      aceEditorRef,
       ...toRefs(state),
       handleCancel,
       handleSubmit,
       addFormRef,
       handleAddField,
-      handleDrop,
-      handleDragStart,
-      handleDragOver,
     }
   },
 }
 
-// 获取文字宽度
-function measureUseCanvas(fontSize, text) {
-  const _span = document.createElement('span')
-  // 放入文本
-  _span.innerText = text
-  // 设置文字大小
-  _span.style.fontSize = fontSize + 'px'
-  // span元素转块级
-  _span.style.position = 'absolute'
-  // span放入body中
-  document.body.appendChild(_span)
-  // 获取span的宽度
-  let width = _span.offsetWidth
-  // 从body中删除该span
-  document.body.removeChild(_span)
-  // 返回span宽度
-  return width
-}
 
-// 规换{{}}内容
-
-function getTemplateInfo(template, data) {
-  let resultKey = []
-
-  const templateValue = renderTemplate(template, data)
-
-  return {
-    templateValue,
-    resultKey: Array.from(new Set(resultKey)).join(','),
-  }
-
-  function renderTemplate(template, data) {
-    // const reg = /\{\{(.+)\}\}/
-    const reg = /\{\{([\w()（）\u4e00-\u9fa5]+)\}\}/
-    if (reg.test(template)) {
-      const name = reg.exec(template)[1]
-
-      resultKey.push(data[name])
-      template = template.replace(reg, ` ${data[name]} `)
-      console.log(template)
-      return renderTemplate(template, data)
-    }
-    return template
-  }
-}
 </script>
 
 <style lang="less" scoped>
-.field-list {
-  .field-item {
-    padding: 5px;
-    text-align: center;
+.editor-wrap {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 300px;
+
+  &>div {
+    margin: 0 5px;
+    height: 100%;
+    flex-grow: 1;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 5px;
+    border-radius: 3px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.field-list {
+  padding: 10px;
+
+  .field-item {
+    margin: 5px 0 0 0;
+    padding: 3px;
+    line-height: 1;
+
+    &:hover {
+      color: #409eff;
+      cursor: pointer;
+    }
+  }
+}
+
+.el-col {
+  border: none;
+}
+
+.calculate-wrap {
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+
+  .calculate-item {
+    padding: 7px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1;
     cursor: pointer;
+
+    &:hover {
+      background: #ccc;
+    }
   }
 }
 
 .check-tips-sec {
   display: inline;
   margin-right: 20px;
-  color: #606266;
+  color: var(--el-text-color-regular);
 
   .el-icon {
     vertical-align: middle;
@@ -375,5 +406,11 @@ function getTemplateInfo(template, data) {
   .check-icon-success {
     color: #67c23a;
   }
+}
+
+.icon-delete {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>

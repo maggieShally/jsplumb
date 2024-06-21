@@ -105,10 +105,13 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
+  background: #fff;
   display: inline-block;
 }
 
 .linkAge-sec {
+  width: 100%;
+  height: 100%;
   padding: 20px;
   border: 2px solid #fff;
   position: relative;

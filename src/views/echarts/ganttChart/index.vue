@@ -35,7 +35,7 @@ export default {
     ]
 
     // Generate mock data
-    categories.forEach(function (category, index) {
+    categories.forEach((category, index) => {
       var baseTime = startTime
       for (var i = 0; i < dataCount; i++) {
         var typeItem = types[Math.round(Math.random() * (types.length - 1))]
@@ -82,12 +82,15 @@ export default {
         }
       )
     }
-    console.log(data)
+    
     const option = {
       tooltip: {
         formatter: function (params) {
           return params.marker + params.name + ': ' + params.value[3] + ' ms'
         },
+      },
+      legend:{
+        show: true
       },
       title: {
         text: 'Profile',
@@ -110,8 +113,14 @@ export default {
         height: 300,
       },
       xAxis: {
-        min: 10,
+        min: startTime,
+        // min: 0,
         scale: true,
+        axisLabel: {
+          formatter: function (val) {
+            return Math.max(0, val - startTime) + ' ms';
+          }
+        }
       },
       yAxis: {
         data: categories,
@@ -127,25 +136,25 @@ export default {
             x: [1, 2],
             y: 0,
           },
-          // data: data,
-
-          data: [
-            {
-              name: 'test',
-              value: ['categoryA', 44, 55, 60],
-              itemStyle: {
-                color: 'red'
-              }
-            }, // 这是第一个 dataItem
-            ['categoryB', 11, 21, 56], // 这是第二个 dataItem
-            ['categoryC', 13, 30, 20],
-            ['categoryC', 33, 40, 14],
-          ],
+          data: data
+          // data: [
+          //   {
+          //     name: 'test',
+          //     value: ['categoryA', 44, 55, 60],
+          //     itemStyle: {
+          //       color: 'red'
+          //     }
+          //   }, // 这是第一个 dataItem
+          //   ['categoryB', 11, 21, 56], // 这是第二个 dataItem
+          //   ['categoryC', 13, 30, 20],
+          //   ['categoryC', 33, 40, 14],
+          // ],
         },
       ],
     }
 
     const chartRef = ref(null)
+    console.log(option)
     const state = reactive({
       seriesData: option,
     })

@@ -1,10 +1,12 @@
 <!--
  * @Description: 
  * @Date: 2022-12-02 16:06:16
- * @LastEditTime: 2023-12-15 16:22:31
+ * @LastEditTime: 2024-06-05 09:14:36
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\screenFull\index.vue
 -->
 <template>
+
+  <!-- 全屏状态 start -->
   <div class="screenfull" ref="screenFullRef" :id="unitKey">
     <div class="content" v-if="!isPageFull && !isFloat">
       <FullScreenToolCom :isFullScreen="isFullScreen" :placement="placement" :isFloat="isFloat" :isPageFull="isPageFull" @onScreenFull="clickScreenFull" @onFloat="clickFloat" @onPageFull="clickPageFull" />
@@ -12,6 +14,7 @@
       </slot>
     </div>
   </div>
+  <!-- 全屏状态 end -->
 
   <Teleport to="body">
     <!-- 浮窗状态 start  -->
@@ -68,10 +71,10 @@ export default {
       default: 'top',
     },
   },
-  emits: ['onExit', 'onToggle'],
+  emits: ['onToggle'],
   setup(props, context) {
     const screenFullRef = ref(null)
-
+    
     const state = reactive({
       screenText: '全屏',
       isFloat: false,
@@ -91,23 +94,18 @@ export default {
 
       localStorage.setItem('screenFullKey', props.unitKey)
       if (screenfull.isEnabled) {
-        screenfull.toggle(document.querySelector(`#${props.unitKey}`))
+        screenfull.toggle(screenFullRef.value)
       }
     }
 
     // 监听全屏变化
     screenfull.on('change', () => {
       const activeUnitKey = localStorage.getItem('screenFullKey')
+    
       if (screenFullRef.value?.id === activeUnitKey) {
         console.log(screenfull.isFullscreen)
         state.isFullScreen = screenfull.isFullscreen
         context.emit('onToggle', screenfull.isFullscreen)
-      }
-      if (
-        !screenfull.isFullscreen &&
-        screenFullRef.value?.id === activeUnitKey
-      ) {
-        context.emit('onExit')
       }
     })
 
@@ -120,14 +118,14 @@ export default {
       state.isPageFull = false
       state.isFloat = !state.isFloat
       handleAddzIndex()
-      context.emit('onExit')
+      context.emit('onToggle', false)
     }
 
     // 退出浮窗
     const handleCloseFloat = () => {
       state.isFloat = false
       state.zIndex = 998
-      context.emit('onExit')
+      context.emit('onToggle', false)
     }
 
     // 网页全屏

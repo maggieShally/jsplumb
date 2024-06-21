@@ -6,10 +6,14 @@
 -->
 
 <template>
-  <div class="chart">
+  <div>
     <el-button type="primary" @click="handleShowTips">显示</el-button>
-    <BaseChart ref="chartRef1" name="group1" :seriesData="seriesData1" />
-    <BaseChart ref="chartRef2" name="group2" :seriesData="seriesData2" />
+    <div class="chart">
+      <BaseChart ref="chartRef1" name="group1" :seriesData="seriesData1" />
+    </div>
+    <div class="chart">
+      <BaseChart ref="chartRef2" name="group2" :seriesData="seriesData2" />
+    </div>
   </div>
 </template>
 
@@ -107,5 +111,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.chart {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+}
 </style>

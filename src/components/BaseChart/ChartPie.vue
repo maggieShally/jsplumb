@@ -1,7 +1,7 @@
 <!--
  * @Description: echarts基础封装，返回 echarts实例
  * @Date: 2021-10-14 17:05:49
- * @LastEditTime: 2023-11-27 13:32:23
+ * @LastEditTime: 2024-05-15 14:12:48
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseChart\ChartPie.vue
 -->
 

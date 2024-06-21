@@ -1,7 +1,7 @@
 <!--
  * @Description: 学习  jsPlumb
  * @Date: 2021-05-07 11:57:32
- * @LastEditTime: 2023-04-07 11:25:46
+ * @LastEditTime: 2024-04-28 14:50:42
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\flow\jsplumb\index.vue
 -->
 
@@ -24,16 +24,16 @@
 </template>
 
 <script>
-import {
-  getCurrentInstance,
-  onMounted,
-  reactive,
-  toRefs,
-  nextTick,
-  ref,
-  inject,
-  provide
-} from 'vue'
+// import {
+//   getCurrentInstance,
+//   onMounted,
+//   reactive,
+//   toRefs,
+//   nextTick,
+//   ref,
+//   inject,
+//   provide
+// } from 'vue'
 import { ElMessage } from 'element-plus'
 import lodash from 'lodash'
 import {

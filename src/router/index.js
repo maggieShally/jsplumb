@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2023-12-01 11:30:48
+ * @LastEditTime: 2024-04-28 15:29:08
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -53,6 +53,16 @@ const routes = [
             path: '/others/tailwindcss',
             name: 'tailwindcss',
             component: () => import('../views/others/tailwindcss/index.vue')
+          },
+          {
+            path: '/others/rateTest',
+            name: '测试',
+            component: () => import('../views/others/rateTest/index.vue')
+          },
+          {
+            path: '/others/iframeTest',
+            name: 'IframeTest',
+            component: () => import('../views/others/iframeTest/index.vue')
           }
         ]
       },
@@ -84,12 +94,7 @@ const routes = [
           }
         ]
       },
-      {
-        path: '/scroll',
-        name: 'Scroll',
-        icon: 'icon-dashboard-line',
-        component: () => import('../views/ListScroll/index.vue')
-      },
+     
       {
         path: '/dragResize',
         name: 'DragResize',
@@ -132,14 +137,14 @@ const routes = [
             component: () => import('../views/echarts/tableLine/index.vue')
           },
           {
-            path: '/echarts/sankeyChart',
-            name: '桑基图',
-            component: () => import('../views/echarts/sankeyChart/index.vue')
-          },
-          {
             path: '/echarts/ganttChart',
             name: '甘特图',
             component: () => import('../views/echarts/ganttChart/index.vue')
+          },
+          {
+            path: '/echarts/chartEdit',
+            name: '配置图',
+            component: () => import('../views/echarts/chartEdit/index.vue')
           }
         ]
       },
@@ -168,6 +173,11 @@ const routes = [
         icon: 'icon-settings-2-line',
         component: () => import('../views/antv/index.vue'),
         children: [
+          {
+            path: '/antv/s2ProportionTable',
+            name: 's2ProportionTable',
+            component: () => import('../views/antv/s2Test/proportionTable/index.vue')
+          },
           {
             path: '/antv/routerPath',
             name: 'RouterPath',
