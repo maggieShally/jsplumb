@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-07-12 10:50:47
- * @LastEditTime: 2022-09-05 11:34:22
+ * @LastEditTime: 2024-07-03 14:59:13
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\data.js
  */
 
@@ -23,7 +23,7 @@ export const initData = {
   nodes: [
     {
       id: '1',
-      name: 'CBG',
+      name: 'CBG-1',
       index: 0
     },
     {
@@ -98,19 +98,29 @@ export const initData = {
   edges: [
     {
       source: '1',
-      target: '2'
+      label: '我是一个Label',
+      target: '2',
     }, {
       source: '1',
-      target: '2-1'
+      target: '2-1',
+      data: {
+        label: 'text-label',
+        name: 'text-name'
+      }
     }, {
       source: '1',
-      target: '2-2'
+      target: '2-2',
+     
     }, {
       source: '1',
       target: '2-3'
     }, {
       source: '2-1',
-      target: '3-1'
+      target: '3-1',
+      data: {
+        label: 'source 2-1',
+        name: 'target 3-1'
+      }
     },
     {
       source: '2',

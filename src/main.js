@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2024-04-28 14:21:14
+ * @LastEditTime: 2024-06-25 10:13:41
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\main.js
  */
 import { createApp } from 'vue'

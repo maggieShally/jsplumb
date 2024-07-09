@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-12 10:46:35
- * @LastEditTime: 2024-01-16 18:14:33
+ * @LastEditTime: 2024-07-09 17:31:32
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\index.vue
 -->
 
@@ -22,8 +22,9 @@
 
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
-import { Graph } from '@antv/x6'
+import { Graph, Markup } from '@antv/x6'
 import { register, getTeleport } from '@antv/x6-vue-shape'
+
 import {
   DagreLayout,
   CircularLayout,
@@ -100,20 +101,66 @@ export default {
       Graph.registerEdge(
         'org-edge',
         {
-          zIndex: -1,
+          zIndex: 99,
           attrs: {
             line: {
               fill: 'none',
               strokeLinejoin: 'round',
               strokeWidth: '2',
-              stroke: '#4b4a67',
+              stroke: '#A2B1C3',
               sourceMarker: null,
               targetMarker: null,
+            },
+          },
+          label: {
+            position: 0.25,
+          },
+          attrs: {
+            line: {
+              stroke: '#ccc',
             },
           },
         },
         true
       )
+    }
+
+
+    const createNode = item => {
+      return {
+        ...item,
+        shape: 'NodeCom',
+        width: 150,
+        height: 100,
+        data: item,
+      }
+    }
+
+    const createEdge = item => {
+      let defaultLabel = {
+        markup: Markup.getForeignObjectMarkup(),
+        attrs: {
+          fo: {
+          },
+        }
+      }
+      if (item.data) {
+        defaultLabel.attrs.fo = {
+          width: 180,
+          height: 70,
+          x: 20,
+          y: -25,
+        }
+      }
+
+      return {
+        shape: 'org-edge',
+        source: item.source,
+        target: item.target,
+        data: item.data,
+        connector: { name: 'normal' },
+        defaultLabel
+      }
     }
 
     const initGraph = function () {
@@ -123,7 +170,9 @@ export default {
         height: 700,
         grid: true,
         scroller: true,
-        interacting: false,
+        autoResize: true,
+        panning: true,
+        mousewheel: true,
         connecting: {
           anchor: 'orth',
           connector: 'rounded',
@@ -136,34 +185,38 @@ export default {
             },
           },
         },
+
+        onEdgeLabelRendered(args) {
+          const { selectors, edge } = args
+          const content = selectors.foContent
+          if (edge.data) {
+            console.log(edge.id)
+            const { data } = edge
+            content.innerHTML = `
+              <div class="text-label-box" id='${edge.id}' data-edge=${edge.data} onclick="handleCheck()" >
+                <div>${data.name}</div>
+                <div>${data.label} <span class="check-link">查详详情</span></div>
+              </div>
+              `
+            document.getElementById(edge.id).onclick = () => {
+              console.log(edge)
+              console.log(edge.target.cell)
+              console.log(edge.source.cell)
+            }
+          }
+        }
       })
+
 
       const data = {
         nodes: state.initData.nodes.map(item => {
-          return {
-            ...item,
-            shape: 'NodeCom',
-            width: 150,
-            height: 100,
-            data: item,
-          }
+          return createNode(item)
         }),
         edges: state.initData.edges.map(item => {
-          return {
-            shape: 'org-edge',
-            source: item.source,
-            target: item.target,
-            connector: { name: 'normal' },
-            attrs: {
-              line: {
-                stroke: '#A2B1C3',
-                strokeWidth: 2,
-              },
-            },
-          }
+          return createEdge(item)
         }),
       }
-
+      console.log(data)
       // layout(graph)
 
       const dagreLayout = new DagreLayout({
@@ -175,7 +228,7 @@ export default {
         rankdir: 'LR', // 可选，默认为图的中心
         align: 'DL', // 可选
         nodesep: 30, // 可选
-        ranksep: 100, // 可选
+        ranksep: 150, // 可选
         controlPoints: true, // 可选
         sortBy: 'value',
       })
@@ -230,6 +283,18 @@ export default {
     &:first-child {
       border-right: 1px solid #ddd;
     }
+  }
+}
+</style>
+
+<style lang="less">
+.text-label-box {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+
+  .check-link {
+    color: #3a4dfa;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2024-04-28 15:29:08
+ * @LastEditTime: 2024-06-26 16:47:59
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
@@ -207,6 +207,11 @@ const routes = [
             path: '/antV/nodeTree',
             name: 'nodeTree',
             component: () => import('../views/antv/nodeTree/index.vue')
+          },
+          {
+            path: '/antV/G2Chart',
+            name: 'G2Chart',
+            component: () => import('../views/antv/G2Chart/index.vue')
           },
           {
             path: '/antV/department',

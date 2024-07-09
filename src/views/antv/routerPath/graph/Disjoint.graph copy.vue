@@ -1,8 +1,8 @@
 <!--
  * @Description: 分离视图 （显示选中的路径）
  * @Date: 2024-04-19 15:08:58
- * @LastEditTime: 2024-04-26 09:12:35
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\Disjoint.graph.vue
+ * @LastEditTime: 2024-07-09 15:20:31
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\graph\Disjoint.graph.vue
 -->
 
 <template>
@@ -23,13 +23,19 @@ import { layout, getChildrenNodesAndEdges, getEdgesByNodeId } from './utils.js'
 
 import NodeCom from './NodeCom.vue'
 
+import { processEdges, processConfig } from '../config.js'
+import { getColumns } from './utils.js'
 
-// 边的颜色
-const lineStyle = {
-  defaultColor: '#A2B1C3',
-  activeColor: '#DB7093',
-  hiddenColor: 'rgba(162,177,195,.3)'
-}
+import { lineStyle } from '../config.js'
+
+import { useCreateNodeAndEdge } from './useCreateNodeAndEdge.js'
+
+// // 边的颜色
+// const lineStyle = {
+//   defaultColor: '#A2B1C3',
+//   activeColor: '#DB7093',
+//   hiddenColor: 'rgba(162,177,195,.3)'
+// }
 
 export default {
   name: 'DisjointGraph',
@@ -53,13 +59,12 @@ export default {
 
     const state = reactive({
       dataList: [],
-      idKey: props.uKey
+      idKey: props.uKey,
+      processData: {}, // 当前过程数据
     })
 
     watch(() => props.data, val => {
       state.dataList = lodash.cloneDeep({ ...val })
-
-
       if (props.isMainGraph) {
         initData()
       } else {
@@ -69,39 +74,41 @@ export default {
 
     })
 
-    // 创建节点
-    const createNode = (id, data, index) => {
-      return {
-        id,
-        data: {
-          ...data,
-          index
-        },
-        shape: 'NodeCom' + state.idKey,
-      }
-    }
 
-    // 创建边
-    const createEdge = item => {
-      console.log(item)
-      let line = {
-        stroke: lineStyle.defaultColor,
-        strokeWidth: 2,
-      }
-      if (item.lineType === 'dashed') {
-        line.strokeDasharray = '10 10'
-      }
-      return {
-        target: item.targetId,
-        source: item.sourceId,
-        data: item,
-        connector: { name: 'normal' },
-        attrs: {
-          line,
-        },
-      }
-    }
+    // // 创建节点
+    // const createNode = (id, data, index) => {
+    //   return {
+    //     id,
+    //     data: {
+    //       ...data,
+    //       index
+    //     },
+    //     shape: 'NodeCom' + state.idKey,
+    //   }
+    // }
 
+    // // 创建边
+    // const createEdge = item => {
+    //   let line = {
+    //     stroke: lineStyle.defaultColor,
+    //     strokeWidth: 1,
+    //   }
+    //   if (item.lineType === 'dashed') {
+    //     line.strokeDasharray = '5 10'
+    //   }
+    //   return {
+    //     target: item.targetId,
+    //     source: item.sourceId,
+    //     data: item,
+    //     connector: { name: 'normal' },
+    //     attrs: {
+    //       line,
+    //     },
+    //   }
+    // }
+
+    const { createNode, createEdge} = useCreateNodeAndEdge()
+    
     const resistNode = () => {
       register({
         shape: 'NodeCom' + state.idKey,
@@ -186,8 +193,12 @@ export default {
               for (let item of edges) {
                 graph.addEdge(createEdge(item))
               }
-              layout(graph)
-              resetHightLight()
+
+              const showNodes = graph.getNodes().filter(i => i.data.type !== 'process').map(i => i.data)
+              normalLayout(showNodes)
+
+              // layout(graph)
+              // resetHightLight()
             }
 
             return {
@@ -201,7 +212,6 @@ export default {
     }
 
     const initGraph = () => {
-      console.log(document.getElementById(`disjoinGraph${state.idKey}`))
       graph = new Graph({
         container: document.getElementById(`disjoinGraph${state.idKey}`),
         width: 'auto',
@@ -211,13 +221,31 @@ export default {
         autoResize: true,
         panning: true,
         mousewheel: true,
+        filter: ['rect'], // rect类型 不能选中
+        interacting: function (cellView) {
+          // process 不能移动，选中
+          if (cellView.cell.data.type === 'process') {
+            return {
+              nodeMovable: false,
+              edgeMovable: false,
+              vertexMovable: false,
+            }
+          }
+          return true
+        },
       })
 
       graph.use(
         new Transform({
           resizing: {
-            enabled: true
-          },
+            enabled: node => {
+              // process 组不允许
+              if (node.shape === "rect") {
+                return false
+              }
+              return true
+            }
+          }
         }),
       )
 
@@ -296,6 +324,9 @@ export default {
 
       // 节点点击  高亮路径， 计算 节点详情
       graph.on('node:click', ({ e, x, y, node, view }) => {
+        debugger
+        if (node.data.type === 'process') return false
+
         const hightLightCells = hightLightNodes(node)
         getTableData(node)
 
@@ -315,6 +346,7 @@ export default {
       // 边点击
       graph.on('edge:click', ({ e, x, y, edge, view }) => {
         console.log(edge)
+        if(edge.data.type === 'process') return false
         const { isSelected } = edge.data
         edge.setData({ isSelected: !isSelected })
         edge.setAttrs({
@@ -338,6 +370,7 @@ export default {
         })
 
         allEdges.forEach(edge => {
+          if(edge.data.type === 'process') return false
           edge.setAttrs({
             line: {
               stroke: lineStyle.defaultColor,
@@ -347,58 +380,201 @@ export default {
       })
     }
 
-    const initGraphData = data => {
-      graph.fromJSON(data)
-      layout(graph)
-      graph.zoomTo(0.6)
-      graph.center()
-    }
+    // 第一层 layout，的DagreLayout方法， 因为节点宽度不一至，所以动态跟据宽度返回 节点间距
+    const dagreLayout = new DagreLayout({
+      rankdir: 'LR', // 可选，默认为图的中心
+      controlPoints: true, // 可选
+      ranksepFunc: node => {
+        // process层节点间距
+        return 80 * (node.width / 180)
+      }
+    })
 
-    // 主视图 节点 边 组成
-    const initData = () => {
-      const { dataList } = state
-      const levelNode = dataList.nodeList.filter(i => i.level === 1)
-      let nodeIds = levelNode.map(i => i.nodeId)
-      let levelEdge = []
-      dataList.edgesList.forEach(item => {
-        if ([item.targetId, item.sourceId].every(i => nodeIds.includes(i)) && (item.targetId !== item.sourceId)) {
-          if (!levelEdge.find(i => i.targetId === item.targetId && i.sourceId === item.sourceId)) {
-            levelEdge.push(item)
-          }
+    // 分离视图节点布局
+    const disjointDagreLayout = new DagreLayout({
+      rankdir: 'LR', // 可选，默认为图的中心
+      controlPoints: true, // 可选
+    })
+
+
+    // 让节点居中
+    const normalizeNodePosition = (nodes) => {
+      nodes.forEach((node) => {
+        node.x -= (node.width || 120) / 2;
+        node.y -= (node.height || 120) / 2;
+      });
+    };
+
+
+    // 第一层 dragLayout 布局,计算出现在的节点组 按过程排序的节点（用户最外层布局）
+    const initProcessData = showNodes => {
+      const { dataList: { nodeList, edgesList } } = state
+      
+      const activeProcessGroup = Array.from(new Set(nodeList.map(i => i.processId)))
+
+      const processSortNodes = []
+      processConfig.forEach(i => {
+        if (activeProcessGroup.includes(i.key)) {
+          processSortNodes.push(i.key)
         }
       })
+
+      let processEdges = []
+      for (let i = 0; i < processSortNodes.length - 1; i++) {
+        processEdges.push({
+          source: processSortNodes[i],
+          target: processSortNodes[i + 1]
+        })
+      }
+
+      const processNodes = processSortNodes.map(i => {
+        const processShowNodes = showNodes.filter(n => n.processId === i)
+        const len = processShowNodes.length
+        return {
+          shape: 'rect',
+          nodeId: i,
+          id: i,
+          data: {
+            type: 'process'
+          },
+          label: '', //processConfig.find(p => p.key === i)?.label,
+          width: (getColumns(len)) * 150,
+          height: Math.ceil(len / getColumns(len)) * 160,
+          attrs: {
+            body: {
+              fill: 'transparent',
+              stroke: '',
+              // fill: '#efdbff',
+              stroke: '#9254de',
+            },
+          },
+        }
+      })
+
+      // 先排外层节点组
+      const firstLayout = dagreLayout.layout(
+        {
+          nodes: processNodes,
+          edges: processEdges.map(item => {
+            return {
+              ...item,
+              data: {
+                type: 'process',
+              },
+              connector: { name: 'smooth' },
+              attrs: {
+                wrap: {
+                  'stroke-width': 0,
+                },
+                line: {
+                  'stroke-width': 0,
+                  stroke: 'transparent',
+                },
+              },
+            }
+          })
+        }
+      )
+
+      //节点局中
+      normalizeNodePosition(firstLayout.nodes)
+
+      return {
+        firstLayout,
+        nodes: processNodes,
+        edges: processEdges,
+      }
+
+    }
+
+    // 第二层 在第一层的基础上。。gridLayout布局 
+    const secondGridLayout = (processNodes, showNodes) => {
+      const { dataList: { nodeList, edgesList } } = state
+      const secondLayerList = processNodes.map(item => {
+        const activeNodes = showNodes.filter(i => i.processId === item.id)
+        const currentNodes = processNodes.find(i => i.id === item.id)
+        console.log(currentNodes.x, currentNodes.y)
+        const gridLayout = new GridLayout({
+          type: "grid",
+          width: currentNodes.width,
+          height: currentNodes.height,
+          begin: [currentNodes.x, currentNodes.y],
+        });
+        return gridLayout.layout({
+          nodes: activeNodes.map((i, index) => {
+            return createNode(i.nodeId, i, index)
+          }),
+          edges: edgesList.filter(i => showNodes.find(n => n.nodeId === i.sourceId) && showNodes.find(n => n.nodeId === i.targetId)).map(e => {
+            return createEdge(e)
+          })
+        });
+      })
+      
+      secondLayerList.forEach(nodes => {
+        if(nodes.nodes.length > 1)  {
+          normalizeNodePosition(nodes.nodes)
+        }
+      })
+
+      return {
+        secondLayerList
+      }
+    }
+
+    // 布局
+    const normalLayout = (showNodes) => {
+      const { dataList: { nodeList, edgesList } } = state
+      // 外层过种节点组
+      const { firstLayout, nodes: processNodes, edges: processEdges, } = initProcessData(showNodes)
+
+      // 第二层用 网格布局
+      const { secondLayerList } = secondGridLayout(processNodes, showNodes)
+
+      graph.fromJSON({
+        nodes: [...firstLayout.nodes, ...secondLayerList.map(i => i.nodes).flat()],
+        edges: [...firstLayout.edges, ...secondLayerList.map(i => i.edges).flat()]
+      })
+    }
+
+
+    // 主视图 节点 边 组成v2
+    const initData = () => {
+      const { dataList: { nodeList, edgesList } } = state
+      const showNodes = nodeList.filter(i => i.level === 1)
+      normalLayout(showNodes)
+    }
+
+    // 显示SKU层
+    const handleShowSku = level => {
+      const { nodeList, edgesList } = state.dataList
+      const showNodes = nodeList.filter(i => i.level === level)
+      const allNodeIds = showNodes.map(i => i.nodeId)
+      const showEdges = edgesList.filter(i => allNodeIds.includes(i.sourceId) && allNodeIds.includes(i.targetId))
       const data = {
-        nodes: levelNode.sort((a, b) => a.sort - b.sort).map((item, index) => {
+        nodes: showNodes.sort((a, b) => a.sort - b.sort).map((item, index) => {
           return createNode(item.nodeId, item, index)
         }),
-        edges: levelEdge.map(item => createEdge(item))
+        edges: showEdges.map(item => createEdge(item))
       }
-      console.log(data)
-      initGraphData(data)
+      normalLayout(showNodes.sort((a, b) => a.sort - b.sort))
     }
+
 
     // 分离视图
     const initDisjointData = () => {
+
       const { nodeList, edgesList } = state.dataList
       if (state.dataList.nodeList.length) {
         const data = {
           nodes: nodeList.map((item, index) => createNode(item.nodeId, item, index)),
           edges: edgesList.map(item => createEdge(item))
         }
-        // initGraphData(data)
-
-        const dagreLayout = new DagreLayout({
-          rankdir: 'LR', // 可选，默认为图的中心
-          align: 'DL', // 可选
-          nodesep: 30, // 可选
-          ranksep: 100, // 可选
-          controlPoints: true, // 可选
-        })
-        const model = dagreLayout.layout(data)
-
+        const model = disjointDagreLayout.layout(data)
         graph.fromJSON(model)
         graph.zoomTo(0.6)
         graph.center()
+
+        // normalLayout(nodeList)
 
       }
     }
@@ -409,7 +585,8 @@ export default {
     })
 
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      handleShowSku,
     }
   }
 }

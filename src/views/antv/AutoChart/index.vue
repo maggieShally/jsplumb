@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-10 14:03:44
- * @LastEditTime: 2023-04-18 11:30:36
+ * @LastEditTime: 2024-06-26 14:26:46
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\AutoChart\index.vue
 -->
 <template>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { autoChart } from '@antv/chart-advisor'
+// import { autoChart } from '@antv/chart-advisor'
 import { onMounted, reactive, toRefs } from 'vue'
 
 export default {
@@ -47,7 +47,7 @@ export default {
     }
 
     onMounted(async () => {
-      updateChartView()
+      // updateChartView()
     })
 
     return {

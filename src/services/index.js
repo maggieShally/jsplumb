@@ -7,6 +7,7 @@
 import request from '@/utils/request.js'
 
 export { default as dataViewApi } from './dataView.api.js'
+export { default as processApi } from './process.api.js'
 
 export default {
   getByDictType(data) {

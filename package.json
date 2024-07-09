@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@antv/chart-advisor": "latest",
+    "@antv/g2": "^5.1.23",
     "@antv/g6": "^4.3.11",
     "@antv/layout": "^0.1.19",
     "@antv/s2": "^2.0.0-next.17",

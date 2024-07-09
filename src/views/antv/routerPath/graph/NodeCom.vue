@@ -3,9 +3,10 @@
     <ContextMenu :actions="menuList">
       <div :class="{ 'node-sec': true, 'isActive': isChecked}" :style="{'background-color': nodeBgCode, 'opacity': opacity }" @click="handleGetRouter">
         <div>
-          <span v-if="nodeInfo.level >= 1">{{ nodeInfo.itemProduct }} / {{ nodeInfo.level }} / {{ nodeInfo.nodeId }} / {{ nodeInfo.jobName }}</span>
-          <span v-if="nodeInfo.level >= 2"> / {{ nodeInfo.itemNum }} </span>
-          <span v-if="nodeInfo.level >= 3">/ {{ nodeInfo.nodeId }}</span>
+          <span v-if="nodeInfo.level >= 1 || uKey === 'subPath'">{{ nodeInfo.itemProduct }}</span>
+          <!-- / {{ nodeInfo.level }} / {{ nodeInfo.nodeId }} / {{ nodeInfo.jobName }} -->
+          <span v-if="nodeInfo.level >= 2 || uKey === 'subPath'"> / {{ nodeInfo.itemNum }} </span>
+          <!-- <span v-if="nodeInfo.level >= 3">/ {{ nodeInfo.nodeId }}</span> -->
         </div>
 
         <div class="plus-item" v-if="uKey === 'main'">
@@ -24,10 +25,9 @@ import { toRefs, reactive, inject, onMounted, ref } from 'vue'
 import { ElIcon } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 
-
 import ContextMenu from '@/components/contextMenu'
 
-import { processConfig } from './config.js'
+import { processConfig } from '../config.js'
 
 export default {
   name: 'NodeCom',
@@ -47,7 +47,7 @@ export default {
     const node = getNode()
 
     const nodeRef = ref(null)
-
+    debugger
     const state = reactive({
       nodeInfo: node.data,
       isChecked: false, // 要高亮的节点
@@ -56,7 +56,7 @@ export default {
       menuList: getMenuList(node.data),
       isSelected: node.data.isSelected, // 被先中的节点
 
-      nodeBgCode: processConfig.find(i => i.jobId === node.data.jobId)?.color
+      nodeBgCode: processConfig.find(i => i.key === node.data.processId)?.color
     })
     
     function getMenuList(data) {

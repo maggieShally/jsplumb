@@ -15,6 +15,7 @@ import { reactive, toRefs, ref } from 'vue'
 
 import BaseChart from '@/components/BaseChart'
 import { countOption } from './ApiChart.data.js'
+
 export default {
   name: 'APIChart',
   components: {

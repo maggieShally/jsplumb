@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-07-21 11:18:51
- * @LastEditTime: 2024-05-09 16:25:45
+ * @LastEditTime: 2024-06-28 11:14:36
  * @FilePath: \webpack-teste:\others\jsplumb-test\vite.config.js
  */
 const UselessFile = require('useless-files-webpack-plugin')
@@ -57,6 +57,24 @@ export default defineConfig(({ mode, command }) => {
     //     ],
     //   }
     // },
+
+    build: {
+      minify: false,
+      rollupOptions: {
+        output: {
+          // 打包输出的配置
+          manualChunks: id => {
+            // 这个ID，就是所有文件的绝对路径
+            if (id.includes('node_modules')) {
+              // 因为 node_modules 中的依赖通常是不会改变的
+              // 所以直接单独打包出去
+              // 这个return 的值就是打包的名称
+              return 'vendor'
+            }
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         // 设置路径
@@ -69,6 +87,17 @@ export default defineConfig(({ mode, command }) => {
 
     plugins: [
       ...createVitePlugins(),
+      // new UselessFile({
+      //   // 性能优化 ：删除项目中没有引用关系的文件
+      //   root: './src', // 项目目录
+      //   out: './fileList.json', // 输出文件列表
+      //   clean: false, // 是否删除文件,
+      //   exclude: /node_modules/, // 排除文件列表
+      // }),
+      // new CompressionPlugin({
+      //   test: /\.(js|css|html)$/, // 匹配文件名
+      //   threshold: 10240,
+      // }),
     ],
     pages: {
       index: {
@@ -104,6 +133,10 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: true, // 支持跨域
         },
         '^/dea/': {
+          target: 'http://dopuat.longsys.com', // '代理目标的基础路径'
+          changeOrigin: true, // 支持跨域
+        },
+        '^/bub/': {
           target: 'http://dopuat.longsys.com', // '代理目标的基础路径'
           changeOrigin: true, // 支持跨域
         },

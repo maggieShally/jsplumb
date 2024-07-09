@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-03-22 16:28:10
- * @LastEditTime: 2022-07-12 14:38:22
+ * @LastEditTime: 2024-07-03 14:58:06
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\NodeCom.vue
 -->
 
@@ -11,7 +11,7 @@
       <span class="node-icon icon-right" @click="handleClick('right')">{{visible ? '+' : '-'}}</span>
       <div class="normal-section" v-if="nodeInfo.type !== 'zb'">
         <!-- <el-button type="primary" size="small" @click="handleShowZb">指标</el-button> -->
-        <p class="title">{{ nodeInfo.name }}</p>
+        <p class="title">{{ nodeInfo.name }} {{nodeInfo.id}}</p>
       </div>
     </div>
   </div>

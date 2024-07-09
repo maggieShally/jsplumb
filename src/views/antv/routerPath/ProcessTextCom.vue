@@ -1,7 +1,7 @@
 <!--
  * @Description: 工序流程节点说明
  * @Date: 2024-04-18 09:40:09
- * @LastEditTime: 2024-06-05 15:10:24
+ * @LastEditTime: 2024-06-28 11:38:34
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\ProcessTextCom.vue
 -->
 <template>
@@ -13,11 +13,11 @@
       </el-icon>
     </span>
     <div class="process-text">
-      <div class="process-text-item" v-for="(item, index) in processDataList" :key="item.jobId">
-        <div><span class="process-mark" :style="{ 'background-color': item.color }"></span>{{ index + 1 }} {{ item.jobType }}</div>
+      <div class="process-text-item" v-for="(item, index) in processDataList" :key="item.key">
+        <div><span class="process-mark" :style="{ 'background-color': item.color }"></span>{{ index + 1 }} {{ item.value }}</div>
         <div v-if="isToggle" class="item-content">
-          <div v-for="(subItem, subIndex) in item.childrenCombo" :key="subItem.jobId">
-            {{ index + 1 }}.{{ subIndex + 1 }} {{ subItem.jobType }}
+          <div v-for="(subItem, subIndex) in item.children" :key="subItem.key">
+            {{ index + 1 }}.{{ subIndex + 1 }} {{ subItem.value }}
           </div>
         </div>
       </div>
@@ -31,6 +31,8 @@ import { ref, reactive, toRefs, onMounted } from 'vue'
 import { mockData } from './data.js'
 import { processConfig } from './config.js'
 
+import { useGetProcessData } from './hooks/useGetProcessData.js'
+
 export default {
   name: 'ProcessTextCom',
   components: {
@@ -41,19 +43,22 @@ export default {
 
     const state = reactive({
       isToggle: false,
-      processDataList: mockData.combos.map(item => {
-        return {
-          ...item,
-          color: processConfig.find(i => i.jobType === item.jobType)?.color
-        }
-      })
+      // processDataList: mockData.combos.map(item => {
+      //   return {
+      //     ...item,
+      //     color: processConfig.find(i => i.jobType === item.jobType)?.color
+      //   }
+      // })
     })
+
+    const { processData: processDataList } = useGetProcessData()
 
     const handleToggle = () => {
       state.isToggle = !state.isToggle
     }
 
     return {
+      processDataList,
       ...toRefs(state),
       handleToggle
     }
@@ -90,6 +95,7 @@ export default {
   .process-text-item {
     border-right: 1px solid #ddd;
     border-left: 1px solid #ddd;
+    
 
     &>div {
       padding: 3px 10px;
@@ -98,6 +104,7 @@ export default {
 
   .item-content {
     border-top: 1px solid #ddd;
+    min-width: 130px;
   }
 
   .process-mark {
