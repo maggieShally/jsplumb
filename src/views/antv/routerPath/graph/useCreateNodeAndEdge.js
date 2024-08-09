@@ -1,9 +1,13 @@
+/*
+ * @Description: 
+ * @Date: 2024-07-09 15:04:02
+ * @LastEditTime: 2024-07-11 13:55:54
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\graph\useCreateNodeAndEdge.js
+ */
 
 
 import { Markup } from '@antv/x6'
-
 import { lineStyle } from '../config.js'
-import { defaultTo } from 'lodash'
 
 export const useCreateNodeAndEdge = idKey => {
   // 创建节点
@@ -39,9 +43,9 @@ export const useCreateNodeAndEdge = idKey => {
     if (item.isSubPath) {
       const height = item.lineTargetValueList.filter(i => i.isShow).length / 2 * 35
       defaultLabel.attrs.fo = {
-        width: 200,
+        width: 160,
         height,
-        x: -100,
+        x: -80,
         y: -height * 0.45,
       }
     }

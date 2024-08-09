@@ -1,52 +1,46 @@
 <!--
  * @Description: 分离视图 （显示选中的路径）
  * @Date: 2024-04-19 15:08:58
- * @LastEditTime: 2024-07-09 18:27:06
+ * @LastEditTime: 2024-08-09 17:15:58
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\graph\Disjoint.graph.vue
 -->
 
 <template>
-  <div class="graphWrapper" :id="`disjoinGraph${idKey}`"></div>
+  <OperatorCom @onCommand="handleOperator" />
+  <div class="graphWrapper" ref="graphRef" :id="`disjoinGraph${idKey}`">
+  </div>
 </template>
 
 <script>
-import { ref, reactive, toRefs, unref, watch, onMounted, computed } from 'vue'
+import { ref, reactive, toRefs, unref, watch, onMounted, computed, nextTick } from 'vue'
 
+import { useElementSize } from '@vueuse/core'
 import lodash from 'lodash'
+
 import { Graph } from '@antv/x6'
 import { GridLayout, DagreLayout } from '@antv/layout'
 import { register, getTeleport } from '@antv/x6-vue-shape'
-import { Selection } from '@antv/x6-plugin-selection'
 import { Transform } from '@antv/x6-plugin-transform'
-
+import { Scroller } from '@antv/x6-plugin-scroller'
 
 import { layout, getChildrenNodesAndEdges, getEdgesByNodeId } from './utils.js'
 
-import NodeCom from './NodeCom.vue'
-
-import { processEdges, processConfig } from '../config.js'
-import { getColumns } from './utils.js'
-
 import { lineStyle } from '../config.js'
-
 import { useCreateNodeAndEdge } from './useCreateNodeAndEdge.js'
-
 import { useNormalLayout } from './useNormalLayout.js'
 
-// // 边的颜色
-// const lineStyle = {
-//   defaultColor: '#A2B1C3',
-//   activeColor: '#DB7093',
-//   hiddenColor: 'rgba(162,177,195,.3)'
-// }
+import NodeCom from './NodeCom.vue'
+import OperatorCom from './OperatorCom.vue'
+
 
 export default {
   name: 'DisjointGraph',
   components: {
+    OperatorCom
   },
   props: {
     uKey: String,
-    isMainGraph: {
+    isMainGraph: { //主视图
       type: Boolean,
       default: false
     },
@@ -61,23 +55,62 @@ export default {
   emits: ['onGetTableData', 'onGetViewData'],
   setup(props, context) {
 
-    // const disjoinGraphRef = ref(null)
+    const graphRef = ref(null)
+    const { width, height } = useElementSize(graphRef)
+
     let graph
 
     const state = reactive({
+      loading: false,
       dataList: props.data,
       idKey: props.uKey,
       processData: {}, // 当前过程数据
+
+      isDisabledLine: false, //是否禁用连线
+
+      hasSubViewLoad: false,
+      hasSubPathLoad: false
     })
 
-    watch(() => props.data, val => {
+    // 处理 tab切锦 节点渲染 位置不对的问题 
+    watch(width, (val, oldVale) => {
+      if (!props.isMainGraph && val && (!state.hasSubPathLoad || !state.hasSubViewLoad)) {
+        
+        if(!state.hasSubPathLoad && props.uKey === 'subPath') {
+          initDisjointPathData()
+          state.hasSubPathLoad = true
+        } 
+        if(!state.hasSubViewLoad && props.uKey === 'subView') {
+          initDisjointData()
+          state.hasSubPathLoad = true
+        }
+      }
+    })
+
+    watch(() => props.data, async val => {
+      state.hasSubViewLoad = false
+      state.hasSubPathLoad = false
       state.dataList = lodash.cloneDeep({ ...val })
       if (props.isMainGraph) {
         initData()
-      } else if (props.uKey === 'subView') {
-        initDisjointData()
       } else {
-        initDisjointPathData()
+        if(width.value) {
+          if (props.uKey === 'subView') {
+            initDisjointData()
+            state.hasSubViewLoad = true
+          } else {
+            initDisjointPathData()
+            state.hasSubPathLoad = true
+          }
+        }
+      }
+
+      if (width.value) {
+        if (props.uKey === 'subView') {
+          state.hasSubViewLoad = true
+        } else {
+          state.hasSubPathLoad = true
+        }
       }
     })
 
@@ -185,16 +218,15 @@ export default {
     }
 
     const initGraph = () => {
-      debugger
+
       graph = new Graph({
         container: document.getElementById(`disjoinGraph${state.idKey}`),
-        width: 'auto',
-        height: 400,
-        grid: true,
-        scroller: true,
         autoResize: true,
-        panning: true,
-        mousewheel: true,
+        grid: true,
+        mousewheel: {
+          enabled: true,
+          modifiers: ['ctrl', 'meta'],
+        },
         filter: ['rect'], // rect类型 不能选中
         interacting: function (cellView) {
           // process 不能移动，选中
@@ -217,14 +249,22 @@ export default {
             for (let item of lineTargetValueList.filter(i => i.isShow && i.currency === 'RMB')) {
               str += `<div>${item.targetName}(${item.currency})：${item.targetValue}</div>`
             }
-            str += `<div><span class="check-link">查详详情</span></div> </div>`
+            str += `<div class="check-link-wrap"><span class="check-link">查详详情</span></div> </div>`
             content.innerHTML = str
             document.getElementById(edge.id).onclick = () => {
-              console.log(edge)
+              console.log(edge.data.detailList)
             }
           }
         }
       })
+
+      graph.use(
+        new Scroller({
+          enabled: true,
+          autoResize: true,
+          pannable: true,
+        }),
+      )
 
       graph.use(
         new Transform({
@@ -239,12 +279,13 @@ export default {
           }
         }),
       )
+
     }
 
     // 根据点击节点 获取 底部维度数据
     const getTableData = node => {
       const nodeData = node.getData()
-      console.log(nodeData.isChecked)
+      console.log(nodeData)
       let result = []
       const neighborNodes = graph.getNeighbors(node).map(i => {
         return {
@@ -314,8 +355,6 @@ export default {
       }
     }
 
-
-
     // graph点击事件
     const initMethod = () => {
       // 节点点击  高亮路径， 计算 节点详情
@@ -338,8 +377,8 @@ export default {
 
       // 边点击
       graph.on('edge:click', ({ e, x, y, edge, view }) => {
-        console.log(edge)
         if (edge.data.type === 'process') return false
+        if(state.isDisabledLine) return false
         const { isSelected } = edge.data
         edge.setData({ isSelected: !isSelected })
         edge.setAttrs({
@@ -379,6 +418,8 @@ export default {
       const showNodes = nodeList.filter(i => i.level === level)
       const dataJson = getNormalLayoutData(showNodes.sort((a, b) => a.sort - b.sort))
       graph.fromJSON(dataJson)
+      graph.zoomTo(0.6)
+      graph.centerContent()
     }
 
     // 主视图 节点 边 组成
@@ -387,12 +428,41 @@ export default {
       const showNodes = nodeList.filter(i => i.level === 1)
       const dataJson = getNormalLayoutData(showNodes)
       graph.fromJSON(dataJson)
+      graph.zoomTo(0.6)
+      graph.centerContent()
+    }
+
+    // 分离路径
+    const disjointPathDagreLayout = new DagreLayout({
+      rankdir: 'LR', // 可选，默认为图的中心
+      controlPoints: true, // 可选
+      nodesep: 40, // 可选
+      ranksep: 100, // 可选
+    })
+
+    // 分离路径
+    const initDisjointPathData = () => {
+      
+      const { nodeList, edgesList } = state.dataList
+      if (state.dataList?.nodeList?.length) {
+        const data = {
+          nodes: nodeList.map((item, index) => createNode(item.nodeId, item, index)),
+          edges: edgesList.map(item => createEdge(item))
+        }
+        const model = disjointPathDagreLayout.layout(data)
+        graph.fromJSON(model)
+
+        graph.zoomTo(0.6)
+        setTimeout(() => {
+          graph.centerContent()
+        }, 100)
+      }
     }
 
     // 分离视图
     const initDisjointData = () => {
       const { nodeList, edgesList } = state.dataList
-      if (state.dataList.nodeList.length) {
+      if (state.dataList?.nodeList?.length) {
         const data = {
           nodes: nodeList.map((item, index) => createNode(item.nodeId, item, index)),
           edges: edgesList.map(item => createEdge(item))
@@ -400,34 +470,45 @@ export default {
         graph.fromJSON(data)
         layout(graph)
         graph.zoomTo(0.6)
-        graph.center()
+        setTimeout(() => {
+          graph.centerContent()
+        }, 100)
       }
     }
 
+    function commandFun() { }
 
+    // 居中
+    commandFun.center = () => {
+      graph.centerContent()
+    }
 
-    // 分离路径
-    const disjointPathDagreLayout = new DagreLayout({
-      rankdir: 'LR', // 可选，默认为图的中心
-      controlPoints: true, // 可选
-      nodesep: 60, // 可选
-      ranksep: 130, // 可选
-    })
+    // 还原节点位置
+    commandFun.reset = () => {
+      initData()
+    }
 
+    // 禁用连接
+    commandFun.disableLine = (_,value) => {
+      state.isDisabledLine = value
+    }
 
-    // 分离路径
-    const initDisjointPathData = () => {
-      const { nodeList, edgesList } = state.dataList
-      if (state.dataList.nodeList.length) {
-        const data = {
-          nodes: nodeList.map((item, index) => createNode(item.nodeId, item, index)),
-          edges: edgesList.map(item => createEdge(item))
-        }
-        console.log(data)
-        const model = disjointPathDagreLayout.layout(data)
-        graph.fromJSON(model)
-        graph.zoomTo(0.6)
-        graph.center()
+    // 显示层级
+    commandFun.showLevel = command => {
+      const { nodeList } = state.dataList
+      const showNodes = nodeList.filter(i => i.configAttribute === command)
+      const dataJson = getNormalLayoutData(showNodes.sort((a, b) => a.sort - b.sort))
+      graph.fromJSON(dataJson)
+      graph.zoomTo(0.6)
+      graph.centerContent()
+    }
+
+    const handleOperator = command => {
+      console.log(command)
+      if (command.indexOf('item') >= 0) {
+        commandFun.showLevel(command)
+      } else {
+        commandFun[command]()
       }
     }
 
@@ -439,27 +520,41 @@ export default {
       if (props.uKey === 'subView') {
         initDisjointData()
       }
+      if (props.uKey === 'subPath') {
+        initDisjointPathData()
+      }
     })
 
     return {
+      graphRef,
       ...toRefs(state),
       handleShowSku,
+      handleOperator,
     }
   }
 }
 </script>
-<style>
+<style lang="less">
 .text-label-box {
   padding: 7px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5%;
   font-size: 12px;
+  cursor: pointer;
+
+  .check-link-wrap {
+    text-align: right;
+
+    .check-link {
+      color: #3432dd;
+    }
+  }
 }
 </style>
 <style lang='less' scoped>
 .graphWrapper {
+  flex: 1;
   width: 100%;
-  height: 700px;
 }
 </style>

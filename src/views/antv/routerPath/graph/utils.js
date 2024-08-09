@@ -8,9 +8,9 @@ export const getColumns = len => {
 
 // 获取 每组起始 X位置
 const getCombineSortXPos = nodes => {
-  let combineSort = new Array(9).fill(0)
+  let combineSort = new Array(10).fill(0)
   // 每组 节点个数
-  let lengthArr = new Array(9).fill(0)
+  let lengthArr = new Array(10).fill(0)
   for (let i = 0; i < combineSort.length; i++) {
     const allData = nodes.filter(n => n.data.sort === i)
     let len = allData.length
@@ -41,7 +41,7 @@ export function layout(graph) {
   const { combineSort, lengthArr } = getCombineSortXPos(nodes)
   const maxLen = Math.max.apply(null, lengthArr)
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i <= 9; i++) {
     let sort = i
     const allData = nodes
       .filter(node => node.data.sort === sort)
@@ -53,13 +53,15 @@ export function layout(graph) {
         combineSort[sort - 1] + (index % columns) * nodeWidth + GroupSpace
 
       // 根据行最多的组为参照，计算 Y 起始位置 (节点相对居中显示)
+      debugger
       const startY =
         ((Math.ceil(maxLen / getColumns(maxLen)) -
           Math.ceil(lengthArr[sort] / getColumns(lengthArr[sort]))) /
           2) *
         nodeHeight
-        
+      
       const y = startY + Math.floor(index / columns) * nodeHeight
+      
       item.position(x, y)
       item.setData({ index })
     })

@@ -17,6 +17,7 @@
     "@antv/s2-vue": "^2.0.0-next.12",
     "@antv/x6": "^2.16.1",
     "@antv/x6-plugin-dnd": "^2.1.1",
+    "@antv/x6-plugin-scroller": "^2.0.10",
     "@antv/x6-plugin-selection": "^2.2.1",
     "@antv/x6-plugin-transform": "^2.1.8",
     "@antv/x6-vue-shape": "^2.1.1",

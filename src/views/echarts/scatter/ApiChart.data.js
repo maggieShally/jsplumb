@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-07-15 11:22:25
- * @LastEditTime: 2024-07-04 10:49:54
+ * @LastEditTime: 2024-07-15 14:52:31
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\ApiChart.data.js
  */
 
@@ -27,51 +27,51 @@ export const countOption = () => {
     legend: {},
     dataZoom: [{}],
     xAxis: [
-      {
-        type: 'category',
-        data: [
-          '1月1日',
-          '1月2日',
-          '1月3日',
-          '1月4日',
-          '1月5日',
-          '1月6日',
-          '1月7日',
-          '2月1日',
-          '2月2日',
-          '2月3日',
-          '2月4日',
-          '2月5日',
-          '2月6日',
-          '2月7日',
-          '1月1日',
-          '1月2日',
-          '1月3日',
-          '1月4日',
-          '1月5日',
-          '1月6日',
-          '1月7日',
-          '2月1日',
-          '2月2日',
-          '2月3日',
-          '2月4日',
-          '2月5日',
-          '2月6日',
-          '2月7日',
-        ],
+      // {
+      //   type: 'category',
+      //   data: [
+      //     '1月1日',
+      //     '1月2日',
+      //     '1月3日',
+      //     '1月4日',
+      //     '1月5日',
+      //     '1月6日',
+      //     '1月7日',
+      //     '2月1日',
+      //     '2月2日',
+      //     '2月3日',
+      //     '2月4日',
+      //     '2月5日',
+      //     '2月6日',
+      //     '2月7日',
+      //     '1月1日',
+      //     '1月2日',
+      //     '1月3日',
+      //     '1月4日',
+      //     '1月5日',
+      //     '1月6日',
+      //     '1月7日',
+      //     '2月1日',
+      //     '2月2日',
+      //     '2月3日',
+      //     '2月4日',
+      //     '2月5日',
+      //     '2月6日',
+      //     '2月7日',
+      //   ],
 
-        position: 'bottom',
-        // axisTick: {
-        //   length: (0 + 1) * 20
-        // },
+      //   position: 'bottom',
+      //   // axisTick: {
+      //   //   length: (0 + 1) * 20
+      //   // },
 
-        // axisPointer: {
-        //   type: 'line'
-        // },
-        // axisLabel: {
-        //   margin: 10
-        // }
-      },
+      //   // axisPointer: {
+      //   //   type: 'line'
+      //   // },
+      //   // axisLabel: {
+      //   //   margin: 10
+      //   // }
+      // },
       {
         type: 'category',
         data: ['1月', '2月', '1月', '2月'],
@@ -90,20 +90,22 @@ export const countOption = () => {
         type: 'category',
         data: ['2021', '2022'],
         position: 'bottom',
-        axisTick: {
-          length: (2 + 1) * 20,
-        },
-        axisPointer: {
-          type: 'none',
-        },
-        axisLabel: {
-          margin: 60,
-        },
+        
+        // axisTick: {
+        //   length: (2 + 1) * 20,
+        // },
+        // axisPointer: {
+        //   type: 'none',
+        // },
+        // axisLabel: {
+        //   margin: 60,
+        // },
       },
     ],
     yAxis: [
       {
         type: 'value',
+        // alignTicks: true,
         max: value => {
           console.log(value)
           const { max, min } = value
@@ -118,6 +120,7 @@ export const countOption = () => {
       },
       {
         type: 'value',
+        // alignTicks: true,
         max: value => {
           console.log(value)
           const { max, min } = value

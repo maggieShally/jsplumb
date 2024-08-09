@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-05-07 09:51:21
- * @LastEditTime: 2024-06-21 17:10:36
+ * @LastEditTime: 2024-08-07 13:58:04
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\App.vue
 -->
 <template>
@@ -129,6 +129,7 @@ a {
   background: #fff;
   border-radius: 12px;
   overflow-x: hidden;
+  height: 100%;
   min-height: 830px;
 }
 </style>

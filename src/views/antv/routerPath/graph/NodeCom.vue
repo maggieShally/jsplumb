@@ -1,7 +1,7 @@
 
 <template>
     <ContextMenu :actions="menuList">
-      <div :class="{ 'node-sec': true, 'isActive': isChecked}" :style="{'background-color': nodeBgCode, 'opacity': opacity }" @click="handleGetRouter">
+      <div :class="{ 'node-sec': true, 'isActive': isChecked}" :style="{'background-color': nodeBgCode, 'opacity': opacity }">
         <div>
           <span v-if="nodeInfo.level >= 1 || uKey === 'subPath'">{{ nodeInfo.itemProduct }}</span>
           <!-- / {{ nodeInfo.level }} / {{ nodeInfo.nodeId }} / {{ nodeInfo.jobName }} -->
@@ -40,21 +40,19 @@ export default {
   },
   emits: ['onNext', 'onPre'],
   setup(props, context) {
+    
     const getNode = inject('getNode')
     const getGraph = inject('getGraph')
     const graph = getGraph()
 
     const node = getNode()
 
-    const nodeRef = ref(null)
-    debugger
     const state = reactive({
       nodeInfo: node.data,
       isChecked: false, // 要高亮的节点
       opacity: 1,
       index: node.data.index,
       menuList: getMenuList(node.data),
-      isSelected: node.data.isSelected, // 被先中的节点
 
       nodeBgCode: processConfig.find(i => i.key === node.data.processId)?.color
     })
@@ -80,15 +78,10 @@ export default {
       context.emit('onNext', node)
     }
 
-    const handleGetRouter = () => {
-      // context.emit('onHightLight', node)
-    }
-    
     onMounted(() => {
       node.on('change:data', ({ current }) => {
         state.isChecked = current.isChecked
         state.index = current.index
-        state.isSelected = current.isSelected
         state.opacity = current.opacity
       })
     })
@@ -96,7 +89,6 @@ export default {
     return {
       ...toRefs(state),
       getNextLevel,
-      handleGetRouter,
     }
   }
 }

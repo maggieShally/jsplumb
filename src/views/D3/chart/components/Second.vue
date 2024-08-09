@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-06-29 16:55:02
- * @LastEditTime: 2022-06-14 09:49:50
+ * @LastEditTime: 2024-07-16 14:37:25
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\chart\components\Second.vue
 -->
 
@@ -50,7 +50,6 @@ onMounted(() => {
   // 定义x轴坐标
   const xAxis = d3.axisBottom(scaleLinear).ticks(7)
   
-
   g.append('g')
     .attr('transform', `translate(20, ${dataset.length * rectHeight} )`)
     .call(xAxis)

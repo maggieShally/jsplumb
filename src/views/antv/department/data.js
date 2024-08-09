@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2022-07-12 10:50:47
- * @LastEditTime: 2024-07-03 14:59:13
+ * @LastEditTime: 2024-08-07 17:25:07
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\data.js
  */
 
@@ -61,39 +61,39 @@ export const initData = {
       id: '5-1',
       name: 'S2', index: 5
     },
-    {
-      id: '6',
-      name: 'SD4.0', index: 5
-    },
-    {
-      id: '7',
-      name: 'MICRO', index: 5,
-      value: '3'
-    },
-    {
-      id: '8',
-      name: '1667x', index: 5
-    },
-    {
-      id: '9',
-      name: '633x', index: 5
-    },
-    {
-      id: '10',
-      name: '消费类', index: 5
-    },
-    {
-      id: '11',
-      name: 'NA', index: 5
-    },
-    {
-      id: '12',
-      name: '128GB', index: 5
-    },
-    {
-      id: '13',
-      name: '64GB', index: 5
-    }
+    // {
+    //   id: '6',
+    //   name: 'SD4.0', index: 5
+    // },
+    // {
+    //   id: '7',
+    //   name: 'MICRO', index: 5,
+    //   value: '3'
+    // },
+    // {
+    //   id: '8',
+    //   name: '1667x', index: 5
+    // },
+    // {
+    //   id: '9',
+    //   name: '633x', index: 5
+    // },
+    // {
+    //   id: '10',
+    //   name: '消费类', index: 5
+    // },
+    // {
+    //   id: '11',
+    //   name: 'NA', index: 5
+    // },
+    // {
+    //   id: '12',
+    //   name: '128GB', index: 5
+    // },
+    // {
+    //   id: '13',
+    //   name: '64GB', index: 5
+    // }
   ],
   edges: [
     {
@@ -137,37 +137,37 @@ export const initData = {
       source: '3-1',
       target: '5-1'
     },
-    {
-      source: '4',
-      target: '6'
-    },
-    {
-      source: '5',
-      target: '7'
-    },
-    {
-      source: '6',
-      target: '8'
-    },
-    {
-      source: '7',
-      target: '9'
-    },
-    {
-      source: '8',
-      target: '10'
-    },
-    {
-      source: '8',
-      target: '11'
-    },
-    {
-      source: '11',
-      target: '12'
-    },
-    {
-      source: '11',
-      target: '13'
-    }
+    // {
+    //   source: '4',
+    //   target: '6'
+    // },
+    // {
+    //   source: '5',
+    //   target: '7'
+    // },
+    // {
+    //   source: '6',
+    //   target: '8'
+    // },
+    // {
+    //   source: '7',
+    //   target: '9'
+    // },
+    // {
+    //   source: '8',
+    //   target: '10'
+    // },
+    // {
+    //   source: '8',
+    //   target: '11'
+    // },
+    // {
+    //   source: '11',
+    //   target: '12'
+    // },
+    // {
+    //   source: '11',
+    //   target: '13'
+    // }
   ]
 }

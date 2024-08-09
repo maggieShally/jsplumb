@@ -71,6 +71,8 @@ export default {
   display: flex;
   background: #fff;
   font-size: 12px;
+  max-width: 90%;
+  overflow: auto;
 
   .toggle-icon {
     margin: 0 10px;
@@ -91,6 +93,7 @@ export default {
 
 .process-text {
   display: flex;
+  min-width: 1020px;
 
   .process-text-item {
     border-right: 1px solid #ddd;

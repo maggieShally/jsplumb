@@ -1,16 +1,18 @@
 <!--
  * @Description: 
  * @Date: 2022-07-12 10:46:35
- * @LastEditTime: 2024-07-09 17:31:32
+ * @LastEditTime: 2024-08-08 09:02:24
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\department\index.vue
 -->
 
 <template>
   <el-button @click="handleChangeNode">change</el-button>
   <div class="wrap">
-    <div id="container" class="left-content" style="height: 700px"></div>
-    <div class="right-content">
+    <div className="app-main">
+      <div id="container" class="app-content"></div>
+    </div>
 
+    <div class="right-content">
       <el-table :data="dataList" border>
         <el-table-column label="料号" prop="itemNo"></el-table-column>
         <el-table-column label="PN" prop="pn"></el-table-column>
@@ -24,6 +26,7 @@
 import { reactive, toRefs, onMounted } from 'vue'
 import { Graph, Markup } from '@antv/x6'
 import { register, getTeleport } from '@antv/x6-vue-shape'
+import { Scroller } from '@antv/x6-plugin-scroller'
 
 import {
   DagreLayout,
@@ -166,12 +169,12 @@ export default {
     const initGraph = function () {
       graph = new Graph({
         container: document.getElementById('container'),
-        width: 2200,
-        height: 700,
-        grid: true,
-        scroller: true,
-        autoResize: true,
-        panning: true,
+        // width: 2200,
+        // height: 700,
+        // grid: true,
+        // scroller: true,
+        // autoResize: true,
+        // panning: true,
         mousewheel: true,
         connecting: {
           anchor: 'orth',
@@ -206,6 +209,15 @@ export default {
           }
         }
       })
+
+      graph.use(
+        new Scroller({
+          enabled: true,
+          pageVisible: true,
+          // pageBreak: true,
+          pannable: true,
+        }),
+      )
 
 
       const data = {
@@ -256,6 +268,7 @@ export default {
 <style lang="less" scoped>
 .wrap {
   display: flex;
+  height: 700px;
 
   .left-content {
     flex: 1;
@@ -295,6 +308,21 @@ export default {
 
   .check-link {
     color: #3a4dfa;
+  }
+}
+
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-right: 8px;
+  margin-left: 8px;
+
+  .app-content {
+    flex: 1;
+    margin-right: 8px;
+    margin-left: 8px;
   }
 }
 </style>

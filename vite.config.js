@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-07-21 11:18:51
- * @LastEditTime: 2024-06-28 11:14:36
+ * @LastEditTime: 2024-08-07 11:22:44
  * @FilePath: \webpack-teste:\others\jsplumb-test\vite.config.js
  */
 const UselessFile = require('useless-files-webpack-plugin')
@@ -137,6 +137,10 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: true, // 支持跨域
         },
         '^/bub/': {
+          target: 'http://dopuat.longsys.com', // '代理目标的基础路径'
+          changeOrigin: true, // 支持跨域
+        },
+        '^/dpr/': {
           target: 'http://dopuat.longsys.com', // '代理目标的基础路径'
           changeOrigin: true, // 支持跨域
         },
