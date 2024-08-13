@@ -1,7 +1,7 @@
 <!--
  * @Description: echart test
  * @Date: 2022-03-30 09:40:28
- * @LastEditTime: 2024-01-17 17:34:07
+ * @LastEditTime: 2024-08-12 15:09:16
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\index.vue
 -->
 
@@ -40,7 +40,7 @@ import ScatterChart from './Scatter.vue'
 import ScatterChartSame from './Scatter.same.vue'
 import ChartGroup from './ChartGroup.vue'
 import APIChart from './ApiChart.vue'
-import TestChart from './TestChart.vue'
+import TestChart from './SankeyChart.vue'
 
 export default {
   name: 'EchartTest',

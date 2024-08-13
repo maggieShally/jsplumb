@@ -7,7 +7,7 @@
 
 <template>
   <OperatorCom @onCommand="handleOperator" />
-  <div class="graphWrapper" ref="graphRef" :id="`disjoinGraph${idKey}`">
+  <div class="graphWrapper" ref="graphRef" :id="`disjoinGraph${idKey}`" v-loading="loading">
   </div>
 </template>
 
@@ -424,12 +424,14 @@ export default {
 
     // 主视图 节点 边 组成
     const initData = () => {
+      state.loading = true
       const { dataList: { nodeList, edgesList } } = state
       const showNodes = nodeList.filter(i => i.level === 1)
       const dataJson = getNormalLayoutData(showNodes)
       graph.fromJSON(dataJson)
       graph.zoomTo(0.6)
       graph.centerContent()
+      state.loading = false
     }
 
     // 分离路径

@@ -7,23 +7,22 @@
 <template>
   <el-config-provider :locale="elementLocale">
     <!-- <el-button mb-2 @click="handleChangeLanguage">Switch Language</el-button> -->
-    <el-container>
-      <el-header>Header</el-header>
+    <el-container style="height: 100%;">
+      <el-header style="height: 40px;">Header</el-header>
       <el-container class="wrapper">
         <el-aside width="200px">
           <BaseNav />
         </el-aside>
         <el-main>
           <div class="content-wrap">
-            <router-view></router-view>
+            <div style="height: 100%; overflow: auto">
+              <router-view></router-view>
+            </div>
           </div>
         </el-main>
       </el-container>
     </el-container>
   </el-config-provider>
-  <!-- test123 -->
-  <!-- test123 第二次提交 -->
-  <!-- test123 第三次提交 -->
 </template>
 
 
@@ -104,7 +103,7 @@ a {
 .el-aside {
   overflow-x: hidden !important;
   position: absolute;
-  top: 60px;
+  top: 40px;
   bottom: 0;
 }
 .el-container {
@@ -119,7 +118,7 @@ a {
 }
 
 .wrapper {
-  height: calc(100% - 60px);
+  height: calc(100% - 40px);
 }
 
 .content-wrap {
@@ -128,8 +127,7 @@ a {
   background-color: #ccc;
   background: #fff;
   border-radius: 12px;
-  overflow-x: hidden;
   height: 100%;
-  min-height: 830px;
+  overflow: hidden;
 }
 </style>

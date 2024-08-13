@@ -1,7 +1,7 @@
 <!--
  * @Description: 练习拖拽结构
  * @Date: 2022-03-25 15:08:42
- * @LastEditTime: 2022-12-07 10:46:35
+ * @LastEditTime: 2024-08-12 14:53:53
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\JsDrag\index.vue
 -->
 
@@ -214,7 +214,6 @@ export default {
 <style lang="less" scoped>
 .flex-wrap {
   width: 100%;
-  min-height: 800px;
   display: flex;
   align-items: stretch;
 

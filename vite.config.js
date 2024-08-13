@@ -147,11 +147,14 @@ export default defineConfig(({ mode, command }) => {
       },
     },
 
-    pluginOptions: {
-      'style-resources-loader': {
-        preProcessor: 'less',
-        patterns: [path.resolve(__dirname, './src/assets/main.less')], // 引入全局样式变量
-      },
+    css: {
+      preprocessorOptions: {
+        less: {
+            javascriptEnabled: true,
+            additionalData: `@import "${path.resolve(__dirname,"src/assets/variable.less")}";`,
+        },
     },
+    }
+    
   }
 })

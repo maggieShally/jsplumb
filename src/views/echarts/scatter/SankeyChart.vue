@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2023-04-23 15:28:49
- * @LastEditTime: 2023-11-28 17:09:53
- * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\TestChart.vue
+ * @LastEditTime: 2024-08-12 15:10:08
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\SankeyChart.vue
 -->
 
 <template>
@@ -39,7 +39,71 @@ export default {
   setup() {
     const state = reactive({
       chartRef: null,
-      seriesData: sankeyOptions,
+      seriesData: {
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'mousemove',
+        },
+        series: {
+          type: 'sankey',
+          layout: 'none',
+          emphasis: {
+            focus: 'adjacency'
+          },
+          data: [
+            {
+              name: 'a'
+            },
+            {
+              name: 'b'
+            },
+            {
+              name: 'a1'
+            },
+            {
+              name: 'a2'
+            },
+            {
+              name: 'b1'
+            },
+            {
+              name: 'c'
+            }
+          ],
+          links: [
+            {
+              source: 'a',
+              target: 'a1',
+              value: 5
+            },
+            {
+              source: 'a',
+              target: 'a2',
+              value: 3
+            },
+            {
+              source: 'b',
+              target: 'b1',
+              value: 8
+            },
+            {
+              source: 'a',
+              target: 'b1',
+              value: 3
+            },
+            {
+              source: 'b1',
+              target: 'a1',
+              value: 1
+            },
+            {
+              source: 'b1',
+              target: 'c',
+              value: 2
+            }
+          ]
+        }
+      },
       preActiveData: {
         links: [],
         nodes: []
@@ -91,6 +155,6 @@ export default {
 <style lang="less" scoped>
 .chart {
   width: 100%;
-  height: 11450px;
+  height: 400px;
 }
 </style>
