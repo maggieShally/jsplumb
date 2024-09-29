@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-07-19 14:57:57
- * @LastEditTime: 2024-08-13 15:29:43
+ * @LastEditTime: 2024-08-13 15:59:44
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\tailwindcss\index.vue
 -->
 <template>
@@ -274,10 +274,10 @@ export default {
 		&:nth-of-type(6) {
 			background-color: rgb(80, 27, 71);
 		}
-
 		&:hover {
 			flex: 2;
 		}
+		
 	}
 }
 </style>

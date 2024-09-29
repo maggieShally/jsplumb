@@ -8,6 +8,7 @@
 <template>
   <div class="node-wrap">
     <div class="node-content">
+      {{nodeSize.id}}
       <!-- <template v-if="nodeInfo.type !== 'zb' && !nodeInfo.isLeaf"> -->
       <span class="node-icon icon-right" @click="handleClick('right')">下{{rightVisible ? '+' : '-'}}</span>
       <!-- <span class="node-icon icon-bottom" @click="handleClick('bottom')">指{{bottomVisible ? '+' : '-'}}</span> -->
@@ -16,8 +17,9 @@
         <el-button type="primary" size="small" @click="handleShowZb">指标</el-button>
         <p class="title">{{ nodeInfo.name }}</p>
       </div>
-      <!-- <div class="node-section" v-else>
-
+     
+      <div class="node-section" v-else>
+        
         <p class="node-title">{{ nodeInfo.name }}</p>
         <div class="flex-wrap">
           <div class="flex-item" v-for="item in nodeInfo.data" :key="item.name">
@@ -25,7 +27,7 @@
             <p>{{ item.quantity }}</p>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -43,9 +45,11 @@ export default {
     const getGraph = inject('getGraph')
 
     const node = getNode()
+
     const graph = getGraph()
     const state = reactive({
       nodeInfo: getNode().data,
+      nodeSize: node,
       rightVisible: true,
       bottomVisible: true,
     })

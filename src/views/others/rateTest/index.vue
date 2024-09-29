@@ -1,101 +1,181 @@
+<!--
+ * @Description: 
+ * @Date: 2024-01-17 11:54:02
+ * @LastEditTime: 2024-09-25 10:55:01
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\rateTest\index.vue
+-->
+
 <template>
-  <!-- <div>
-    <ul>
-      <li>
-        <input id="tab1" type="radio" name="tab" checked style="display: none">
-        <label for="tab1">选项一</label>
-        <div class="content">
-          选项一内容
-        </div>
-      </li>
-      <li>
-        <input id="tab2" type="radio" name="tab" style="display: none">
-        <label for="tab2">选项二</label>
-        <div class="content">选项二内容</div>
-      </li>
-      <li>
-        <input id="tab3" type="radio" name="tab" style="display: none">
-        <label for="tab3">选项三</label>
-        <div class="content">选项三内容</div>
-      </li>
-    </ul>
-  </div> -->
 
-  <!-- <input id="canCick" type="text" value="123"/>
-  <el-button id="myBtn" type="primary" @click="handleSubmit">提交</el-button> -->
 
-  <iframe src="http://localhost:8087/others/iframeTest" style="width: 100%;height: 500px"></iframe>
+
+  <div>
+    <!--
+    <DraggableColumn />
+    -->
+
+    <el-button type="primary" @click="handleGetSubmit">点击Test</el-button>
+
+
+    <span id="form_nav">我是一个terst </span>
+
+    <el-input v-model="name"></el-input>
+
+    <div ref="testRef" style="width: 100px;border: 1px solid rgb(221, 221, 221);">
+      <div>ddddddddd</div>
+      <div>sccc</div>
+    </div>
+  </div>
+
 </template>
 
 <script>
+
+// import useGetTableData from './useGetTableData.js'
+import { onBeforeUnmount, toRefs, onMounted, reactive, ref } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
+import { ElMessageBox, ElMessage } from 'element-plus'
+
+import { useEventListener } from '@vueuse/core'
+
+
+// import DraggableColumn from './DraggableColumn.vue'
+
+
+
 export default {
   name: 'RateTest',
+  components: {
+    // DraggableColumn
+  },
   setup() {
 
-    const handleSubmit = () => {
-      // doSubmit()
+    const testRef = ref(null)
+
+    const state = reactive({
+      searchForm: {},
+      name: '',
+    })
+
+
+    const handleGetSubmit = async () => {
+      console.log(2222)
+      try {
+        const data = await doSumnit()
+        console.log(data)
+      } catch (err) {
+        console.log('err', err)
+      }
+
     }
+
+    const doSumnit = async () => {
+      return new Promise((resolev, reject) => {
+        try {
+          setTimeout(() => {
+            reject(false)
+          }, 500)
+        } catch (err) {
+          console.log(err)
+        }
+
+      })
+    }
+
+    // const getTableFun = async extra => {
+    //   const params = {
+    //     ...state.searchForm,
+    //     ...extra
+    //   }
+    //   const { data } = await getData(params)
+    //   return {
+    //     ...data,
+    //     rows: data.rows.map(i => {
+    //       return {
+    //         ...i,
+    //         valueKey: i + 'test',
+    //       }
+    //     })
+    //   }
+    // }
+
+    // const { tableData, pagination, loading, handleSearch, handleChangeSize, handleChangePage } = useGetTableData(getTableFun, {
+    //   onSuccess: result => {
+    //     console.log(result)
+    //   }
+    // })
+
+    const open = () => {
+      let result = true
+      ElMessageBox.confirm(
+        'proxy will permanently delete the file. Continue?',
+        'Warning',
+        {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        }
+      )
+        .then(() => {
+          ElMessage({
+            type: 'success',
+            message: 'Delete completed',
+          })
+          result = true
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: 'Delete canceled',
+          })
+        })
+      return result
+    }
+
+
+    onBeforeRouteLeave(() => {
+      return open()
+    })
+
+    onBeforeUnmount(() => {
+      var a = 3
+    
+    })
+
+
+    onMounted(() => {
+      // useEventListener(document, 'visibilitychange', (evt) => {
+      //   console.log(evt)
+      // })
+
+      // document.addEventListener('click', el => {
+      //   console.log('是否在testRef内点击', testRef.value.contains(el.target))
+      // })
+
+      window.onbeforeunload = function () {
+        // return 'ssss';
+      }
+
+    })
+
+
     return {
-      // handleSubmit
+      testRef,
+      // tableData,
+      // pagination,
+      // loading,
+      // handleSearch,
+      // handleChangeSize,
+      // handleChangePage,
+      ...toRefs(state),
+      handleGetSubmit
     }
   }
 }
 </script>
 
 <style lang="less">
-ul {
-  position: relative;
-    width: 300px;
-    margin: 100px auto;
-}
-
-ul li {
-  list-style: none;
-}
-
-ul li input {
+#form_nav {
   display: none
-}
-
-
-ul li label {
-  float: left;
-  width: 100px;
-  text-align: center;
-  line-height: 30px;
-  border: 1px solid #000;
-  border-right: 0;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: all .3s;
-}
-
-ul li input:checked+label {
-  color: #fff;
-  background-color: #000;
-}
-
-ul li:last-child label {
-  border-right: 1px solid #000;
-}
-
-ul li .content {
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  left: 0;
-  top: 31px;
-  width: 100%;
-  height: 300px;
-  border: 1px solid #000;
-  box-sizing: border-box;
-  font-size: 24px;
-  text-align: center;
-  line-height: 300px;
-}
-
-ul li input:checked~.content {
-  opacity: 1;
-  visibility: visible;
 }
 </style>

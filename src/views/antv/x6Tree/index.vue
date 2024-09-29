@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted, h } from 'vue'
+import { reactive, toRefs, onMounted, h, render } from 'vue'
 import { Graph, ObjectExt, Cell } from '@antv/x6'
-import { DagreLayout, CircularLayout, ForceLayout, RadialLayout } from '@antv/layout'
+import { DagreLayout, CircularLayout, ForceLayout, RadialLayout, } from '@antv/layout'
 import { register, getTeleport } from '@antv/x6-vue-shape'
 
 import dagre from 'dagre'
@@ -58,7 +58,6 @@ export default {
     let graph
 
     const registerGraph = function () {
-
 
       register({
         shape: 'custom-vue-node',
@@ -125,7 +124,6 @@ export default {
         autoResize: true,
         panning: true,
         mousewheel: true,
-
         connecting: {
           anchor: 'orth',
           connector: 'rounded',
@@ -150,7 +148,9 @@ export default {
             ...item,
             shape: 'custom-vue-node',
             width: 150,
-            height: item.type === 'zb' ? 140 : 100,
+            height: item.type === 'zb' ? 200 : 100,
+            size: [100, 500],
+            // height: 100,
 
             data: item,
             ports: {
@@ -236,6 +236,7 @@ export default {
 
       // layout(graph)
 
+      // const dagreLayout = new DagreLayout({
       const dagreLayout = new DagreLayout({
         // type: 'dagre',
         // rankdir: 'LR',
@@ -246,7 +247,14 @@ export default {
         align: 'DL', // 可选
         nodesep: 30, // 可选
         ranksep: 100, // 可选
-        controlPoints: true, // 可选
+        nodeSize: 30,
+        // nodeSize: [100, 36],
+        // nodesepFunc: node => {
+        //   return node.height * 0.5
+        // }, // 可选
+        preventOverlap: true,
+        controlPoints: true, // 可选 
+       
       })
       const model = dagreLayout.layout(data)
 

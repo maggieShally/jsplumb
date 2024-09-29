@@ -12,7 +12,7 @@ export const initData = {
       type: 'node'
     },
     {
-      id: '-1-0',
+      id: '1-0',
       name: 'PCBA DDR4,8GB 上游1',
       type: 'pre'
     },
@@ -51,7 +51,7 @@ export const initData = {
       isLeaf: true
     },
     {
-      id: '0-zb-1',
+      id: '0-2',
       name: 'PCBA DDR4,8GB 指标1/销售单',
       type: 'zb',
       data: [
@@ -68,7 +68,7 @@ export const initData = {
       ]
     },
     {
-      id: '0-zb-2',
+      id: '0-2',
       name: 'PCBA DDR4,8GB 指标1/生产单',
       type: 'zb',
       data: [
@@ -95,7 +95,7 @@ export const initData = {
       type: 'next'
     },
     {
-      id: '1-zb-1',
+      id: '1-2',
       name: 'PCBA DDR4,16GB 指标1',
       type: 'zb',
       data: [
@@ -112,7 +112,7 @@ export const initData = {
       ]
     },
     {
-      id: '1-zb-2',
+      id: '1-3',
       name: 'PCBA DDR4,16GB 指标2',
       type: 'zb',
       data: [
@@ -132,7 +132,7 @@ export const initData = {
   edges: [
     {
       source: {
-        cell: '-1-0',
+        cell: '1-0',
         port: 'right'
       },
       target: {
@@ -142,7 +142,7 @@ export const initData = {
     },
     {
       source: {
-        cell: '-1-0',
+        cell: '1-0',
         port: 'bottom'
       },
       target: {
@@ -186,7 +186,7 @@ export const initData = {
         port: 'bottom'
       },
       target: {
-        cell: '0-zb-1',
+        cell: '0-2',
         port: 'left'
       }
     },
@@ -196,7 +196,7 @@ export const initData = {
         port: 'bottom'
       },
       target: {
-        cell: '0-zb-2',
+        cell: '0-2',
         port: 'left'
       }
     },
@@ -212,7 +212,7 @@ export const initData = {
     },
     {
       source: {
-        cell: '-1-0',
+        cell: '1-0',
         port: 'right'
       },
       target: {
@@ -236,7 +236,7 @@ export const initData = {
         port: 'bottom'
       },
       target: {
-        cell: '1-zb-1',
+        cell: '1-2',
         port: 'left'
       }
     },
@@ -246,7 +246,7 @@ export const initData = {
         port: 'bottom'
       },
       target: {
-        cell: '1-zb-2',
+        cell: '1-3',
         port: 'left'
       }
     }

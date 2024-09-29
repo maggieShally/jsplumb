@@ -1,18 +1,18 @@
 <!--
  * @Description: sss
  * @Date: 2022-06-16 11:04:43
- * @LastEditTime: 2022-12-05 10:19:21
+ * @LastEditTime: 2024-09-04 13:43:57
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\nodeItem\index.vue
 -->
 <template>
   <ScreenFullCom @onToggle="val => isFullScreen = val">
-    <el-button @click="visible=true">sss</el-button>
+    <el-button @click="visible = true">sss</el-button>
     <div id="nodeUnit">
       <el-tooltip :teleported="false" content="<span>The content can be <strong>HTML</strong></span>" raw-content>
         <el-button>hover me</el-button>
       </el-tooltip>
       <NodeUnion :currentNode="nodeTree" :nodeIndex="0" :childrenList="nodeTree.children" :isLast="true" />
-   
+
     </div>
     <!-- <div style="height: 1100px">
       <iframe src="http://localhost:8080/matter/productToResource" width="100%" height="100%" frameborder="0" scrolling="no">
@@ -55,7 +55,7 @@
       </el-tooltip>
 
     </el-dialog>
-
+    l
   </ScreenFullCom>
 </template>
 
@@ -159,5 +159,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

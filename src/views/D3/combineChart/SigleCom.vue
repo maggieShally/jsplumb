@@ -6,12 +6,12 @@
 -->
 
 <template>
-  <div style="marginBottom: 50px">
+  <div style="margin-bottom: 50px">
     <el-table :data="tableData">
       <el-table-column label="类别" prop="category" width="150px" />
       <el-table-column v-for="item in columns" :label="item.label" :prop="item.key" :key="item.key" width="180px" align="center">
         <template #default="scope">
-          <div style="marginLeft: -12px" class="cell-wrapper">
+          <div style="margin-left: -12px" class="cell-wrapper">
 
             <Component v-if="scope.row[scope.column.rawColumnKey]?.chartType" :is="`${scope.row[scope.column.rawColumnKey].chartType}`" :label="scope.row[scope.column.rawColumnKey].label" />
 

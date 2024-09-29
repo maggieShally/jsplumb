@@ -53,7 +53,7 @@ export default {
   },
   setup() {
     const state = reactive({
-      panelName: 'five'
+      panelName: 'first'
     })
 
     // const isManual = computed(() => state.panelName === 'second')

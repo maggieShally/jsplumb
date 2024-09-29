@@ -5,10 +5,8 @@
  * @FilePath: \jsplumb-test\src\views\D3\components\First.vue
 -->
 <template>
-  <p>learn example 1</p>
-  <div id="box">
-
-  </div>
+  <p>(First)learn example 1</p>
+  <div id="box"></div>
 </template>
 
 <script setup>

@@ -134,7 +134,7 @@ export default {
         ...item,
         shape: 'NodeCom',
         width: 150,
-        height: 100,
+        height: Math.random()*100 + 150,
         data: item,
       }
     }
@@ -239,7 +239,7 @@ export default {
         // nodesep: 50,
         rankdir: 'LR', // 可选，默认为图的中心
         align: 'DL', // 可选
-        nodesep: 30, // 可选
+        // nodesep: 30, // 可选
         ranksep: 150, // 可选
         controlPoints: true, // 可选
         sortBy: 'value',

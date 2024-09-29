@@ -1,7 +1,7 @@
 <!--
  * @Description: echarts基础封装，返回 echarts实例
  * @Date: 2021-10-14 17:05:49
- * @LastEditTime: 2024-05-15 14:12:48
+ * @LastEditTime: 2024-08-20 16:31:18
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseChart\ChartPie.vue
 -->
 
@@ -45,7 +45,6 @@ import { localGet, copyText } from '@/utils'
 import waterConfig from './config.js'
 
 import TipsNodeCom from '../TipsNodeCom'
-
 import ContextMenu from '../contextMenu'
 
 export default {
@@ -99,8 +98,6 @@ export default {
     const getNode = props.mode === 'node' ? inject('getNode') : undefined
 
     const ec = echarts
-
-    const isManual = inject('isManual', '') // 手动触发 resize(tab 切换显示时 会导致获取不到宽度 需要手动触发 resize)
 
     const { proxy } = getCurrentInstance()
 
@@ -171,13 +168,6 @@ export default {
       { deep: true }
     )
 
-    watch(
-      () => isManual.value,
-      async val => {
-        await nextTick()
-        chart.value.resize()
-      }
-    )
 
     //标题
     const title = computed(() => {
@@ -333,7 +323,6 @@ export default {
 
     onUnmounted(() => {
       chart.value?.dispose()
-      window.removeEventListener('resize', handleWindowResize)
     })
 
     return {
@@ -343,7 +332,6 @@ export default {
       chart,
       currentNode,
       ...toRefs(state),
-      handleWindowResize,
     }
   },
 }

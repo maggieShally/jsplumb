@@ -49,7 +49,6 @@
 <script>
 import { getCurrentInstance, toRefs, reactive, onMounted, nextTick } from 'vue'
 import { headerData, tableData } from './data.js'
-import { rectToPathData } from '@antv/x6/lib/util/dom/path'
 
 export default {
   name: 'D3Gantt',

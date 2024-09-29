@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2023-04-23 15:28:49
- * @LastEditTime: 2024-08-12 15:10:08
+ * @LastEditTime: 2024-09-04 13:55:11
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\scatter\SankeyChart.vue
 -->
 
@@ -69,7 +69,17 @@ export default {
             {
               name: 'c'
             }
-          ],
+          ].map(i => {
+            return {
+              ...i,
+              label: {
+                formatter: params => {
+                  console.log(params)
+                  return params.name + '\n'+  10
+                }
+              }
+            }
+          }),
           links: [
             {
               source: 'a',

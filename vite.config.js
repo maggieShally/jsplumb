@@ -4,8 +4,9 @@
  * @LastEditTime: 2024-08-07 11:22:44
  * @FilePath: \webpack-teste:\others\jsplumb-test\vite.config.js
  */
-const UselessFile = require('useless-files-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin')
+// const CompressionPlugin = require('compression-webpack-plugin')
+
+import eslint from 'vite-plugin-eslint'  
 
 import { defineConfig } from 'vite'
 import createVitePlugins from './plugins'
@@ -86,6 +87,14 @@ export default defineConfig(({ mode, command }) => {
     },
 
     plugins: [
+      // eslint(),
+      // [
+      //   eslint({
+      //     failOnWarning: false,
+      //     failOnError: false,
+      //   }),
+     
+      // ],
       ...createVitePlugins(),
       // new UselessFile({
       //   // 性能优化 ：删除项目中没有引用关系的文件
@@ -150,11 +159,11 @@ export default defineConfig(({ mode, command }) => {
     css: {
       preprocessorOptions: {
         less: {
-            javascriptEnabled: true,
-            additionalData: `@import "${path.resolve(__dirname,"src/assets/variable.less")}";`,
+          javascriptEnabled: true,
+          additionalData: `@import "${path.resolve(__dirname, "src/assets/variable.less")}";`,
         },
-    },
+      },
     }
-    
+
   }
 })

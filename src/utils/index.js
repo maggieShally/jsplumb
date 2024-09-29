@@ -9,6 +9,7 @@ export function localGet(key) {
   try {
     return JSON.parse(window.localStorage.getItem(key))
   } catch (error) {
+    let a = 3
     return value
   }
 }

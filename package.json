@@ -2,6 +2,7 @@
   "name": "jsplumb-test",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -41,7 +42,6 @@
     "lodash": "^4.17.21",
     "save": "^2.9.0",
     "screenfull": "^5.2.0",
-    "useless-files-webpack-plugin": "^1.0.1",
     "v-gantt-chart": "^1.6.1",
     "vue": "^3.3.8",
     "vue-codemirror": "^6.1.1",
@@ -64,12 +64,13 @@
     "autoprefixer": "^9.8.8",
     "babel-eslint": "^10.1.0",
     "compression-webpack-plugin": "^5.0.0",
-    "eslint": "^6.7.2",
+    "eslint": "^7.32.0",
     "eslint-plugin-vue": "^7.0.0",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "unplugin-auto-import": "^0.17.5",
-    "vite": "^5.2.10"
+    "vite": "^5.2.10",
+    "vite-plugin-eslint": "^1.8.1"
   },
   "eslintConfig": {
     "root": true,
@@ -87,7 +88,8 @@
       "no-unused-vars": "warn",
       "no-debugger": "off",
       "no-console": "off",
-      "no-undef": "warn"
+      "no-undef": "warn",
+      "no-dupe-keys": 0
     }
   },
   "browserslist": [

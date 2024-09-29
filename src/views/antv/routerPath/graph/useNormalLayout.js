@@ -152,7 +152,7 @@ export const useNormalLayout = (state) => {
   // 布局
   const getNormalLayoutData = showNodes => {
     
-    // 外层过种节点组
+    // 外层过程节点组
     const { firstLayout, nodes: processNodes } = initProcessData(showNodes)
 
     // 第二层用 网格布局

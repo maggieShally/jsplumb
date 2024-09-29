@@ -11,7 +11,7 @@ const layout = (graph, dir = 'LR') => {
   const nodes = graph.getNodes()
   const edges = graph.getEdges()
   const g = new dagre.graphlib.Graph()
-  g.setGraph({ rankdir: dir, nodesep: 80, ranksep: 120 })
+  g.setGraph({ rankdir: dir, nodesep: 280, ranksep: 320 })
   g.setDefaultEdgeLabel(() => ({}))
 
   const width = 300

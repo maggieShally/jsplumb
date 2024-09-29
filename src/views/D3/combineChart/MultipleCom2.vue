@@ -1,19 +1,19 @@
 <!--
  * @Description: 多条连线
  * @Date: 2023-02-24 16:39:42
- * @LastEditTime: 2023-04-07 16:59:06
+ * @LastEditTime: 2024-09-26 10:48:41
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\MultipleCom2.vue
 -->
 
 <template>
   <div>
 
-    <div style="marginBottom: 50px">
+    <div style="margin-bottom: 50px">
       <el-table :data="tableData" border>
         <el-table-column label="名称" prop="category" width="150px" />
         <el-table-column v-for="(item, index) in columns" :label="item.label" :prop="item.key" :key="item.key" :width="columnWidth" align="center">
           <template #default="scope">
-            <div style="marginLeft: -12px" class="cell-wrapper">
+            <div style="margin-left: -12px" class="cell-wrapper">
               <div class="dragg-wrap" :style="{left: -168 * index + (180 - 80) / 2 + 'px'}" v-if="scope.row[scope.column.rawColumnKey]?.chartType">
                 <VueDragResize :isResizable="false" :isActive="true" :w="80" :h="80" :x="scope.row[scope.column.rawColumnKey].left" :parentH="90" :parentW="168*columns.length" :parentLimitation="true" v-on:dragstop="event => resize(event, scope.$index, scope.column.rawColumnKey)" :key="scope.row[scope.column.rawColumnKey].key">
                  <Component :is="`${scope.row[scope.column.rawColumnKey].chartType}`" :label="scope.row[scope.column.rawColumnKey].label" />
@@ -71,6 +71,7 @@ export default {
     CircleCom,
   },
   setup() {
+    
     const getFirstWidth = '12px'
 
     const data = [
