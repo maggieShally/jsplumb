@@ -1,3 +1,9 @@
+<!--
+ * @Description:  节点
+ * @Date: 2024-01-02 10:51:45
+ * @LastEditTime: 2024-09-29 15:18:18
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\graph\NodeCom.vue
+-->
 
 <template>
     <ContextMenu :actions="menuList">

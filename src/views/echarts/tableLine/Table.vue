@@ -6,118 +6,77 @@
 -->
 <template>
 
-  <div style="marginBottom: 50px">
+  <div style="margin-bottom: 50px">
     <el-table :data="tableData" border :span-method="objectSpanMethod">
       <el-table-column label="交易类型" prop="jyType" width="150px" />
       <el-table-column label="产品大类" prop="category" width="150px" />
-      <el-table-column
-        v-for="item in columns"
-        :label="item.label"
-        :prop="item.key"
-        :key="item.key"
-        width="180px"
-      >
+      <el-table-column v-for="item in columns" :label="item.label" :prop="item.key" :key="item.key" width="180px">
         <template #default="scope">
-          <div style="marginLeft: -12px" class="cell-wrapper">
-            <div
-              :id="`Str${scope.row[scope.column.rawColumnKey]?.id}`"
-              class="strBox"
-            ></div>
+          <div style="margin-left: -12px" class="cell-wrapper">
+            <div :id="`Str${scope.row[scope.column.rawColumnKey]?.id}`" class="strBox"></div>
 
-            <el-tooltip
-              v-if="scope.row[scope.column.rawColumnKey]?.nextShow"
-              effect="light"
-              placement="bottom"
-            >
+            <el-tooltip v-if="scope.row[scope.column.rawColumnKey]?.nextShow" effect="light" placement="bottom">
               <template #content>
-                <el-button
-                  type="primary"
-                  size="small"
-                  @click="handleShowNextInfo"
-                  >下钻</el-button
-                >
+                <el-button type="primary" size="small" @click="handleShowNextInfo">下钻</el-button>
               </template>
-              <div
-                :class="[
-                  'counter-progress',
-                  hightLightIds.length > 0 &&
+              <div :class="[
+                'counter-progress',
+                hightLightIds.length > 0 &&
                   !hightLightIds.includes(
                     scope.row[scope.column.rawColumnKey]?.id
                   )
-                    ? 'noBg'
-                    : ''
-                ]"
-              >
-                <div
-                  class="counter-progress-bg"
-                  :style="{
-                    width:
-                      (scope.row[scope.column.rawColumnKey]?.percent /
-                        scope.row[scope.column.rawColumnKey]?.total) *
-                        100 +
-                      '%'
-                  }"
-                ></div>
+                  ? 'noBg'
+                  : ''
+              ]">
+                <div class="counter-progress-bg" :style="{
+                  width:
+                    (scope.row[scope.column.rawColumnKey]?.percent /
+                      scope.row[scope.column.rawColumnKey]?.total) *
+                    100 +
+                    '%'
+                }"></div>
                 <div class="counter-progress-text">
                   {{ scope.row[scope.column.rawColumnKey]?.total }}
                 </div>
               </div>
             </el-tooltip>
 
-            <div
-              v-else
-              :class="[
-                'counter-progress',
-                hightLightIds.length > 0 &&
+            <div v-else :class="[
+              'counter-progress',
+              hightLightIds.length > 0 &&
                 !hightLightIds.includes(
                   scope.row[scope.column.rawColumnKey]?.id
                 )
-                  ? 'noBg'
-                  : ''
-              ]"
-            >
-              <div
-                class="counter-progress-bg"
-                :style="{
-                  width:
-                    (scope.row[scope.column.rawColumnKey]?.percent /
-                      scope.row[scope.column.rawColumnKey]?.total) *
-                      100 +
-                    '%'
-                }"
-              ></div>
+                ? 'noBg'
+                : ''
+            ]">
+              <div class="counter-progress-bg" :style="{
+                width:
+                  (scope.row[scope.column.rawColumnKey]?.percent /
+                    scope.row[scope.column.rawColumnKey]?.total) *
+                  100 +
+                  '%'
+              }"></div>
               <div class="counter-progress-text">
                 {{ scope.row[scope.column.rawColumnKey]?.total }}
               </div>
             </div>
 
-            <span
-              v-if="scope.row[scope.column.rawColumnKey]?.show"
-              class="operate-text"
-              type="primary"
-              @click="
-                handleShowLine(
-                  $event,
-                  scope.row[scope.column.rawColumnKey]?.nextIds,
-                  scope
-                )
-              "
-              >{{
+            <span v-if="scope.row[scope.column.rawColumnKey]?.show" class="operate-text" type="primary" @click="
+              handleShowLine(
+                $event,
+                scope.row[scope.column.rawColumnKey]?.nextIds,
+                scope
+              )
+              ">{{
                 activeId === scope.row[scope.column.rawColumnKey]?.id
                   ? '关闭'
                   : '展开'
-              }}</span
-            >
-            <div
-              v-if="activeId === scope.row[scope.column.rawColumnKey]?.id"
-              class="line-wrap"
-            >
+              }}</span>
+            <div v-if="activeId === scope.row[scope.column.rawColumnKey]?.id" class="line-wrap">
               <div class="first"></div>
               <div class="second"></div>
-              <template
-                v-for="item in scope.row[scope.column.rawColumnKey]?.nextIds"
-                :key="item"
-              >
+              <template v-for="item in scope.row[scope.column.rawColumnKey]?.nextIds" :key="item">
                 <div class="third">
                   <div class="four"></div>
                 </div>
@@ -133,6 +92,8 @@
 </template>
 
 <script>
+import { reactive, toRefs, nextTick } from 'vue'
+
 import { weeks, columns } from './data.js'
 
 import TableNextModal from './Table.modal.vue'
@@ -167,7 +128,7 @@ export default {
             percent: 50,
             id: '211',
             show: true,
-            nextIds: ['64','12', ]
+            nextIds: ['64', '12',]
           }
         },
         {
@@ -282,7 +243,7 @@ export default {
       let maxHeight = 0,
         minHeight = 0,
         heightList = [],
-        secondTop=0
+        secondTop = 0
 
       thirdList.forEach((item, index) => {
         const clientRect = targetEventList[index].getBoundingClientRect()
@@ -294,7 +255,7 @@ export default {
 
         // 尽量让线终点在单元格中间
         item.style.width = (offX < 0 ? -offX - 50 : offX + 30) + 'px'
-        
+
         if (offX < 0) {
           item.style.transform = 'translate(-100%)'
           item.classList.add('rightArrow')
@@ -399,6 +360,7 @@ export default {
 
   &.noBg {
     background-color: rgba(221, 221, 221, 0.3);
+
     .counter-progress-bg {
       background-color: rgba(64, 158, 255, 0.2);
     }
@@ -436,5 +398,4 @@ export default {
 :deep(.el-table .el-table__cell) {
   z-index: auto;
 }
-
 </style>

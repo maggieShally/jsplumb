@@ -1,7 +1,7 @@
 <!--
  * @Description: 数据集 指标列表
  * @Date: 2024-04-29 11:20:53
- * @LastEditTime: 2024-05-22 10:26:25
+ * @LastEditTime: 2025-01-21 18:16:09
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\DimensionQuotaList.vue
 -->
 
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { ref, reactive, toRefs, onMounted } from 'vue'
+import { ref, reactive, toRefs, onMounted, computed } from 'vue'
 import draggable from 'vuedraggable'
 
 import { dataViewApi } from '@/services'
@@ -41,8 +41,8 @@ export default {
     draggable
   },
   props: {
-    dimensionFields: Array,
-    quotaFields: Array,
+    dimensionFields: Array, //已选中的维度字段
+    quotaFields: Array, // 已选中的指标字段
   },
   setup(props) {
 
@@ -98,7 +98,7 @@ export default {
 
     const handleDimensionMove = (e, originalEvent) => {
       const toId = e.to.id
-      if (['defaultFields', 'dimensionFields'].includes(toId)) {
+      if (['defaultFields', 'dimensionFields', 'drillField'].includes(toId)) {
         const currentFieldList = e.relatedContext.list.map(i => i.field)
         if (!currentFieldList.includes(e.draggedContext.element.field)) {
           return true

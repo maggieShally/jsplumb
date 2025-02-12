@@ -11,6 +11,8 @@
 
 <script>
 import { computed, inject, onMounted, onUnmounted, watch } from 'vue'
+import * as echarts from 'echarts'
+
 import { BASIC_OPTION } from './default_options.js'
 import { merge } from 'lodash'
 import ResizeListener from 'element-resize-detector'
@@ -33,8 +35,8 @@ export default {
     },
   },
   setup(props, context) {
-    const ec = inject('ec')
-    console.log(ec)
+    // const ec = inject('ec')
+    // console.log(ec)
 
     let chart
 
@@ -85,7 +87,7 @@ export default {
     )
 
     onMounted(() => {
-      chart = ec.init(document.querySelector(`#${props.name}_chart`))
+      chart = echarts.init(document.querySelector(`#${props.name}_chart`))
       updateChartView()
       window.addEventListener('resize', handleWindowResize)
       addChartResizeListener()

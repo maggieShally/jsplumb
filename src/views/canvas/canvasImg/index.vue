@@ -1,20 +1,32 @@
 <!--
  * @Description: 
  * @Date: 2021-07-21 15:50:58
- * @LastEditTime: 2021-08-25 15:17:42
- * @FilePath: \jsplumb-test\src\views\canvas\canvasImg\index.vue
+ * @LastEditTime: 2024-10-16 14:41:46
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\canvas\canvasImg\index.vue
 -->
 <template>
-  {{info.name}}
+  <el-tabs v-model="activeName">
+    <el-tab-pane name="first" label="svg">
+      <SVGCom />
+    </el-tab-pane>
+    <el-tab-pane name="second" label="test">
+      
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
 import { onMounted, reactive, toRefs } from 'vue'
+import SVGCom from './SVGCom.vue'
+
 export default {
   name: 'canvasImg',
+  components: {
+    SVGCom
+  },
   setup() {
     const state = reactive({
-      info: {}
+      activeName: 'first'
     })
 
     onMounted(() => {
@@ -29,6 +41,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

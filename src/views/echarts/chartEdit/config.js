@@ -1,12 +1,12 @@
 /*
  * @Description:
  * @Date: 2024-01-17 17:45:17
- * @LastEditTime: 2024-05-17 10:50:13
+ * @LastEditTime: 2025-01-20 11:48:50
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\config.js
  */
 
 // 模拟的数据集ID
-export const mockDataSetId = 'ae0cc214-a7f3-4f11-a256-a9e94a238226'
+export const mockDataSetId = 'dba58813-cead-4ea5-b369-eb1f789ed635'
 
 export const chartTypeList = [
   {

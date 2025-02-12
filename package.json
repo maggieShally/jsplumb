@@ -38,6 +38,7 @@
     "element-plus": "^2.7.2",
     "element-resize-detector": "^1.2.3",
     "gantt-schedule-timeline-calendar": "^3.7.1",
+    "gridstack": "^11.3.0",
     "jsplumb": "^2.15.5",
     "lodash": "^4.17.21",
     "save": "^2.9.0",

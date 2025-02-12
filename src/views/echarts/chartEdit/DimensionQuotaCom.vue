@@ -1,7 +1,7 @@
 <!--
  * @Description: 用户选中的指标维度
  * @Date: 2024-04-28 16:42:50
- * @LastEditTime: 2024-05-22 09:32:14
+ * @LastEditTime: 2024-12-09 11:30:53
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\DimensionQuotaCom.vue
 -->
 
@@ -37,7 +37,7 @@
 </template> 
 
 <script>
-import { ref, reactive, toRefs, onMounted } from 'vue'
+import { ref, reactive, toRefs, onMounted, computed } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useVModel } from '@vueuse/core'
 import draggable from 'vuedraggable'

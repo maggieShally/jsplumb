@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2024-04-29 14:16:33
- * @LastEditTime: 2024-06-18 15:14:10
+ * @LastEditTime: 2024-12-09 11:30:35
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\services\dataView.api.js
  */
 import request from '@/utils/request.js'
@@ -14,7 +14,7 @@ export default {
       data: {
         userName: 'maggie.hu',
         password:
-          '63b442c9fba8143e9a5f88049c08717387c19f9847825cbdb50efc806a6aab4141eb447e50182491399590741477f2b9da1310c2596d761fc1967701f2242188e0743cba90c054bd5a2a82c5c6ad17129728db9e6cb38e5239b78bc7c06dde925ab259ed05d3ebd9b020f06d0097c55e2583cc6ca3ea1b43e28fba7fe568c0f5',
+          '77e89faed1395653669ed0b3466bf0b1363fa3c1184a02551b873eeb8d31fcd75805f981a98b352889660a5a552814e628b09a29d6b7d85b202808fc1988ec1213645b35180d77c0b32e61cad5421bfae782064b857affd4760665f8aa6637c8cfa9bc3edbe4c92843815ce6ff100d4bd7824a2be7f52b8aee3277596835d5a7',
       },
     })
   },
@@ -22,6 +22,15 @@ export default {
     return request({
       url: '/dea/data/api/getDataFields',
       method: 'post',
+      data,
+    })
+  },
+
+  // 获取视图配置
+  getViewConfigById(data) {
+    return request({
+      url: '/dea/view/findById',
+      method: 'get',
       data,
     })
   },
@@ -51,4 +60,13 @@ export default {
       disableMessageAlert: true,
     })
   },
+
+  // 查询 面板配置
+  getPanelConfig(data) {
+    return request({
+      url: '/dea/panel/v2/query',
+      method: 'get',
+      data,
+    })
+  }
 }

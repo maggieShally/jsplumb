@@ -1,11 +1,13 @@
+<!--
+ * @Description: 可拖动列用于表格
+ * @Date: 2024-09-05 09:25:43
+ * @LastEditTime: 2024-10-09 16:49:50
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\rateTest\DraggableColumn.vue
+-->
 <template>
 
   <div ref="draggableColumnRef">
-
-    <el-table :data="tableData" row-key="key">
-      <el-table-column v-for="item in columns" :key="item.prop" :label="item.label" :prop="item.prop"></el-table-column>
-    </el-table>
-
+    <slot></slot>
   </div>
 
 </template>
@@ -13,72 +15,34 @@
 <script>
 import { ref, reactive, toRefs, onMounted } from 'vue'
 import Sortable from 'sortablejs'
+import { useVModel } from '@vueuse/core'
 
 export default {
   name: 'DraggableColumn',
   components: {
   },
   props: {
+    columns: {
+      type: Array
+    }
   },
-  setup() {
+  setup(props, context) {
 
     const draggableColumnRef = ref(null)
 
-    const state = reactive({
-      tableData: [
-        {
-          name: '1',
-          age: 11,
-          key: 11,
-        },
-        {
-          name: '2',
-          age: 12,
-          key: 12
-        },
-        {
-          name: '3',
-          age: 13,
-          key: 13
-        },
-        {
-          name: '4',
-          age: 14,
-          key: 14
-        },
-        {
-          name: '5',
-          age: 15,
-          key: 15
-        }
-      ],
-      columns: [
-        {
-          label: '名称',
-          prop: 'name'
-        },
-        {
-          label: '年龄',
-          prop: 'age'
-        }
-      ]
-    })
+    const columnList = useVModel(props, 'columns', context.emit)
 
 
     const columnsDrop = async () => {
       const tHeader = draggableColumnRef.value.querySelector(
         '.el-table__header-wrapper tr'
       )
-      console.log(tHeader)
       Sortable.create(tHeader, {
         //  指定父元素下可被拖拽的子元素
         draggable: '.el-table__cell',
         async onEnd({ newIndex, oldIndex }) {
-          let currRow = state.columns.splice(oldIndex, 1)[0]
-          state.columns.splice(newIndex, 0, currRow)
-          // state.columns.forEach((item, index) => {
-          //   item.key = Date.now() + index
-          // })
+          let currRow = columnList.value.splice(oldIndex, 1)[0]
+          columnList.value.splice(newIndex, 0, currRow)
         },
       })
     }
@@ -89,7 +53,6 @@ export default {
 
     return {
       draggableColumnRef,
-      ...toRefs(state)
     }
   }
 }

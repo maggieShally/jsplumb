@@ -9,8 +9,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/d3',
-    redirect: '/dataBases',
+    path: '/',
+    redirect: '/others/rateTest',
     component: () => import('../views/index.vue'),
     children: [
       {
@@ -126,6 +126,11 @@ const routes = [
         icon: 'icon-settings-2-line',
         component: () => import('../views/echarts/index.vue'),
         children: [
+          {
+            path: '/gridStack',
+            name: 'gridStack',
+            component: () => import('../views/echarts/gridStack/index.vue')
+          },
           {
             path: '/echarts/list',
             name: 'echarts',

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2024-01-02 10:48:41
- * @LastEditTime: 2024-08-09 17:06:41
+ * @LastEditTime: 2024-10-16 16:29:07
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\index.vue
 -->
 <template>
@@ -25,7 +25,8 @@
               <div class="process-pos">
                 <ProcessTextCom />
               </div>
-              <div style="flex: 1; width: 100%; display: flex'">
+              <!-- <div style="flex: 1; width: 100%; display: flex'" id="mainWrap"> -->
+              <div id="mainWrap" style="width: 100%; height: 100%">
                 <DisjointGraph ref="mainGraphRef" :isMainGraph="true" uKey="main" @onGetTableData="handleGetTableData" @onGetViewData="handleGetViewData" :data="allData" />
               </div>
             </div>

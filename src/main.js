@@ -29,7 +29,12 @@ import VueDragResize from 'vue-drag-resize'
 // import ClickOutside from 'element-plus/lib/directives/click-outside/index.js'
 
 
+
+
 import './assets/tailwindcss.css'
+
+
+
 
 const app = createApp(App)
 

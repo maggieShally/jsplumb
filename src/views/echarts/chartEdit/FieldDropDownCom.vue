@@ -1,7 +1,7 @@
 <!--
  * @Description: 已选维度，指标 字段组件。下拉操作
  * @Date: 2024-05-17 10:54:32
- * @LastEditTime: 2024-05-17 11:25:11
+ * @LastEditTime: 2024-12-09 11:38:07
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\FieldDropDownCom.vue
 -->
 <template>
@@ -48,10 +48,9 @@
 </template>
 
 <script>
-import { ref, reactive, toRefs, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 
 import { getQuotaConfig, getDimensionConfig } from './config.js'
-
 
 export default {
   name: 'FieldDropDownCom',
@@ -74,9 +73,7 @@ export default {
       } else {
         opFieldList.value = getQuotaConfig(props.chartType)
       }
-      
     }
-
     
     // 获取选中操作值，显示
     const getShowValue = (item, key) => {
@@ -84,12 +81,10 @@ export default {
       return opFieldList.value.find(i => i.configKey === key)?.children?.find(i => i.value === item[key])?.label
     }
 
-
     onMounted(() => {
       getConfig()
     })
-
-
+    
     return {
       element,
       opFieldList,

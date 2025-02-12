@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Date: 2023-12-01 11:36:26
+ * @LastEditTime: 2025-01-21 11:38:17
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\utils\request.js
+ */
 import axios from 'axios'
 
 const getPendingKey = config => {
@@ -31,7 +37,7 @@ request.interceptors.request.use(config => {
   if (config.method === 'get') {
     config.params = config.data
   }
-  addPending(config)
+  // addPending(config)
   return config
 })
 

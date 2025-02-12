@@ -1,25 +1,26 @@
 <!--
  * @Description: 分离视图 （显示选中的路径）
  * @Date: 2024-04-19 15:08:58
- * @LastEditTime: 2024-08-09 17:15:58
+ * @LastEditTime: 2024-10-16 16:38:43
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\routerPath\graph\Disjoint.graph.vue
 -->
 
 <template>
-  <OperatorCom @onCommand="handleOperator" />
-  <div class="graphWrapper" ref="graphRef" :id="`disjoinGraph${idKey}`" v-loading="loading">
+  <div ref="wrapRef" class="graphContainer" style="height: 100%; width: 100%; position: relative;">
+    <OperatorCom @onCommand="handleOperator" />
+    <div class="graphWrapper" ref="graphRef" :id="`disjoinGraph${idKey}`" v-loading="loading"></div>
   </div>
 </template>
 
 <script>
 import { ref, reactive, toRefs, unref, watch, onMounted, computed, nextTick } from 'vue'
 
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, useFullscreen } from '@vueuse/core'
 import lodash from 'lodash'
 
 import { Graph } from '@antv/x6'
-import { GridLayout, DagreLayout } from '@antv/layout'
-import { register, getTeleport } from '@antv/x6-vue-shape'
+import { DagreLayout } from '@antv/layout'
+import { register } from '@antv/x6-vue-shape'
 import { Transform } from '@antv/x6-plugin-transform'
 import { Scroller } from '@antv/x6-plugin-scroller'
 
@@ -55,8 +56,10 @@ export default {
   emits: ['onGetTableData', 'onGetViewData'],
   setup(props, context) {
 
+    const wrapRef = ref(null)
     const graphRef = ref(null)
-    const { width, height } = useElementSize(graphRef)
+    const { width, height } = useElementSize(wrapRef)
+    const { isFullscreen, enter, exit, toggle } = useFullscreen(wrapRef)
 
     let graph
 
@@ -75,12 +78,12 @@ export default {
     // 处理 tab切锦 节点渲染 位置不对的问题 
     watch(width, (val, oldVale) => {
       if (!props.isMainGraph && val && (!state.hasSubPathLoad || !state.hasSubViewLoad)) {
-        
-        if(!state.hasSubPathLoad && props.uKey === 'subPath') {
+
+        if (!state.hasSubPathLoad && props.uKey === 'subPath') {
           initDisjointPathData()
           state.hasSubPathLoad = true
-        } 
-        if(!state.hasSubViewLoad && props.uKey === 'subView') {
+        }
+        if (!state.hasSubViewLoad && props.uKey === 'subView') {
           initDisjointData()
           state.hasSubPathLoad = true
         }
@@ -94,7 +97,7 @@ export default {
       if (props.isMainGraph) {
         initData()
       } else {
-        if(width.value) {
+        if (width.value) {
           if (props.uKey === 'subView') {
             initDisjointData()
             state.hasSubViewLoad = true
@@ -261,7 +264,7 @@ export default {
       graph.use(
         new Scroller({
           enabled: true,
-          autoResize: true,
+          // autoResize: true,
           pannable: true,
         }),
       )
@@ -378,7 +381,7 @@ export default {
       // 边点击
       graph.on('edge:click', ({ e, x, y, edge, view }) => {
         if (edge.data.type === 'process') return false
-        if(state.isDisabledLine) return false
+        if (state.isDisabledLine) return false
         const { isSelected } = edge.data
         edge.setData({ isSelected: !isSelected })
         edge.setAttrs({
@@ -444,7 +447,7 @@ export default {
 
     // 分离路径
     const initDisjointPathData = () => {
-      
+
       const { nodeList, edgesList } = state.dataList
       if (state.dataList?.nodeList?.length) {
         const data = {
@@ -491,7 +494,7 @@ export default {
     }
 
     // 禁用连接
-    commandFun.disableLine = (_,value) => {
+    commandFun.disableLine = (_, value) => {
       state.isDisabledLine = value
     }
 
@@ -503,6 +506,16 @@ export default {
       graph.fromJSON(dataJson)
       graph.zoomTo(0.6)
       graph.centerContent()
+    }
+
+    // 全屏
+    commandFun.fullScreen = async command => {
+      await toggle()
+      await nextTick()
+      graph.centerContent()
+      // setTimeout(() => {
+      //   graph.centerContent()
+      // },200)
     }
 
     const handleOperator = command => {
@@ -528,6 +541,7 @@ export default {
     })
 
     return {
+      wrapRef,
       graphRef,
       ...toRefs(state),
       handleShowSku,
@@ -558,5 +572,9 @@ export default {
 .graphWrapper {
   flex: 1;
   width: 100%;
+}
+
+.graphContainer:fullscreen {
+  background-color: #fff;
 }
 </style>

@@ -6,7 +6,7 @@
 -->
 <template>
   <ScreenFullCom @onToggle="handleToggle" :unitKey="unitKey" :placement="placement">
-    <el-form :model="addForm" :inline="true">
+    <!-- <el-form :model="addForm" :inline="true">
       <el-form-item label="名称">
         <el-input v-model="addForm.name"></el-input>
       </el-form-item>
@@ -22,8 +22,9 @@
       <el-form-item>
         <el-button type="primary" @click="handleSubmit">查询</el-button>
       </el-form-item>
-    </el-form>
-    <BaseChart ref="chartRef" :name="`A_${Date.now()}`" :seriesData="seriesData" />
+    </el-form> -->
+    <!-- <BaseChart ref="chartRef" :name="`A_${Date.now()}`" :seriesData="seriesData" /> -->
+     <ChartViewCom v-bind="$attrs" />
   </ScreenFullCom>
 </template>
 
@@ -36,11 +37,14 @@ import ScreenFullCom from '@/components/screenFull'
 import { countOption } from './ApiChart.data.js'
 import { isFullscreen } from 'screenfull'
 
+import ChartViewCom from '../../../echarts/chartEdit/chartView/index.vue'
+
 export default {
   name: 'ChartCom',
   components: {
     BaseChart,
     ScreenFullCom,
+    ChartViewCom
   },
   props: {
     unitKey: String,

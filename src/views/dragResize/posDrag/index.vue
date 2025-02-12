@@ -23,6 +23,9 @@
     <el-tab-pane label="js移动缩放" name="JSDrag">
       <JSDrag />
     </el-tab-pane>
+    <el-tab-pane label="offsetWidth" name="offsetWidth">
+      <OffsetWidthCom />
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -30,6 +33,8 @@
 import { reactive, toRefs } from 'vue'
 import PosLeft from './PosLeft'
 import PosRight from './PosRight'
+ 
+import  OffsetWidthCom from './OffsetWidthCom'
 
 import JSDrag from './JSDrag'
 export default {
@@ -37,7 +42,8 @@ export default {
   components: {
     PosLeft,
     PosRight,
-    JSDrag
+    JSDrag,
+    OffsetWidthCom
   },
   setup() {
     const state = reactive({

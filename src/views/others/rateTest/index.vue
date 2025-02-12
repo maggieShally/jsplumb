@@ -1,31 +1,34 @@
 <!--
  * @Description: 
  * @Date: 2024-01-17 11:54:02
- * @LastEditTime: 2024-09-25 10:55:01
+ * @LastEditTime: 2024-10-10 10:27:11
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\rateTest\index.vue
 -->
 
 <template>
 
+  <el-tabs v-model="activeName" class="demo-tabs">
+    <el-tab-pane label="DraggableColumn" name="draggable">
+      <DraggableColumn :columns="columns">
+        <el-table :data="tableData" row-key="key">
+          <el-table-column v-for="item in columns" :key="item.prop" :label="item.label" :prop="item.prop"></el-table-column>
+        </el-table>
+      </DraggableColumn>
 
-
-  <div>
-    <!--
-    <DraggableColumn />
-    -->
-
-    <el-button type="primary" @click="handleGetSubmit">点击Test</el-button>
-
-
-    <span id="form_nav">我是一个terst </span>
-
-    <el-input v-model="name"></el-input>
-
-    <div ref="testRef" style="width: 100px;border: 1px solid rgb(221, 221, 221);">
-      <div>ddddddddd</div>
-      <div>sccc</div>
-    </div>
-  </div>
+    </el-tab-pane>
+    <el-tab-pane label="Config" name="second">
+      <div>
+        <el-button type="primary" @click="handleGetSubmit">点击Test</el-button>
+        <span id="form_nav">我是一个terst </span>
+        <el-input v-model="name"></el-input>
+        <div ref="testRef" style="width: 100px;border: 1px solid rgb(221, 221, 221);">
+          <div>testRef</div>
+          <div>ddddddddd</div>
+          <div>sccc</div>
+        </div>
+      </div>
+    </el-tab-pane>
+  </el-tabs>
 
 </template>
 
@@ -39,29 +42,71 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { useEventListener } from '@vueuse/core'
 
 
-// import DraggableColumn from './DraggableColumn.vue'
+import DraggableColumn from './DraggableColumn.vue'
 
 
 
 export default {
   name: 'RateTest',
   components: {
-    // DraggableColumn
+    DraggableColumn
   },
   setup() {
 
     const testRef = ref(null)
 
     const state = reactive({
+      activeName: 'draggable',
       searchForm: {},
       name: '',
+
+      tableData: [
+        {
+          name: '1',
+          age: 11,
+          key: 111,
+        },
+        {
+          name: '2',
+          age: 12,
+          key: 121
+        },
+        {
+          name: '3',
+          age: 13,
+          key: 131
+        },
+        {
+          name: '4',
+          age: 14,
+          key: 141
+        },
+        {
+          name: '5',
+          age: 15,
+          key: 151
+        }
+      ],
+      columns: [
+        {
+          label: '名称',
+          prop: 'name'
+        },
+        {
+          label: '年龄',
+          prop: 'age'
+        },
+        {
+          label: 'key',
+          prop: 'key'
+        }
+      ]
     })
 
 
     const handleGetSubmit = async () => {
-      console.log(2222)
       try {
-        const data = await doSumnit()
+        const data = await doSubmit()
         console.log(data)
       } catch (err) {
         console.log('err', err)
@@ -69,7 +114,7 @@ export default {
 
     }
 
-    const doSumnit = async () => {
+    const doSubmit = async () => {
       return new Promise((resolev, reject) => {
         try {
           setTimeout(() => {
@@ -78,95 +123,60 @@ export default {
         } catch (err) {
           console.log(err)
         }
-
       })
     }
 
-    // const getTableFun = async extra => {
-    //   const params = {
-    //     ...state.searchForm,
-    //     ...extra
-    //   }
-    //   const { data } = await getData(params)
-    //   return {
-    //     ...data,
-    //     rows: data.rows.map(i => {
-    //       return {
-    //         ...i,
-    //         valueKey: i + 'test',
-    //       }
-    //     })
-    //   }
-    // }
-
-    // const { tableData, pagination, loading, handleSearch, handleChangeSize, handleChangePage } = useGetTableData(getTableFun, {
-    //   onSuccess: result => {
-    //     console.log(result)
-    //   }
-    // })
-
     const open = () => {
-      let result = true
-      ElMessageBox.confirm(
-        'proxy will permanently delete the file. Continue?',
-        'Warning',
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning',
-        }
-      )
-        .then(() => {
-          ElMessage({
-            type: 'success',
-            message: 'Delete completed',
+      return new Promise((resolve, reject) => {
+        ElMessageBox.confirm(
+          'proxy will permanently delete the file. Continue?',
+          'Warning',
+          {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+          }
+        )
+          .then(() => {
+            ElMessage({
+              type: 'success',
+              message: 'Delete completed',
+            })
+            resolve(true)
           })
-          result = true
-        })
-        .catch(() => {
-          ElMessage({
-            type: 'info',
-            message: 'Delete canceled',
+          .catch(() => {
+            ElMessage({
+              type: 'info',
+              message: 'Delete canceled',
+            })
+            resolve(false)
           })
-        })
-      return result
+      })
     }
 
-
-    onBeforeRouteLeave(() => {
-      return open()
+    // vue-router切换前提醒
+    onBeforeRouteLeave(async (to, from, next) => {
+      next(await open())
     })
-
-    onBeforeUnmount(() => {
-      var a = 3
-    
-    })
-
 
     onMounted(() => {
-      // useEventListener(document, 'visibilitychange', (evt) => {
-      //   console.log(evt)
-      // })
+      useEventListener(document, 'visibilitychange', (evt) => {
+        console.log(evt)
+      })
 
-      // document.addEventListener('click', el => {
-      //   console.log('是否在testRef内点击', testRef.value.contains(el.target))
-      // })
+      document.addEventListener('click', el => {
+        console.log('是否在testRef内点击', testRef.value?.contains(el.target))
+      })
 
+
+      // 浏览器关闭前
       window.onbeforeunload = function () {
-        // return 'ssss';
+        return '提示'
       }
-
     })
-
 
     return {
       testRef,
-      // tableData,
-      // pagination,
-      // loading,
-      // handleSearch,
-      // handleChangeSize,
-      // handleChangePage,
       ...toRefs(state),
       handleGetSubmit
     }

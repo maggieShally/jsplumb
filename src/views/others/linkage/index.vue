@@ -1,27 +1,20 @@
 <!--
  * @Description: 联动 动态使用 grid-layout
  * @Date: 2022-07-07 11:09:33
- * @LastEditTime: 2024-05-17 13:57:22
+ * @LastEditTime: 2025-02-07 11:04:32
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\linkage\index.vue
 -->
 
 <template>
-  <!-- <el-button type="primary" @click="getDataList">查</el-button>
-  <el-button type="primary" @click="handleCancel">abort</el-button> -->
-  <el-button type="primary" @click="handleAddItem">添加</el-button>
-
   <el-button type="primary" @click="handleSaveLayout">保存</el-button>
-
-  <span @drag="e => drag(e, 'test123')" @dragend="dragend" class="droppable-element" draggable="true" unselectable="on">test123 Droppable Element (Drag me!)</span>
-  <span @drag="e => drag(e, 'test456')" @dragend="dragend" class="droppable-element" draggable="true" unselectable="on">test456 Droppable Element (Drag me!)</span>
-
 
   <div ref="chartPanelRef" class="chart-panel" id="chart-panel">
 
-    <GridLayoutCom ref="gridlayoutRef" :dataList="chartList" id="mainGrid">
+    <GridLayoutCom ref="gridlayoutRef" v-model:posList="layout" id="mainGrid">
       <template #default="{ item }">
+        <!-- :ref="getChartRefs" -->
         <LinkageCom v-if="item.type === 'chart'" :id="item.id" :mainId="mainChartId" @onGetMain="handleGetMain" @onDelete="handleDelItem">
-          <ChartCom :ref="getChartRefs" :unitKey="item.id" placement="right" />
+          <ChartCom  :unitKey="item.id" placement="right" :dataViewConfig="item.dataViewConfig" :panelId="panelId" />
         </LinkageCom>
       </template>
     </GridLayoutCom>
@@ -31,11 +24,14 @@
 
 <script>
 import { toRefs, reactive, nextTick, ref, unref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 import axios from 'axios'
 
 import { uuid } from '@/utils'
 import { getDom } from './utils'
+import { dataViewApi } from '@/services'
+
 
 import GridLayoutCom from './components/GridLayout'
 import LinkageCom from './LinkageCom.vue'
@@ -58,34 +54,42 @@ export default {
     const gridlayoutRef = ref(null)
     const tabsRef = ref([])
 
+    const route = useRoute()
+
     const state = reactive({
 
       mainChartId: '',
 
       chartList: [
-        {
-          id: '111',
-          type: 'chart',
-          pos: {
-            x: 2,
-            y: 4,
-            w: 2,
-            h: 2,
-            i: '111',
-          },
-        },
-        {
-          id: '222',
-          type: 'chart',
-          pos: {
-            x: 0,
-            y: 0,
-            w: 2,
-            h: 2,
-            i: '222',
-          },
-        },
+        // {
+        //   id: '111',
+        //   type: 'chart',
+        //   pos: {
+        //     x: 2,
+        //     y: 4,
+        //     w: 2,
+        //     h: 2,
+        //     i: '111',
+        //   },
+        // },
+        // {
+        //   id: '222',
+        //   type: 'chart',
+        //   pos: {
+        //     x: 0,
+        //     y: 0,
+        //     w: 2,
+        //     h: 2,
+        //     i: '222',
+        //   },
+        // },
       ],
+
+
+      panelId: route.query.id,
+
+
+      layout: [],
     })
 
     const allChartIds = computed(() => state.chartList.map(i => i.id))
@@ -152,20 +156,20 @@ export default {
     }
     let num = 5
 
-    const handleAddItem = () => {
-      state.chartList.push({
-        id: 'test5' + num,
-        type: 'chart',
-        pos: {
-          x: 3,
-          y: 4,
-          w: 2,
-          h: 2,
-          i: 'test5' + num,
-        },
-      })
-      num++
-    }
+    // const handleAddItem = () => {
+    //   state.chartList.push({
+    //     id: 'test5' + num,
+    //     type: 'chart',
+    //     pos: {
+    //       x: 3,
+    //       y: 4,
+    //       w: 2,
+    //       h: 2,
+    //       i: 'test5' + num,
+    //     },
+    //   })
+    //   num++
+    // }
 
 
     let dragInfo = {
@@ -173,127 +177,166 @@ export default {
       dragId: ''
     }
 
-    const drag = (e, id) => {
-      let activeElelemt = getDom(e)
-      // console.log(activeElelemt)
+    // const drag = (e, id) => {
+    //   let activeElelemt = getDom(e)
+    //   // console.log(activeElelemt)
      
-      let activeChartId = ((activeElelemt.id !== 'app' && activeElelemt.id !== id) ? activeElelemt.id : dragInfo.parentId).split('_')[0]
-      const tabIds = state.chartList.filter(i => i.type === 'tab').map(i => i.id)
-      activeChartId = activeChartId !== 'mainGrid' ? tabIds.includes(activeChartId) ? activeChartId : '' : 'mainGrid'
+    //   let activeChartId = ((activeElelemt.id !== 'app' && activeElelemt.id !== id) ? activeElelemt.id : dragInfo.parentId).split('_')[0]
+    //   const tabIds = state.chartList.filter(i => i.type === 'tab').map(i => i.id)
+    //   activeChartId = activeChartId !== 'mainGrid' ? tabIds.includes(activeChartId) ? activeChartId : '' : 'mainGrid'
 
-      dragInfo.dragId = id
-      dragInfo.parentId = activeChartId
+    //   dragInfo.dragId = id
+    //   dragInfo.parentId = activeChartId
       
-      if (activeChartId && activeChartId !== 'mainGrid') {
+    //   if (activeChartId && activeChartId !== 'mainGrid') {
 
-        // 进入tab组件 给tab组件 添加 子元素
-        tabsRef.value.find(i => i.id === activeChartId)?.drag(e, id, {
-          addItem: (dragPos, paneName) => {
-            const chartLen = state.chartList.find(i => i.id === activeChartId).data.paneList?.find(i => i.name === paneName)?.chartList?.length
+    //     // 进入tab组件 给tab组件 添加 子元素
+    //     tabsRef.value.find(i => i.id === activeChartId)?.drag(e, id, {
+    //       addItem: (dragPos, paneName) => {
+    //         const chartLen = state.chartList.find(i => i.id === activeChartId).data.paneList?.find(i => i.name === paneName)?.chartList?.length
 
-            console.log(chartLen)
-            state.chartList.find(i => i.id === activeChartId)
-              .data.paneList.find(i => i.name === paneName)
-              .chartList.push({
-                id,
-                type: 'chart',
-                pos: {
-                  ...dragPos,
-                  i: id,
-                  x: (chartLen * 2) % 12,
-                  y: chartLen,
-                },
-              })
-          }
-        })
+    //         console.log(chartLen)
+    //         state.chartList.find(i => i.id === activeChartId)
+    //           .data.paneList.find(i => i.name === paneName)
+    //           .chartList.push({
+    //             id,
+    //             type: 'chart',
+    //             pos: {
+    //               ...dragPos,
+    //               i: id,
+    //               x: (chartLen * 2) % 12,
+    //               y: chartLen,
+    //             },
+    //           })
+    //       }
+    //     })
 
-        // 删除 外层 子元素
-        state.chartList = state.chartList.filter(i => i.id !== id)
-        gridlayoutRef.value.dragend()
-      } else if(activeChartId === 'mainGrid') {
+    //     // 删除 外层 子元素
+    //     state.chartList = state.chartList.filter(i => i.id !== id)
+    //     gridlayoutRef.value.dragend()
+    //   } else if(activeChartId === 'mainGrid') {
 
-        // 外层添加 子元素
-        gridlayoutRef.value.drag(e, id, unref(chartPanelRef), {
-          addItem: dragPos => {
-            state.chartList.push({
-              id: id,
-              type: 'chart',
-              pos: {
-                ...dragPos,
-                i: id,
-                x: (state.chartList.length * 2) % 12,
-                y: state.chartList.length,
-              },
-            })
-          }
-        })
-
-
-        // // tab组件的 得删除
-        let preTabId = ''
-        state.chartList.forEach(item => {
-          if (item.type === 'tab') {
-            item.data.paneList = item.data.paneList.map(paneItem => {
-              if(paneItem.chartList.some(i => i.id === id)) {
-                preTabId = item.id
-              }
-              return {
-                ...paneItem,
-                chartList: paneItem.chartList.filter(i => i.id !== id)
-              }
-            })
-          }
-        })
-        console.log(preTabId)
-        tabsRef.value.find(i => i.id === preTabId)?.dragend()
-      }
+    //     // 外层添加 子元素
+    //     gridlayoutRef.value.drag(e, id, unref(chartPanelRef), {
+    //       addItem: dragPos => {
+    //         state.chartList.push({
+    //           id: id,
+    //           type: 'chart',
+    //           pos: {
+    //             ...dragPos,
+    //             i: id,
+    //             x: (state.chartList.length * 2) % 12,
+    //             y: state.chartList.length,
+    //           },
+    //         })
+    //       }
+    //     })
 
 
+    //     // // tab组件的 得删除
+    //     let preTabId = ''
+    //     state.chartList.forEach(item => {
+    //       if (item.type === 'tab') {
+    //         item.data.paneList = item.data.paneList.map(paneItem => {
+    //           if(paneItem.chartList.some(i => i.id === id)) {
+    //             preTabId = item.id
+    //           }
+    //           return {
+    //             ...paneItem,
+    //             chartList: paneItem.chartList.filter(i => i.id !== id)
+    //           }
+    //         })
+    //       }
+    //     })
+    //     console.log(preTabId)
+    //     tabsRef.value.find(i => i.id === preTabId)?.dragend()
+    //   }
+    // }
 
-    }
-
-    const dragend = (e) => {
-      const {  dragId } = dragInfo
-      if(unref(allChartIds).includes(dragId)) {
-        gridlayoutRef.value.dragend(e)
-      } else {
-        const { chartList } = state
-        let preTabId = ''
-        for(let i = 0; i < chartList.length; i++) {
-          const item = chartList[i]
-          if(item.type === 'tab') {
-            const hasDragId = item.data.paneList.map(i => i.chartList.map(i => i.id)).flat().includes(dragId)
-            if(hasDragId) {
-              preTabId = item.id
-              break
-            }
-          }
-        }
-        console.log(preTabId)
-        tabsRef.value.find(i => i.id === preTabId)?.dragend()
-      }
-      
-
-    }
+    // const dragend = (e) => {
+    //   const {  dragId } = dragInfo
+    //   if(unref(allChartIds).includes(dragId)) {
+    //     gridlayoutRef.value.dragend(e)
+    //   } else {
+    //     const { chartList } = state
+    //     let preTabId = ''
+    //     for(let i = 0; i < chartList.length; i++) {
+    //       const item = chartList[i]
+    //       if(item.type === 'tab') {
+    //         const hasDragId = item.data.paneList.map(i => i.chartList.map(i => i.id)).flat().includes(dragId)
+    //         if(hasDragId) {
+    //           preTabId = item.id
+    //           break
+    //         }
+    //       }
+    //     }
+    //     console.log(preTabId)
+    //     tabsRef.value.find(i => i.id === preTabId)?.dragend()
+    //   }
+    // }
 
     // tab组件 添加 pane
-    const handleTabAddPane = id => {
-      const activeItem = state.chartList.find(i => i.id === id)
-      const len = activeItem.data.paneList.length + 1
-      activeItem.data.paneList.push(
-        {
-          name: 'tab' + len,
-          title: 'tab' + len,
-          chartList: []
-        }
-      )
-    }
+    // const handleTabAddPane = id => {
+    //   const activeItem = state.chartList.find(i => i.id === id)
+    //   const len = activeItem.data.paneList.length + 1
+    //   activeItem.data.paneList.push(
+    //     {
+    //       name: 'tab' + len,
+    //       title: 'tab' + len,
+    //       chartList: []
+    //     }
+    //   )
+    // }
 
     // tab组件 删除 chart
-    const handleTabChart = (parentId, paneName, chartId) => {
-      let activePanlListChartList = state.chartList.find(i => i.id === parentId)?.data?.paneList.find(i => i.name === paneName)?.chartList
-      state.chartList.find(i => i.id === parentId).data.paneList.find(i => i.name === paneName).chartList = activePanlListChartList.filter(i => i.id !== chartId)
+    // const handleTabChart = (parentId, paneName, chartId) => {
+    //   let activePanlListChartList = state.chartList.find(i => i.id === parentId)?.data?.paneList.find(i => i.name === paneName)?.chartList
+    //   state.chartList.find(i => i.id === parentId).data.paneList.find(i => i.name === paneName).chartList = activePanlListChartList.filter(i => i.id !== chartId)
+    // }
+
+
+    const getPanelData = async () => {
+      const { data } = await dataViewApi.getPanelConfig({ panelId: route.query.id})
+      const { viewPanel, viewMap, resolution } = data
+      const dataList = JSON.parse(viewPanel.panelContent).cells.map(item => {
+        const posInfo = JSON.parse(viewPanel.resolution).find(i => i.resolution === '1920').layoutList.find(i => i.uuid === item.uuid)
+        debugger
+        return {
+          type: 'chart',
+          dataViewConfig: viewMap[item.data.viewId],
+          pos: {
+            ...posInfo.position,
+            type: 'chart',
+            w: Math.floor(posInfo.size.width / (1920 / 24)),
+            h: Math.floor(posInfo.size.height / 30),
+            // w:2,
+            // h:2,
+            x: Math.floor(posInfo.position.x / 24),
+            y: Math.floor(posInfo.position.y / 30),
+            i: item.uuid,
+            id: item.uuid,
+            dataViewConfig: viewMap[item.data.viewId],
+          }
+        }
+      })
+
+      state.chartList = dataList
+      state.layout = dataList.map(i => i.pos )
+      
+      // Object.values(data.viewMap).map(item => {
+      //   return {
+      //     type: 'chart',
+      //     dataViewConfig: item,
+      //     pos: {
+            
+      //     }
+      //   }
+      // })
     }
+
+    onMounted(() => {
+      getPanelData()
+    })
 
     return {
       chartPanelRef,
@@ -307,13 +350,13 @@ export default {
       handleCancel,
       getDataList,
       handleDelItem,
-      handleAddItem,
-      drag,
-      dragend,
+      // handleAddItem,
+      // drag,
+      // dragend,
 
 
-      handleTabAddPane,
-      handleTabChart
+      // handleTabAddPane,
+      // handleTabChart
 
     }
   },
@@ -327,7 +370,7 @@ export default {
 }
 
 #mainGrid {
-  min-height: 500px;
+  min-height: 1500px;
 }
 
 .grid-item {

@@ -1,15 +1,19 @@
 /*
  * @Description:
  * @Date: 2021-07-21 11:18:51
- * @LastEditTime: 2024-08-07 11:22:44
+ * @LastEditTime: 2024-11-08 10:14:25
  * @FilePath: \webpack-teste:\others\jsplumb-test\vite.config.js
  */
 // const CompressionPlugin = require('compression-webpack-plugin')
 
 import eslint from 'vite-plugin-eslint'  
 
+debugger
+import vue from "@vitejs/plugin-vue"
+debugger
+
 import { defineConfig } from 'vite'
-import createVitePlugins from './plugins'
+// import createVitePlugins from './plugins'
 import path from 'path'
 
 export default defineConfig(({ mode, command }) => {
@@ -87,6 +91,7 @@ export default defineConfig(({ mode, command }) => {
     },
 
     plugins: [
+      vue()
       // eslint(),
       // [
       //   eslint({
@@ -95,7 +100,7 @@ export default defineConfig(({ mode, command }) => {
       //   }),
      
       // ],
-      ...createVitePlugins(),
+      // ...createVitePlugins(),
       // new UselessFile({
       //   // 性能优化 ：删除项目中没有引用关系的文件
       //   root: './src', // 项目目录
@@ -151,6 +156,11 @@ export default defineConfig(({ mode, command }) => {
         },
         '^/dpr/': {
           target: 'http://dopuat.longsys.com', // '代理目标的基础路径'
+          changeOrigin: true, // 支持跨域
+        },
+        '^/docr/': {
+          target: 'http://10.11.12.236:8280', // '代理目标的基础路径'
+          // target: 'http://dopuat.longsys.com', // '代理目标的基础路径'
           changeOrigin: true, // 支持跨域
         },
       },

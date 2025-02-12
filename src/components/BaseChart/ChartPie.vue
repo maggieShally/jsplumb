@@ -17,7 +17,7 @@
       <div class="title-sub">{{ subText }}</div>
     </div>
     <ContextMenu :actions="menuList">
-      <div :id="`${name}_chart`" class="chart"></div>
+      <div ref="testChartRef" class="chart"></div>
     </ContextMenu>
 
   </div>
@@ -35,6 +35,7 @@ import {
   computed,
   reactive,
   toRefs,
+  ref,
 } from 'vue'
 import { useStore } from 'vuex'
 import lodash from 'lodash'
@@ -106,6 +107,9 @@ export default {
     const chart = shallowRef(null)
     const currentNode = shallowRef(getNode && getNode())
 
+    const testChartRef = ref(null)
+
+
     const state = reactive({
       isDivider: props.isDivider,
       chartHeight: props.isDivider ? 'calc(100% - 50px)' : '100%',
@@ -149,7 +153,7 @@ export default {
         callOnAdd: true,
       })
       instance.listenTo(
-        document.querySelector(`#${props.name}_chart`),
+        testChartRef.value,
         async () => {
           if (!chart.value) return false
           chart.value.resize()
@@ -310,7 +314,7 @@ export default {
     onMounted(async () => {
       await nextTick()
       chart.value = ec.init(
-        document.querySelector(`#${props.name}_chart`),
+        testChartRef.value,
         {},
         {
           // renderer: 'svg',
@@ -326,6 +330,7 @@ export default {
     })
 
     return {
+      testChartRef,
       title,
       subText,
       description,

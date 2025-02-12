@@ -1,11 +1,12 @@
 /*
  * @Description:
  * @Date: 2024-01-18 14:31:36
- * @LastEditTime: 2024-05-22 10:25:04
+ * @LastEditTime: 2025-02-06 17:29:27
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\utils.js
  */
 
 import { uuid } from '@/utils'
+import lodash from 'lodash'
 
 // 样式转换 为 charts的格式
 export const convertVal = val => {
@@ -25,13 +26,16 @@ export const compose = (...arg) => {
 // 单位数据处理
 const unitFormatFunc = {
   thousands: val => {
-    return val / 1e3 + 'K'
+    // return val / 1e3 + 'K'
+    return val + 'K'
   },
   tenThousands: val => {
-    return val / 1e4 + 'W'
+    // return val / 1e4 + 'W'
+    return val + 'W'
   },
   million: val => {
-    return val / 1e6 + 'M'
+    // return val / 1e6 + 'M'
+    return val + 'M'
   },
   percent: val => val + '%',
 }
@@ -64,7 +68,7 @@ export const thousandsFunc = ({ val, item = {} }) => {
  */
 export const scaleFuc = ({ val, item = {} }) => {
   return {
-    val: item.scale ? val.toFixed(item.scale) : val,
+    val: item.scale ? lodash.ceil(val, item.scale) : val,
     item,
   }
 }
@@ -78,7 +82,7 @@ export const composeValue = compose(unitFunc, thousandsFunc, scaleFuc)
  * @return {*}
  */
 export const calcDimensionField = element => {
-  if(element.id) return element
+  if(element.aliasName) return element
   const { columnId, cnName, enName, dataType, from, type } = element
   let key = uuid()
   return {
@@ -109,7 +113,7 @@ export const calcDimensionField = element => {
  * @return {*}
  */
 export const calcQuotaField = element => {
-  if(element.id) return element
+  if(element.aliasName) return element
   const { columnId, cnName,enName, dataType, from , type} = element
   let key = uuid()
   return {
@@ -133,4 +137,62 @@ export const calcQuotaField = element => {
     type,
     originData: element
   }
+}
+
+
+
+// 处理传到后台的字段 fields 字段
+export const getFieldList = ({dimensionFields, quotaFields, drillList }) => {
+  debugger
+  return [...dimensionFields, ...drillList, ...quotaFields].reduce((res, item)=> {
+    const { cnName: cnViewName, enName: enViewName, dataType, id, type, from } = item
+    const { cnName, enName, columnId } = item?.originData || {}
+    debugger
+    if(res.findIndex(i => i.columnId === item.field) === -1) {
+      res.push({
+        cnViewName,
+        enViewName,
+        cnName,
+        enName,
+        dataType,
+        columnId,
+        field: id,
+        id,
+        from,
+        type
+      })
+    } 
+    return res
+  }, [])
+}
+
+
+// 条件
+export const getDataSetCondList = (data, activeDrillFieldList, headList) => {
+  debugger
+  return data.map((item, index) => {
+    const { name } = item
+    const activeItem = activeDrillFieldList[index]
+    return {
+      id: headList.find(i => i.cnName === activeItem.cnName)?.id,
+      field: activeItem.field, // 维度id
+      "operation": "=",
+      "condValue": name?.split('_').at(-1),
+      "valueFormat": null,
+      "sort": 0
+    }
+  })
+  
+}
+
+
+// 维度
+export const getDimensionFields = (dimensionField, activeDrillFieldList) => {
+  return [...dimensionField, ...activeDrillFieldList].reduce((res, item)=> {
+    if(res.findIndex(i => i.field === item.field) === -1) {
+      res.push(item)
+    } 
+    return res
+  }, [])
+  
 }

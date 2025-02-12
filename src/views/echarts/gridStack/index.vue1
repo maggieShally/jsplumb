@@ -1,0 +1,186 @@
+<!--
+ * @Description: GridStack DEMO
+ * @Date: 2025-02-08 16:21:31
+ * @LastEditTime: 2025-02-10 17:23:36
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\gridStack\index.vue
+-->
+
+<template>
+
+  <el-button type="default" @click="handleSave">save</el-button>
+  <div ref="gridRef" class="grid-stack"></div>
+</template>
+
+<script>
+import { reactive, toRefs, ref, onMounted } from 'vue'
+
+import { GridStack } from 'gridstack'
+import 'gridstack/dist/gridstack.css'
+import 'gridstack/dist/gridstack-extra.min.css'
+
+export default {
+  name: 'GridDemo',
+  components: {
+  },
+  props: {
+  },
+  setup() {
+    let grid = null
+
+    GridStack.renderCB = function(el, w) {
+      console.log(el, w);
+      if (w.content) el.innerHTML = w.content;
+      // if (w.id) el.innerHTML = w.id;
+    }
+
+
+    // GridStack.renderCB = function (el, widget) {
+    //         // el: HTMLElement div.grid-stack-item-content
+    //         // widget: GridStackWidget
+
+    //         const gridItemEl = el.closest('.grid-stack-item'); // div.grid-stack-item (parent of el)
+
+    //         // Create Vue component for the widget content
+    //         const itemId = widget.id
+    //         const widgetNode = h(GridItemComponent, {
+    //           itemId: itemId,
+    //           onRemove: () => { // Catch the remove event from the Vue component
+    //             grid.removeWidget(gridItemEl); // div.grid-stack-item
+    //             info.value = `Widget ${itemId} removed`;
+    //           }
+    //         })
+    //         shadowDom[itemId] = el
+    //         render(widgetNode, el) // Render Vue component into the GridStack-created element
+    //       }
+
+    //       grid.load(items);
+    //     })
+
+
+
+    const gridRef = ref(null)
+    const state = reactive({
+      items: [
+        { x: 2, y: 3, h: 4, w: 4, components: 'SimpleCom', id: 1, content: "12222" },
+        // { x: 3, y: 4, w: 3, h: 4, components: 'SimpleCom', id: 2 },
+        // { x: 4, y: 2, w: 4, h: 4, components: 'SimpleCom', id: 3 },
+        {
+          x: 0, y: 1,
+          w: 6, h: 5, id: 4,
+          components: 'TabCom',
+          sizeToContent: true,
+          isSubGrid: true,
+          subGridOpts: {
+            children: [
+              {
+                content: 'hello',
+                id: 51,
+                components: 'SimpleCom', x: 2, y: 1, h: 4, w: 4,
+              },
+              {
+                id: 52, x: 2, y: 5, h: 4, w: 4,
+                content: 'world',
+                components: 'SimpleCom',
+              }
+            ],
+          },
+        }
+
+      ]
+    })
+
+    const handleSave = () => {
+
+      console.log(grid.save())
+    }
+
+   
+    onMounted(() => {
+      let count = 0
+      let sub1 = [ {x:0, y:0}, {x:1, y:0}, {x:2, y:0}, {x:3, y:0}, {x:0, y:1}, {x:1, y:1}];
+      sub1.forEach(d => d.content = String(count++))
+
+      const options = { // main grid options
+        // disableDrag: true,
+        // disableResize: true,
+        cellHeight: 50,
+        margin: 5,
+        //minRow: 2, // don't collapse when empty
+        acceptWidgets: true,
+        id: 'main',
+
+        subGridOpts: {}, // all sub grids will default to those
+        children: [
+          {x:0, y:0, content: 'regular item'},
+          {x:1, y:3, w:4, h:7, 
+            content: '<div>nested grid sizeToContent:true with some header content</div>', 
+            subGridOpts: {
+              children:  [
+                {
+                  x:0, y:0,
+                  w: 4, h:3,
+                  content: '1',
+                  id:'sub1_grid2', 
+                  class: 'sub1',
+                  subGridOpts: {
+                    children: [
+                      {
+                        x:2,
+                        y:2,
+                        content: '1-1'
+                      }
+                    ]
+                  }
+                },
+                {
+                  x:1, y:3, 
+                  content: '2',
+                  w: 4, h:3,
+                  id:'sub1_grid3', 
+                  class: 'sub1',
+                  content: '12',
+                  subGridOpts: {
+                    children: [
+                      {
+                        x:2,
+                        y:2,
+                        content: '12-1'
+                      }
+                    ]
+                  }
+                }
+              ],
+            id:'sub1_grid', 
+            class: 'sub1'
+            }
+          },
+        ]
+      }
+
+      grid = GridStack.init({ // DO NOT use grid.value = GridStack.init(), see above
+        ...options,
+        // children: state.items,
+      }, gridRef.value)
+    })
+
+    return {
+      gridRef,
+      ...toRefs(state),
+      handleSave
+    }
+  },
+}
+
+</script>
+<style lang='less'>
+
+.grid-stack {
+  background: rgba(110, 110, 108, 0.2);
+}
+
+
+.grid-stack-item {
+  background-color: #d4e9e5;
+  border: 1px solid #ddd;
+}
+</style>

@@ -37,6 +37,7 @@ export default function getNormalSeriesData({ dimensionFields, quotaFields, data
     categoryData.push(data)
   }
 
+  // 显示指标数据
   const seriesData = quotaFields.map(item => {
     let temp = {
       name: item.name || item.cnName,
@@ -63,43 +64,45 @@ export default function getNormalSeriesData({ dimensionFields, quotaFields, data
     }
     return temp
   })
-  console.log('xxx')
+  
 
-  return {
-    getCategoryData: ({ position }, originOptions) => {
-      console.log(originOptions)
-      if(!categoryData.length) {
-        return [{
-          type: 'category',
-          axisLabel: {
-            show: true,
-            fontSize: 12,
-            width: ''
-          }
-        }]
-      }
-      return categoryData.map((item, index, arr) => {
-        const data = [...item.keys()]
-        return {
-          type: 'category',
-          position,
-          axisLabel: {
-            ...originOptions.xAxis[index]?.axisLabel,
-            margin: 20 * (index + 1),
-            formatter: value => {
-              return value.split('_').at(-1)
-            },
-          },
-          axisTick: {
-            length: 30 * (index + 1),
-            interval: function (index, value) {
-              //   console.log(index, value)
-            },
-          },
-          data,
+  // X轴数据
+  const getCategoryData = ({ position }, originOptions) => {
+    console.log(originOptions)
+    if(!categoryData.length) {
+      return [{
+        type: 'category',
+        axisLabel: {
+          show: true,
+          fontSize: 12,
+          width: ''
         }
-      })
-    },
+      }]
+    }
+    return categoryData.map((item, index, arr) => {
+      const data = [...item.keys()]
+      return {
+        type: 'category',
+        position,
+        axisLabel: {
+          ...originOptions.xAxis[index]?.axisLabel,
+          margin: 20 * (index + 1),
+          formatter: value => {
+            return value.split('_').at(-1)
+          },
+        },
+        axisTick: {
+          length: 30 * (index + 1),
+          interval: function (index, value) {
+            //   console.log(index, value)
+          },
+        },
+        data,
+      }
+    })
+  }
+  return {
+    getCategoryData,
     seriesData,
   }
 }
