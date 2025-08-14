@@ -1,26 +1,28 @@
 <!--
- * @Description: sss
+ * @Description: 交集并集 关系 
  * @Date: 2022-06-16 11:04:43
  * @LastEditTime: 2024-09-04 13:43:57
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\nodeItem\index.vue
 -->
 <template>
-  <ScreenFullCom @onToggle="val => isFullScreen = val">
+  <ScreenFullCom>
     <el-button @click="visible = true">sss</el-button>
     <div id="nodeUnit">
       <el-tooltip :teleported="false" content="<span>The content can be <strong>HTML</strong></span>" raw-content>
         <el-button>hover me</el-button>
       </el-tooltip>
-      <NodeUnion :currentNode="nodeTree" :nodeIndex="0" :childrenList="nodeTree.children" :isLast="true" />
-
+      <!-- <NodeUnion :currentNode="nodeTree" :nodeIndex="0" :childrenList="nodeTree.children" :isLast="true" /> -->
     </div>
-    <!-- <div style="height: 1100px">
-      <iframe src="http://localhost:8080/matter/productToResource" width="100%" height="100%" frameborder="0" scrolling="no">
-      </iframe>
-    </div> -->
+  </ScreenFullCom>
 
+
+  <ScreenFullCom>
+    <div>testetwetet</div>
+  </ScreenFullCom>
+
+
+  
     <el-dialog v-model="visible" title="22222">
-
       <el-dropdown :teleported="false">
         <span class="el-dropdown-link">
           Dr<el-icon class="el-icon--right">
@@ -39,24 +41,19 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-
       <el-popover :teleported="false" placement="top-start" title="Title" :width="200" trigger="hover" content="this is content, this is content, this is content">
         <template #reference>
           <el-button class="m-2">Hover to activate</el-button>
         </template>
       </el-popover>
-
       <el-select :teleported="false">
         <el-option value="1" label="23"></el-option>
       </el-select>
-
       <el-tooltip class="box-item" effect="dark" content="Top Left prompts info" placement="top-start" :teleported="false">
         <el-button>tooltip</el-button>
       </el-tooltip>
-
     </el-dialog>
-    l
-  </ScreenFullCom>
+
 </template>
 
 

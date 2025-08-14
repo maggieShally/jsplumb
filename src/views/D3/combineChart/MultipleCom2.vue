@@ -1,7 +1,7 @@
 <!--
  * @Description: 多条连线
  * @Date: 2023-02-24 16:39:42
- * @LastEditTime: 2024-09-26 10:48:41
+ * @LastEditTime: 2025-07-07 11:13:00
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\D3\combineChart\MultipleCom2.vue
 -->
 
@@ -299,7 +299,11 @@ export default {
             return 'bottom'
           }
         } else {
-          return targetRowIndex - rowIndex < 0 ? '' : 'right'
+          if(targetColumnIndex > sourceColumnIndex ) {
+            return 'right'
+          } else {
+            return 'left'
+          }
         }
       })()
 
@@ -340,13 +344,23 @@ export default {
         if (targetColumnIndex === sourceColumnIndex) {
           return 0
         }
-        return (
-          (targetColumnIndex - sourceColumnIndex - 1 + 0.2) * tableCellWidth
-        )
+
+        if(targetColumnIndex > sourceColumnIndex) {
+          return (Math.abs(targetColumnIndex - sourceColumnIndex) - 1 + 0.2) * tableCellWidth
+        }
+        
+        return (Math.abs(targetColumnIndex - sourceColumnIndex) + 0.2) * tableCellWidth
       })()
 
       const thirdTop = (function () {
         return secondHeight * (targetRowIndex - rowIndex < 0 ? -1 : 1)
+      })()
+
+      const thirdLeft = (function() {
+        if(targetColumnIndex >= sourceColumnIndex) {
+          return firstWidth
+        }
+        return - (Math.abs(targetColumnIndex - sourceColumnIndex) - 1  + 0.7) * tableCellWidth
       })()
 
       return {
@@ -356,7 +370,7 @@ export default {
         secondLeft: secondLeft + 'px',
         thirdWidth: thirdWidth + 'px',
         thirdTop: thirdTop + 'px',
-        thirdLeft: firstWidth + 'px',
+        thirdLeft: thirdLeft + 'px',
         fourItem: fourItemClass,
       }
     }
@@ -472,6 +486,15 @@ export default {
       left: 100%;
       transform: translate(-50%, -40%);
       top: 50%;
+    }
+
+    &.left {
+      left: 0;
+      &::before {
+        border-color:  transparent @color  transparent transparent;
+        left: -200%;
+        top: 50%;
+      }
     }
 
     &.top {

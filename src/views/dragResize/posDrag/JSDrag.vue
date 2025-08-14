@@ -6,8 +6,7 @@
 -->
 <template>
   <div class="drag-wrap">
-    <div class="drag-sec" id="draggable">
-      <span class="mouse" id="mouse">\</span>
+    <div class="drag-sec" id="draggable" v-draggable="true" v-draggableSize="true">
     </div>
   </div>
 </template>
@@ -18,108 +17,7 @@ import { onMounted } from 'vue'
 export default {
   name: 'JSDrag',
   setup() {
-    const draggable = function() {
-      const target = document.querySelector('#draggable')
-
-      target.onmousedown = function(event) {
-        if (event.target.id !== 'draggable') return false
-
-        const target = event.target
-        const targetLeft = target.offsetLeft
-        const targetTop = target.offsetTop
-
-        let originLeft = event.clientX
-        let originTop = event.clientY
-
-        // const parentNode = document.querySelector('.content-wrap')
-        const parentNode = target.parentNode
-
-        const minLeft = parentNode.offsetLeft
-        const minTop = parentNode.offsetTop
-
-        const maxLeft =
-          parentNode.offsetLeft + parentNode.offsetWidth - target.offsetWidth
-        const maxTop =
-          parentNode.offsetTop + parentNode.offsetHeight - target.offsetHeight
-
-        document.onmousemove = function(event) {
-          event.preventDefault()
-
-          const currentLeft = event.clientX
-          const currentTop = event.clientY
-
-          let diffLeft = targetLeft + (currentLeft - originLeft)
-          let diffTop = targetTop + (currentTop - originTop)
-
-          diffLeft =
-            diffLeft > minLeft
-              ? diffLeft < maxLeft
-                ? diffLeft
-                : maxLeft
-              : minLeft
-          diffTop =
-            diffTop > minTop ? (diffTop < maxTop ? diffTop : maxTop) : minTop
-
-          target.style.cssText += `top: ${diffTop}px ; left: ${diffLeft}px;`
-        }
-
-        document.onmouseup = function() {
-          document.onmousemove = null
-          document.onmouseup = null
-        }
-
-        return false
-      }
-    }
-
-    const draggableSize = function() {
-      const target = document.querySelector('#mouse')
-      const parentNode = document.querySelector('#draggable')
-
-      const minWidth = parentNode.offsetWidth * 0.2
-      const minHeight = parentNode.offsetHeight * 0.2
-
-      target.onmousedown = function(event) {
-        event.preventDefault()
-
-        const disX = event.clientX - parentNode.offsetWidth
-        const disY = event.clientY - parentNode.offsetHeight
-
-        document.onmousemove = event => {
-
-          const cLeft =
-            event.clientX > disX + parentNode.parentNode.offsetWidth
-              ? disX + parentNode.parentNode.offsetWidth
-              : event.clientX
-          const cTop =
-            event.clientY > disY + parentNode.parentNode.offsetHeight
-              ? disY + parentNode.parentNode.offsetHeight
-              : event.clientY
-
-          console.log(disX + parentNode.offsetWidth)
-          let w = cLeft - disX
-          let h = cTop - disY
-          w = w > minWidth ? w : minWidth
-          h = h > minHeight ? h : minHeight
-
-          parentNode.style.cssText += `width: ${w}px; height: ${h}px;`
-        }
-
-        document.onmouseup = function() {
-          document.onmousemove = null
-          document.onmouseup = null
-        }
-
-        return false
-      }
-    }
-
-   
-    onMounted(() => {
-      draggable()
-      draggableSize()
-    })
-
+    
     return {
     }
   }

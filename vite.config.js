@@ -62,8 +62,8 @@ export default defineConfig(({ mode, command }) => {
     //     ],
     //   }
     // },
-
-    build: {
+   
+    build: {  
       minify: false,
       rollupOptions: {
         output: {
@@ -127,7 +127,6 @@ export default defineConfig(({ mode, command }) => {
       //   filename: 'viewPanel.html',
       // }
     },
-    runtimeCompiler: true,
     server: {
       host: '0.0.0.0',
       port: '8087',

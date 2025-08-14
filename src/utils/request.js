@@ -37,7 +37,7 @@ request.interceptors.request.use(config => {
   if (config.method === 'get') {
     config.params = config.data
   }
-  // addPending(config)
+  addPending(config)
   return config
 })
 

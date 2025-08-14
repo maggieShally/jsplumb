@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2024-01-18 14:31:36
- * @LastEditTime: 2025-02-06 17:29:27
+ * @LastEditTime: 2025-03-05 09:44:22
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\utils.js
  */
 
@@ -15,8 +15,8 @@ export const convertVal = val => {
 
 // 组合函数
 export const compose = (...arg) => {
-  const funs = Array.prototype.slice.apply(arg)
-  return funs.reduce(
+  const func = Array.prototype.slice.apply(arg)
+  return func.reduce(
     (a, b) =>
       (...args) =>
         a(b(...args))
@@ -47,7 +47,7 @@ const unitFormatFunc = {
  * @return {*}
  */
 export const unitFunc = ({ val, item = {} }) => {
-  if (item.unit) {
+  if (item.unit && unitFormatFunc[item.unit]) {
     return unitFormatFunc[item.unit](val)
   }
   return val
@@ -68,7 +68,7 @@ export const thousandsFunc = ({ val, item = {} }) => {
  */
 export const scaleFuc = ({ val, item = {} }) => {
   return {
-    val: item.scale ? lodash.ceil(val, item.scale) : val,
+    val: item.scale ? lodash.round(val, item.scale) : val,
     item,
   }
 }

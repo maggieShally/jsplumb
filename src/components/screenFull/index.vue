@@ -1,52 +1,44 @@
 <!--
- * @Description: 
+ * @Description: 全屏组件
  * @Date: 2022-12-02 16:06:16
- * @LastEditTime: 2024-06-05 09:14:36
+ * @LastEditTime: 2025-08-08 15:35:12
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\screenFull\index.vue
 -->
 <template>
+ 
 
-  <!-- 全屏状态 start -->
-  <div class="screenfull" ref="screenFullRef" :id="unitKey">
-    <div class="content" v-if="!isPageFull && !isFloat">
-      <FullScreenToolCom :isFullScreen="isFullScreen" :placement="placement" :isFloat="isFloat" :isPageFull="isPageFull" @onScreenFull="clickScreenFull" @onFloat="clickFloat" @onPageFull="clickPageFull" />
-      <slot>
-      </slot>
-    </div>
-  </div>
-  <!-- 全屏状态 end -->
-
-  <Teleport to="body">
-    <!-- 浮窗状态 start  -->
-    <template v-if="isFloat">
-      <VueDragResize @activated="activateEv" :isActive="true" :x="200" :y="200" :sticks="['br',]" :w="500" :h="400" :parentH="parentH" :parentW="parentW" :parentLimitation="true" :z="zIndex">
-        <div class="floatWrapper" @click="handleClickFocus">
-          <div class="title" @click="handleAddzIndex">
-            <h2>{{title}} {{zIndex}}</h2>
-            <FullScreenToolCom :isFullScreen="isFullScreen" :isFloat="isFloat" :isPageFull="isPageFull" @onScreenFull="clickScreenFull" @onFloat="clickFloat" @onPageFull="clickPageFull" />
-          </div>
-          <div class="content">
-            <slot>
-            </slot>
-          </div>
+  <template v-if="fullType === 'float'">
+    <VueDragResize @activated="activateEv" :isActive="true" :x="200" :y="200" :sticks="['br',]" :w="500" :h="400" :parentH="parentH" :parentW="parentW" :parentLimitation="true" :z="zIndex">
+      <div class="floatWrapper" @click="handleClickFocus">
+        <div class="title" @click="handleAddzIndex">
+          <h2>{{title}}</h2>
+          <FullScreenToolCom :isFullScreen="fullType === 'fullScreen'" :isFloat="fullType === 'float'" :isPageFull="fullType === 'pageScreen'" @onScreenFull="clickScreenFull" @onFloat="clickFloat" @onPageFull="clickPageFull" />
         </div>
-      </VueDragResize>
-    </template>
-    <!-- 浮窗状态 end  -->
+        <div class="content">
+          <slot>
+          </slot>
+        </div>
+      </div>
+    </VueDragResize>
+  </template>
 
-    <!-- 网页全屏状态 start  -->
-    <div class="pageFullScreen" v-if="isPageFull">
-      <FullScreenToolCom :isFullScreen="isFullScreen" :isFloat="isFloat" :isPageFull="isPageFull" @onScreenFull="clickScreenFull" @onFloat="clickFloat" @onPageFull="clickPageFull" />
-      <slot></slot>
-    </div>
-    <!-- 网页全屏状态 end  -->
-  </Teleport>
-
+  <template v-else>
+    <teleport to="body" :disabled="fullType !== 'pageScreen'">
+      <div ref="screenFullRef" :class="wrapClass">
+        <div class="content">
+          <FullScreenToolCom :isFullScreen="fullType === 'fullScreen'" :isFloat="fullType === 'float'" :isPageFull="fullType === 'pageScreen'" @onScreenFull="clickScreenFull" @onFloat="clickFloat" @onPageFull="clickPageFull" />
+          <slot></slot>
+        </div>
+      </div>
+    </teleport>
+  </template>
+  
 </template>
 
 <script>
-import { nextTick, reactive, ref, toRefs, onMounted } from 'vue'
-import screenfull from 'screenfull'
+import { nextTick, reactive, ref, toRefs, onMounted, computed, watch } from 'vue'
+import { useFullscreen  } from '@vueuse/core'
+
 import VueDragResize from 'vue-drag-resize'
 
 import FullScreenToolCom from './FullScreenToolCom.vue'
@@ -58,10 +50,6 @@ export default {
     VueDragResize,
   },
   props: {
-    unitKey: {
-      type: String,
-      default: 'fullScreenChart',
-    }, // 给当前全屏元素唯一id，界面有多个全屏的时候，取消全屏只取消当前的全屏否则change会执行多次
     title: {
       type: String,
       default: '浮窗',
@@ -77,63 +65,53 @@ export default {
     
     const state = reactive({
       screenText: '全屏',
-      isFloat: false,
-      isFullScreen: false,
-      isPageFull: false,
+      fullType: '',
       parentW: window.innerWidth,
       parentH: window.innerHeight,
       zIndex: 998,
     })
 
-    // 全屏
-    const clickScreenFull = async () => {
-      state.isFloat = false
-      state.isPageFull = false
+    const windowReturn = useFullscreen(screenFullRef)
 
-      await nextTick()
+    watch(() => windowReturn.isFullscreen.value, val => {
+      state.isFullScreen = val
+      state.fullType = val ? 'fullScreen' : ''
+    })
 
-      localStorage.setItem('screenFullKey', props.unitKey)
-      if (screenfull.isEnabled) {
-        screenfull.toggle(screenFullRef.value)
-      }
-    }
-
-    // 监听全屏变化
-    screenfull.on('change', () => {
-      const activeUnitKey = localStorage.getItem('screenFullKey')
-    
-      if (screenFullRef.value?.id === activeUnitKey) {
-        console.log(screenfull.isFullscreen)
-        state.isFullScreen = screenfull.isFullscreen
-        context.emit('onToggle', screenfull.isFullscreen)
+    const wrapClass = computed(() => {
+      const { fullType } = state
+      switch(fullType) {
+        case 'float':
+          return 'floatWrapper';
+        case 'fullScreen':
+          return 'screenfull';
+        case 'pageScreen':
+          return 'pageFullScreen';
+        default:
+          return ''
       }
     })
 
-    // 显示浮窗
-    const clickFloat = async () => {
-      if (screenfull.isEnabled && screenfull.isFullscreen) {
-        screenfull.toggle(document.querySelector(`#${props.unitKey}`))
-      }
-
-      state.isPageFull = false
-      state.isFloat = !state.isFloat
-      handleAddzIndex()
-      context.emit('onToggle', false)
+    // 全屏
+    const clickScreenFull = async () => {
+      windowReturn.toggle()
     }
 
-    // 退出浮窗
-    const handleCloseFloat = () => {
-      state.isFloat = false
-      state.zIndex = 998
+    // 显示浮窗
+    const clickFloat = async () => {
+      if(state.isFullScreen) {
+        windowReturn.toggle()
+      }
+      state.fullType = state.fullType === 'float' ? '' : 'float'
+      handleAddzIndex()
       context.emit('onToggle', false)
     }
 
     // 网页全屏
     const clickPageFull = () => {
-      state.isFloat = false
-      state.isPageFull = !state.isPageFull
-      if (screenfull.isEnabled && screenfull.isFullscreen) {
-        screenfull.toggle(document.querySelector(`#${props.unitKey}`))
+      state.fullType = state.fullType === 'pageScreen' ? '' : 'pageScreen'
+      if(state.isFullScreen) {
+        windowReturn.toggle()
       }
     }
 
@@ -161,17 +139,13 @@ export default {
       }
     }
 
-    onMounted(() => {
-      state.toolTeleport = false
-    })
-
     return {
+      wrapClass,
       screenFullRef,
       ...toRefs(state),
       clickScreenFull,
       clickFloat,
       clickPageFull,
-      handleCloseFloat,
       activateEv,
       handleClickFocus,
       handleAddzIndex,

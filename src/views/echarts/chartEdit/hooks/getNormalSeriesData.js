@@ -94,7 +94,7 @@ export default function getNormalSeriesData({ dimensionFields, quotaFields, data
         axisTick: {
           length: 30 * (index + 1),
           interval: function (index, value) {
-            //   console.log(index, value)
+            // console.log(index, value)
           },
         },
         data,

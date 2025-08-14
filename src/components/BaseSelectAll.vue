@@ -1,14 +1,19 @@
-
 <template>
-  <el-select v-model="values" v-bind="$attrs" @change="handleChange">
-    <el-option v-if="modelValue.length === options.length" label="取消全选" :value="-1"></el-option>
-    <el-option v-else label="全选" :value="1"></el-option>
-    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+  <el-select v-model="values" v-bind="$attrs">
+    <template #header>
+      <el-checkbox v-model="checkAll" :indeterminate="indeterminate" @change="handleCheckAll">
+        全选
+      </el-checkbox>
+    </template>
+
+    <el-option-group v-for="subItem in options" :key="subItem.label" :label="subItem.label">
+      <el-option v-for="item in subItem.option" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    </el-option-group>
   </el-select>
 </template>
 
 <script>
-import { unref } from 'vue'
+import { unref, ref, watch } from 'vue'
 import { useVModel } from '@vueuse/core'
 
 // v-mode='xxx' 默认是 名称是modelValue
@@ -16,36 +21,46 @@ export default {
   name: 'BaseSelectAll',
   props: {
     modelValue: {
-      type: [String, Array]
+      type: Array,
+      default: () => []
     },
     options: Array
   },
-  emits:['update:modelValue', 'onEmitChange'],
   setup(props, context) {
-    const values = useVModel(props, 'modelValue',context.emit)
+    const values = useVModel(props, 'modelValue', context.emit)
 
-    const handleChange = val => {
-      console.log(val)
-      const isAll = val.find(i => i === 1)
-      const isCancelAll = val.find(i => i === -1)
-      values.value = val
-      if(isAll) {
-        values.value = props.options.filter(i => i.value !== -1).map(i => i.value)
+    const checkAll = ref(false)
+    const indeterminate = ref(false)
+
+    watch(values, (val) => {
+      if (val.length === 0) {
+        checkAll.value = false
+        indeterminate.value = false
+      } else if (val.length === props.options.map(i => i.option).flat().length) {
+        checkAll.value = true
+        indeterminate.value = false
+      } else {
+        indeterminate.value = true
       }
-      if(isCancelAll) {
+    })
+
+    const handleCheckAll = val => {
+      indeterminate.value = false
+      if (val) {
+        values.value = props.options.map(i => i.option).flat().map((_) => _.value)
+      } else {
         values.value = []
       }
-      context.emit('onEmitChange',values.value)
     }
 
     return {
       values,
-      handleChange
+      checkAll,
+      indeterminate,
+      handleCheckAll
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

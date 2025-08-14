@@ -1,12 +1,13 @@
 <!--
  * @Description: 
  * @Date: 2021-08-10 14:04:48
- * @LastEditTime: 2024-08-12 14:51:43
+ * @LastEditTime: 2025-07-21 16:43:43
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseNav.vue
 -->
 <template>
   <el-scrollbar height="100%" style="background-color:#2c3e50;">
-    <el-menu default-active="2" class="menu-wrap" background-color="#2c3e50" text-color="#fff" active-text-color="#ffd04b" :router="true">
+    {{onRoutes}}
+    <el-menu class="menu-wrap" background-color="#2c3e50" text-color="#fff" :default-active="onRoutes" router active-text-color="#ffd04b">
       <template v-for="menuItem in menuList" :key="menuItem.index">
         <el-sub-menu :index="menuItem.index" v-if="menuItem.children">
           <template #title>
@@ -29,16 +30,27 @@
 </template>
 
 <script>
+
+import { reactive, toRefs, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { menuList } from '@/router'
-import { reactive, toRefs } from 'vue'
+
 export default {
   name: 'NavCom',
   setup() {
     console.log(menuList)
+    const router = useRouter()
+    const route = useRoute()
     const state = reactive({
       menuList: menuList,
     })
+
+    const onRoutes  = computed(() => {
+      return route.path
+    })
+
     return {
+      onRoutes,
       ...toRefs(state),
     }
   },

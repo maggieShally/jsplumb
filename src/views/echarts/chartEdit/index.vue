@@ -115,18 +115,11 @@ export default {
       getDataList()
     })
 
-    watch(() => state.options, val => {
-      console.log(val)
-    }, {
-      deep: true
-    })
-
     watchArray(() => state.dimensionFields, () => {
       getDataList()
     }, {
       deep: true
     })
-
 
     watchArray(() => state.quotaFields, (newVal, oldVal) => {
       getDataList()

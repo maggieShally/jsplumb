@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description: 全屏操作按扭
  * @Date: 2023-03-30 15:22:29
  * @LastEditTime: 2023-03-31 10:31:39
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\screenFull\FullScreenToolCom.vue
@@ -10,7 +10,8 @@
     <el-tooltip :content="pageText" :placement="placement" teleported :append-to="toolRef">
       <span @click="$emit('onPageFull')">
         <el-icon :size="20">
-          <CopyDocument />
+          <DataBoard v-if="isPageFull" />
+          <DataAnalysis v-else />
         </el-icon>
       </span>
     </el-tooltip>
@@ -18,7 +19,8 @@
     <el-tooltip :content="floatText" :placement="placement" teleported :append-to="toolRef">
       <span @click="$emit('onFloat')">
         <el-icon :size="20">
-          <CopyDocument />
+          <Crop v-if="isFloat"/>
+          <CopyDocument v-else />
         </el-icon>
       </span>
     </el-tooltip>
@@ -26,7 +28,8 @@
     <el-tooltip :content="screenText" :placement="placement" teleported :append-to="toolRef">
       <span @click="$emit('onScreenFull')">
         <el-icon :size="20">
-          <FullScreen />
+          <ChatSquare v-if="isFullScreen" />
+          <FullScreen v-else />
         </el-icon>
       </span>
     </el-tooltip>

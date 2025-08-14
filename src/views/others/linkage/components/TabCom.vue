@@ -16,8 +16,7 @@
     <el-tabs v-model="tabActiveName" class="tab-container">
       <el-tab-pane v-for="paneItem in paneList" :key="paneItem.name" :name="paneItem.name" :label="paneItem.title" lazy>
         <div class="pane-sec" :ref="getChartPanelRef" :id="id + '_' + paneItem.name">
-          <!-- ref="chartPanelRef" -->
-          <GridLayoutCom :ref="getGridlayoutRef" :dataList="paneItem.chartList" :id="id + '_' + paneItem.name + '_grid'">
+          <GridLayoutCom :ref="getGridLayoutRef" :dataList="paneItem.chartList" :id="id + '_' + paneItem.name + '_grid'">
             <template #default="{ item }">
               <LinkageCom v-if="item.type === 'chart'" :id="item.id" :mainId="mainChartId" @onDelete="handleDelItem(paneItem.name, item.id)">
                 <ChartCom :unitKey="item.id" placement="right" />
@@ -63,7 +62,7 @@ export default {
   setup(props, context) {
 
     const chartPanelRef = ref([])
-    const gridlayoutRef = ref([])
+    const gridLayoutRef = ref([])
 
     const state = reactive({
       tabActiveName: 'tab1',
@@ -89,16 +88,16 @@ export default {
       }
     }
 
-    const getGridlayoutRef = async el => {
+    const getGridLayoutRef = async el => {
       await nextTick()
       if (el) {
-        const index = gridlayoutRef.value?.findIndex(
+        const index = gridLayoutRef.value?.findIndex(
           item => item?.id === el.id
         )
         if (index < 0) {
-          gridlayoutRef.value.push(el)
+          gridLayoutRef.value.push(el)
         } else {
-          gridlayoutRef.value[index] = el
+          gridLayoutRef.value[index] = el
         }
       }
     }
@@ -116,7 +115,7 @@ export default {
     const drag = (e, id, { addItem}) => {
 
       const activeChartPanelRef = chartPanelRef.value.find(i => i.id === props.id + '_' + state.tabActiveName)
-      const activeGridLayoutRef = gridlayoutRef.value.find(i => i.$attrs.id === props.id + '_' + state.tabActiveName + '_grid')
+      const activeGridLayoutRef = gridLayoutRef.value.find(i => i.$attrs.id === props.id + '_' + state.tabActiveName + '_grid')
 
       activeGridLayoutRef.drag(e, id, activeChartPanelRef, {
         addItem: (dragPos) => addItem(dragPos, state.tabActiveName)
@@ -125,7 +124,7 @@ export default {
 
     const dragend = e => {
       console.log('tab dragend')
-      const activeGridLayoutRef = gridlayoutRef.value.find(i => i.$attrs.id === props.id + '_' + state.tabActiveName + '_grid')
+      const activeGridLayoutRef = gridLayoutRef.value.find(i => i.$attrs.id === props.id + '_' + state.tabActiveName + '_grid')
       
       activeGridLayoutRef.dragend(e)
     }
@@ -134,7 +133,7 @@ export default {
       drag,
       dragend,
       getChartPanelRef,
-      getGridlayoutRef,
+      getGridLayoutRef,
       mainChartId,
       paneList,
       ...toRefs(state),

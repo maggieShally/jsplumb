@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-03-24 11:27:20
- * @LastEditTime: 2022-03-25 15:07:23
+ * @LastEditTime: 2025-07-21 16:24:40
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\posDrag\index.vue
 -->
 <template>
@@ -51,7 +51,7 @@ export default {
       rightActive: Date.now(),
       leftActivInfo: {},
 
-      panelName: 'vuedraggable'
+      panelName: 'JSDrag'
     })
 
     const handleActive = (type, activeInfo) => {

@@ -2,8 +2,8 @@
  * @Description: 主要是通过 tanfrom来移动位置，requestAnimationFrame来控制动画，给于每一个item position位置，动运的direction方向，velocity位移基数
  当超过容器边界时就调整方向
  * @Date: 2021-09-08 14:05:37
- * @LastEditTime: 2021-09-08 16:52:51
- * @FilePath: \jsplumb-test\src\views\wordCloud\index.vue
+ * @LastEditTime: 2025-07-08 16:10:48
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\wordCloud\index.vue
 -->
 <template>
   <div class="wordCloud" ref="wordCloud"></div>
@@ -138,7 +138,7 @@ export default {
           maxy: value.offsetTop + value.offsetHeight,
         }
       })
-      state.containerSize = getConatinerSize()
+      state.containerSize = getContainerSize()
     }
 
     function randomColor() {
@@ -151,7 +151,7 @@ export default {
       return Math.floor(Math.random() * choice + min)
     }
 
-    function getConatinerSize() {
+    function getContainerSize() {
       const wRef = wordCloud.value
       return {
         leftPos: {

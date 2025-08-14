@@ -2,7 +2,7 @@
  * @Description: offsetWidth和offsetHeight, clientWidth和clientHeight, scrollLeft和scrollTop, scrollWidth和scrollHeight
  * @Author: <NAME>
  * @Date: 2024-10-10 10:38:01
- * @LastEditTime: 2024-10-10 11:34:58
+ * @LastEditTime: 2025-02-12 15:29:00
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\dragResize\posDrag\OffsetWidthCom.vue
 -->
 
@@ -84,7 +84,7 @@ const scrollDesc = `
   scrollTop和scrollLeft是可读写属性 。<br>
   scrollTop：返回网页滚动条垂直方向滚去的距离； <br>
   scrollLeft：返回网页滚动条水平方向滚去的距离；<br>
-  scrollWidth和scrolltHeight是只读属性，<br>
+  scrollWidth和scrollHeight是只读属性，<br>
   返回当前节点的实际宽度和实际高度（不包括边框）,没有滚动条时和clientWidth和clientHeight一样
 `
 

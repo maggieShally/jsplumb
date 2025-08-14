@@ -5,11 +5,11 @@
  * @FilePath: \jsplumb-test\src\views\antv\x6\components\TestChart.vue
 -->
 <template>
-  <div :id="`chart_${name}`" style="width:300px; height: 200px"></div>
+  <div ref="chartRef" style="width:300px; height: 200px"></div>
 </template>
 
 <script>
-import { nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import * as echarts from 'echarts'
 
 export default {
@@ -19,6 +19,7 @@ export default {
   },
   setup(props) {
     const ec = echarts
+    const chartRef = ref(null)
     const option = {
       tooltip: {
         trigger: 'axis',
@@ -48,7 +49,7 @@ export default {
       console.log(props.name)
       await nextTick()
       const myChart = ec.init(
-        document.querySelector(`#chart_${props.name}`),
+        chartRef.value,
         {},
         {
           renderer: 'svg',
@@ -56,6 +57,9 @@ export default {
       )
       myChart.setOption(option)
     })
+    return {
+      chartRef
+    }
   },
 }
 </script>

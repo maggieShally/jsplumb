@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2022-07-19 14:57:57
- * @LastEditTime: 2025-01-08 11:12:56
- * @FilePath: \jsplumb-test\src\views\others\tailwindcss\testCss\index.vue
+ * @LastEditTime: 2025-03-25 14:35:39
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\tailwindcss\testCss\index.vue
 -->
 <template>
 	<div>
@@ -16,12 +16,12 @@
 
 		<div class="my-5 border-2 border-pink-300 border-dashed rounded-md"></div>
 
-		<div style="width: 100%; display: flex; align-items: center;">
+		<div style="width: 100%; display: flex; align-items: center; flex-wrap: wrap;">
 
 			<div class="testBox"></div>
 
 			<ul class="strip-loading">
-				<li style="--line-index: 1;"></li>cd
+				<li style="--line-index: 1;"></li>
 				<li style="--line-index: 2;"></li>
 				<li style="--line-index: 3;"></li>
 				<li style="--line-index: 4;"></li>
@@ -37,22 +37,62 @@
 
 			<!-- 细边框 0.5 -->
 			<div class="thinBorder"></div>
+
+			
+			<div style="width: 400px">
+				<!-- 自动打字 -->
+				<div class="auto-typing">
+					Do You Want To Know More About CSS Development Skill
+				</div>
+			</div>
+			
+
+			<!-- 手风琴效果 -->
+			<div class="accordion">
+				<li style="--line-index: 1;"></li>
+				<li style="--line-index: 2;"></li>
+				<li style="--line-index: 3;"></li>
+				<li style="--line-index: 4;"></li>
+				<li style="--line-index: 5;"></li>
+				<li style="--line-index: 6;"></li>
+			</div>
+
+
+			<div style="width: 200px;height: 200px;overflow: auto;">
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<div class="fade-in">
+					ddd
+				</div>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+				<p>11111111111111111111111</p>
+			
+			</div>
+
 		</div>
 
-		<!-- 自动打字 -->
-		<div class="auto-typing">
-			Do You Want To Know More About CSS Development Skill
-		</div>
 
-		<!-- 手风琴效果 -->
-		<div class="accordion">
-			<li style="--line-index: 1;"></li>
-			<li style="--line-index: 2;"></li>
-			<li style="--line-index: 3;"></li>
-			<li style="--line-index: 4;"></li>
-			<li style="--line-index: 5;"></li>
-			<li style="--line-index: 6;"></li>
-		</div>
 	</div>
 </template>
 
@@ -137,6 +177,7 @@ export default {
 }
 
 @keyframes beat {
+
 	0%,
 	100% {
 		transform: scaleY(1);
@@ -161,7 +202,7 @@ export default {
 	background-color: #ddd;
 	position: relative;
 	transform: rotate(45deg);
-	
+
 	animation: testScale 1s infinite;
 
 	&::before,
@@ -186,12 +227,15 @@ export default {
 }
 
 @keyframes testScale {
-  0%, 100% {
-    transform: rotate(45deg) scale(1.2);
-  }
-  50% {
-    transform: rotate(45deg) scale(1);
-  }
+
+	0%,
+	100% {
+		transform: rotate(45deg) scale(1.2);
+	}
+
+	50% {
+		transform: rotate(45deg) scale(1);
+	}
 }
 
 // 0.5细边框
@@ -244,9 +288,7 @@ export default {
 	}
 }
 
-
 // 手风琴效果
-
 .accordion {
 	display: flex;
 	width: 400px;
@@ -254,30 +296,58 @@ export default {
 
 	li {
 		flex: 1;
-		transition:  all 0.5s ease-in-out;
+		transition: all 0.5s ease-in-out;
 
 		&:nth-of-type(1) {
 			background-color: #09f;
 		}
+
 		&:nth-of-type(2) {
 			background-color: rgb(60, 74, 83);
 		}
+
 		&:nth-of-type(3) {
 			background-color: rgb(39, 146, 96);
 		}
+
 		&:nth-of-type(4) {
 			background-color: rgb(202, 235, 110);
 		}
+
 		&:nth-of-type(5) {
 			background-color: rgb(165, 116, 88);
 		}
+
 		&:nth-of-type(6) {
 			background-color: rgb(80, 27, 71);
 		}
+
 		&:hover {
 			flex: 2;
 		}
-		
+
+	}
+}
+
+
+.fade-in {
+	width: 100px;
+	height: 100px;
+	background: #ddd;
+	animation: fadeIn linear;
+	animation-timeline: view();
+	animation-range: entry 20% cover 30%; // entry 进入视口
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px) scale(0.5);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
 	}
 }
 </style>

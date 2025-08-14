@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-12 09:11:20
- * @LastEditTime: 2021-12-03 09:50:33
+ * @LastEditTime: 2025-04-14 17:44:31
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\antv\x6\index.vue
 -->
 
@@ -12,9 +12,14 @@
 
 <script>
 import { reactive, toRefs, ref, inject } from 'vue'
-import { Graph, Shape } from '@antv/x6'
-import '@antv/x6-vue-shape'
+
+import { Graph } from '@antv/x6'
 import { DagreLayout } from '@antv/layout'
+import { register } from '@antv/x6-vue-shape'
+import { Transform } from '@antv/x6-plugin-transform'
+import { Scroller } from '@antv/x6-plugin-scroller'
+
+
 import dagre from 'dagre'
 
 import { onMounted } from '@vue/runtime-core'
@@ -27,19 +32,43 @@ export default {
     // BaseChart,
   },
   setup() {
-    let graph
+    let graph = null
     var dir = 'LR'
 
-    Graph.registerVueComponent(
-      'TestChart',
-      {
-        template: `<TestChart/>`,
-        components: {
-          TestChart,
+    
+    const registerEdge = () => {
+      Graph.registerEdge(
+        'org-edge',
+        {
+          zIndex: -1,
+          attrs: {
+            line: {
+              fill: 'none',
+              strokeLinejoin: 'round',
+              strokeWidth: '2',
+              stroke: '#4b4a67',
+              sourceMarker: null,
+              targetMarker: null,
+            },
+          },
         },
-      },
-      true
-    )
+        true
+      )
+    }
+    
+    const resistNode = () => {
+      register({
+        shape: 'NodeCom',
+        width: 120,
+        height: 120,
+        component: {
+          template: `<TestChart/>`,
+          components: {
+            TestChart
+          },
+        }
+      })
+    }
 
      // 自动布局
     function layout() {
@@ -64,10 +93,8 @@ export default {
 
       dagre.layout(g)
 
-      graph.freeze()
-
       g.nodes().forEach(id => {
-        const node = graph.getCell(id)
+        const node = graph.getCellById(id)
         if (node) {
           const pos = g.node(id)
           node.position(pos.x, pos.y)
@@ -112,32 +139,14 @@ export default {
         }
       })
 
-      graph.unfreeze()
-    }
-
-    const regiseterEdge = () => {
-      Graph.registerEdge(
-        'org-edge',
-        {
-          zIndex: -1,
-          attrs: {
-            line: {
-              fill: 'none',
-              strokeLinejoin: 'round',
-              strokeWidth: '2',
-              stroke: '#4b4a67',
-              sourceMarker: null,
-              targetMarker: null,
-            },
-          },
-        },
-        true
-      )
     }
 
     const state = reactive({})
 
     onMounted(() => {
+      resistNode()
+      registerEdge()
+
       const data = {
         nodes: [],
         edges: [],
@@ -154,15 +163,9 @@ export default {
       for (let i = 1; i <= 7; i++) {
         data.nodes.push({
           id: `${i}`,
-          shape: 'vue-shape',
+          shape: 'NodeCom',
           width: 320,
           height: 220,
-          component: {
-            template: `<TestChart :name="'A_'+${i}" ></TestChart>`,
-            components: {
-              TestChart,
-            },
-          },
         })
       }
 
@@ -183,12 +186,12 @@ export default {
       graph = new Graph({
         container: document.getElementById('container'),
         width: 2200,
-        height: 700,
+        height: 1700,
         grid: true,
         scroller: true,
       })
 
-      regiseterEdge()
+
 
     //   const dagreLayout = new DagreLayout({
     //     // type: 'dagre',

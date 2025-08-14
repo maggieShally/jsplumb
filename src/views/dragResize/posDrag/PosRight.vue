@@ -28,7 +28,7 @@ export default {
   },
   props: {
     dragInfo: Object,
-    hasAcitve: Number
+    hasActive: Number
   },
   setup(props) {
     const state = reactive({
@@ -42,7 +42,7 @@ export default {
 
     const dragInfo = computed(() => props.dragInfo)
 
-    watch(() => props.hasAcitve, (newVal, oldVal)=> {
+    watch(() => props.hasActive, (newVal, oldVal)=> {
       console.log(newVal, oldVal)
       const items = state.rightList.filter(item => item.id === dragInfo.value.id)
       if(items.length < 2) return false

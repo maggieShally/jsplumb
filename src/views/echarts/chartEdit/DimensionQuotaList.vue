@@ -1,14 +1,14 @@
 <!--
  * @Description: 数据集 指标列表
  * @Date: 2024-04-29 11:20:53
- * @LastEditTime: 2025-01-21 18:16:09
+ * @LastEditTime: 2025-02-12 16:26:18
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\chartEdit\DimensionQuotaList.vue
 -->
 
 
 
 <template>
-  <draggable v-model="dimensionList" :group="{ name: 'field-item', pull: 'clone', put: false }" :move="handleDimensionMove" @clone="handleDimensionDragEnd" item-key="columnId">
+  <draggable v-model="dimensionList" :group="{ name: 'field-item', pull: 'clone', put: false }" :move="handleDimensionMove" :clone="handleDimensionDragClone" item-key="columnId">
     <template #item="{ element }">
 
       <el-tag :class="disabledDimensionList.includes(element.columnId) ? 'forbid' : ''" type="primary" style="width: 100%">
@@ -19,7 +19,7 @@
 
   <el-divider></el-divider>
 
-  <draggable v-model="quotaList" :group="{ name: 'field-item', pull: 'clone', put: false }" :move="handleQuotaMove" @clone="handleQuotaDragEnd" item-key="columnId">
+  <draggable v-model="quotaList" :group="{ name: 'field-item', pull: 'clone', put: false }" :move="handleQuotaMove" :clone="handleQuotaDragClone" item-key="columnId">
     <template #item="{ element }">
       <el-tag :class="disabledQuotaList.includes(element.columnId) ? 'forbid' : ''" type="primary" style="width: 100%">{{ element.columnName }}</el-tag>
     </template>
@@ -76,17 +76,16 @@ export default {
       })
     }
 
-    const handleDimensionDragEnd = evt => {
-      evt.item.__draggable_context.element = calcDimensionField(evt.item.__draggable_context.element)
+    const handleDimensionDragClone = item => {
+      return calcDimensionField(item)
     }
 
-    const handleQuotaDragEnd = (evt) => {
-      evt.item.__draggable_context.element = calcQuotaField(evt.item.__draggable_context.element)
+    const handleQuotaDragClone = (item) => {
+      return calcQuotaField(item)
     }
 
-    const handleQuotaMove =  (e, originalEvent) => {
+    const handleQuotaMove = (e, originalEvent) => {
       const toId = e.to.id
-      console.log(toId)
       if (['defaultFields', 'quotaFields'].includes(toId)) {
         const currentFieldList = e.relatedContext.list.map(i => i.field)
         if (!currentFieldList.includes(e.draggedContext.element.field)) {
@@ -107,7 +106,6 @@ export default {
       return false
     }
 
-
     onMounted(() => {
       getDataFields()
     })
@@ -116,8 +114,8 @@ export default {
       disabledDimensionList,
       disabledQuotaList,
       ...toRefs(state),
-      handleDimensionDragEnd,
-      handleQuotaDragEnd,
+      handleDimensionDragClone,
+      handleQuotaDragClone,
       handleDimensionMove,
       handleQuotaMove
     }

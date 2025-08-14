@@ -1,11 +1,12 @@
 /*
  * @Description:
  * @Date: 2021-06-28 11:40:41
- * @LastEditTime: 2024-06-26 16:47:59
+ * @LastEditTime: 2025-03-05 10:30:27
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\router\index.js
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
+const Footer = { template: '<div>Footer Footer Footer Footer</div>' }
 
 const routes = [
   {
@@ -23,7 +24,10 @@ const routes = [
           {
             path: '/flow/jsplumb',
             name: 'jsplumb',
-            component: () => import('../views/flow/jsplumb/index.vue')
+            components: {
+              default: () => import('../views/flow/jsplumb/index.vue'),
+              // footer: Footer
+            }
           },
         ]
       },
@@ -57,7 +61,20 @@ const routes = [
           {
             path: '/others/rateTest',
             name: '测试',
-            component: () => import('../views/others/rateTest/index.vue')
+            redirect: '/others/rateTest/test1',
+            component: () => import('../views/others/rateTest/index.vue'),
+            children: [
+              {
+                path: '/others/rateTest/test1',
+                name: '测试1',
+                component: () => import('../views/others/rateTest/testPane1/index.vue'),
+              },
+               {
+                path: '/others/rateTest/test2',
+                name: '测试2',
+                component: () => import('../views/others/rateTest/testPane2/index.vue'),
+              }
+            ]
           },
           {
             path: '/others/iframeTest',
@@ -257,8 +274,18 @@ const routes = [
             path: '/canvas/canvasImg',
             name: 'CanvasImg',
             component: () => import('../views/canvas/canvasImg/index.vue')
+          },
+          {
+            path: '/canvas/makeImgByCanvas',
+            name: 'makeImgByCanvas',
+            component: () => import('../views/canvas/makeImgByCanvas/index.vue')
           }
         ]
+      },
+      { 
+        path: '/:pathMatch(.*)', 
+         component: () => import('../views/404/index.vue')
+ 
       }
     ]
   }

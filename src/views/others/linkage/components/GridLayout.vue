@@ -1,5 +1,5 @@
 <template>
-  <grid-layout ref="gridlayoutRef" :layout.sync="gridLayout" responsive :col-num="24" :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="false" :vertical-compact="true"
+  <grid-layout ref="gridLayoutRef" :layout.sync="gridLayout" responsive :col-num="24" :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="false" :vertical-compact="true"
     :margin="[10, 10]" :use-css-transforms="true">
 
     <grid-item :ref="getGridItemRefs" v-for="item in gridLayout" :id="item.i" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i"
@@ -42,14 +42,10 @@ export default {
     const gridLayout = useVModel(props, 'posList', context.emit)
 
     let mouseXY = {}
-    let dragPos = { x: null, y: null, w: 2, h: 2, i: null }
 
-    const gridlayoutRef = ref(null)
+    const gridLayoutRef = ref(null)
     const gridItemRefs = ref([])
 
-    // const gridLayout = computed(() => props.dataList.map(i => i.pos))
-
-    // const chartList = computed(() => props.dataList)
 
     const getGridItemRefs = async el => {
       await nextTick()
@@ -84,7 +80,7 @@ export default {
     //     dragPos.x = unref(chartList)[index].pos.x
     //     dragPos.y = unref(chartList)[index].pos.y
     //     // 控制托入 底色 大小 移动位置
-    //     gridlayoutRef.value.dragEvent(
+    //     gridLayoutRef.value.dragEvent(
     //       'dragstart',
     //       el.i,
     //       new_pos.x,
@@ -98,7 +94,7 @@ export default {
     // 从外面拖入  结束
     // const dragend = e => {
     //   // console.log('dragend', dragPos)
-    //   gridlayoutRef.value.dragEvent(
+    //   gridLayoutRef.value.dragEvent(
     //     'dragend',
     //     dragPos.i,
     //     dragPos.x,
@@ -159,7 +155,7 @@ export default {
       // dragend,
       // chartList,
       // gridLayout,
-      gridlayoutRef,
+      gridLayoutRef,
       getGridItemRefs,
       handleMouseDown,
       handleMouseUp,

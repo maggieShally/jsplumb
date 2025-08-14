@@ -120,8 +120,11 @@ export default {
         isExpand: 0,
         itemNum: 'ZJC0007X3314',
 
-        startItemNum: '',
-        endItemNum: ''
+        // startItemNum: '',
+        // endItemNum: '',
+
+        startItemNum: "IFW0001A2258",
+        endItemNum: "ZJC0001S1529",
       },
 
       isDisjoint: false, // 是否视图分离

@@ -1,7 +1,7 @@
 <!--
  * @Description: echarts基础封装，返回 echarts实例
  * @Date: 2021-10-14 17:05:49
- * @LastEditTime: 2024-08-20 16:31:18
+ * @LastEditTime: 2025-07-02 14:34:35
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\components\BaseChart\ChartPie.vue
 -->
 
@@ -119,6 +119,54 @@ export default {
       activeClickNodeInfo: {},
     })
 
+    
+    //标题
+    const title = computed(() => {
+      let title = {}
+      if (lodash.isArray(props.seriesData?.title)) {
+        title = props.seriesData?.title[0]
+      } else {
+        title = props.seriesData?.title
+      }
+
+      return title?.text
+    })
+
+    //副标题
+    const subText = computed(() => {
+      let title = {}
+      if (lodash.isArray(props.seriesData?.title)) {
+        title = props.seriesData?.title[0]
+      } else {
+        title = props.seriesData?.title
+      }
+
+      return title?.subtext
+    })
+
+    //详细信息
+    const description = computed(() => {
+      let title = {}
+      if (lodash.isArray(props.seriesData?.title)) {
+        title = props.seriesData?.title[0]
+      } else {
+        title = props.seriesData?.title
+      }
+
+      return title.itemLongDesc
+    })
+
+    watch(
+      () => props.seriesData,
+      async () => {
+        await nextTick()
+        updateChartView()
+        addChartResizeListener()
+        chart.value?.resize()
+      },
+      { deep: true }
+    )
+
     const handleWindowResize = () => {
       if (!chart.value) return false
       chart.value.resize()
@@ -160,54 +208,6 @@ export default {
         }
       )
     }
-
-    watch(
-      () => props.seriesData,
-      async () => {
-        await nextTick()
-        updateChartView()
-        addChartResizeListener()
-        chart.value?.resize()
-      },
-      { deep: true }
-    )
-
-
-    //标题
-    const title = computed(() => {
-      let title = {}
-      if (lodash.isArray(props.seriesData?.title)) {
-        title = props.seriesData?.title[0]
-      } else {
-        title = props.seriesData?.title
-      }
-
-      return title?.text
-    })
-
-    //副标题
-    const subText = computed(() => {
-      let title = {}
-      if (lodash.isArray(props.seriesData?.title)) {
-        title = props.seriesData?.title[0]
-      } else {
-        title = props.seriesData?.title
-      }
-
-      return title?.subtext
-    })
-
-    //详细信息
-    const description = computed(() => {
-      let title = {}
-      if (lodash.isArray(props.seriesData?.title)) {
-        title = props.seriesData?.title[0]
-      } else {
-        title = props.seriesData?.title
-      }
-
-      return title.itemLongDesc
-    })
 
     // 柱图 用的 右键
     const normalContextMenu = () => {
@@ -290,7 +290,6 @@ export default {
 
     const initMethods = () => {
       // 点击 标题 复制标题
-
       chart.value.on('click', function (params) {
         if (params.componentType === 'title') {
           const title = chart.value.getOption().title[0]

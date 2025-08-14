@@ -76,14 +76,12 @@ export default function useVirtualList(config) {
 
     // 更新实际高度
     updateActualHeight()
-
   }
 
   // 获取缓存高度
   const getItemHeightFromCache  = startIndex => { 
     return renderedItemsCache[startIndex] || config.itemHeight
   }
-
 
   const updateActualHeight = () => {
     const actualHeight = dataSource.reduce((res, item, index) => res += getItemHeightFromCache(index), 0)

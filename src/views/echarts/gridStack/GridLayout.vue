@@ -1,7 +1,7 @@
 <!--
  * @Description: GridStack DEMO
  * @Date: 2025-02-08 16:21:31
- * @LastEditTime: 2025-02-11 16:25:01
+ * @LastEditTime: 2025-03-05 13:52:05
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\echarts\gridStack\GridLayout.vue
 -->
 
@@ -88,10 +88,10 @@ export default {
       await nextTick()
       grid = GridStack.init({ // DO NOT use grid.value = GridStack.init(), see above
         float: true,
-        minRow: 1,
-        cellHeight: 50,
+        minRow: 5,
+        cellHeight: 70,
         dragOut: true,
-        margin: '5px', // 网格里面之间的距离
+        margin: 8, // 网格里面之间的距离
         acceptWidgets: true, // 接受从其他网格或外部拖动的小部件
         subGridOpts: {},
         id: props.idKey,
@@ -123,7 +123,7 @@ export default {
   background: #eee;
 }
 
-.grid-stack-item {
+.grid-stack-item-content {
   background-color: #d4e9e5;
 }
 </style>

@@ -10,7 +10,7 @@
     <div class="my-left" :style="leftStyle">
       <slot name="left"></slot>
     </div>
-    <div ref="spliter" style="width: 10px" class="my-spliter" />
+    <div ref="split" style="width: 10px" class="my-split" />
     <div class="my-right" :style="rightStyle">
       <slot name="right"></slot>
     </div>
@@ -31,7 +31,7 @@ export default {
   setup(props) {
 
     const container = ref(null);
-    const spliter = ref(null);
+    const split = ref(null);
     const leftStyle = ref({});
     const rightStyle = ref({});
     const ratio = ref(props.initRatio);
@@ -76,22 +76,22 @@ export default {
 
     onMounted(() => {
       updatePaneStyles(ratio.value);
-      if (spliter.value) {
-        spliter.value.addEventListener('mousedown', handleResize, false);
-        spliter.value.addEventListener('dblclick', onDblClick, false);
+      if (split.value) {
+        split.value.addEventListener('mousedown', handleResize, false);
+        split.value.addEventListener('dblclick', onDblClick, false);
       }
     })
 
     onUnmounted(() => {
-      if (spliter.value) {
-        spliter.value.removeEventListener('mousedown', handleResize);
-        spliter.value.removeEventListener('dblclick', onDblClick);
+      if (split.value) {
+        split.value.removeEventListener('mousedown', handleResize);
+        split.value.removeEventListener('dblclick', onDblClick);
       }
     })
 
     return {
       container,
-      spliter,
+      split,
       leftStyle,
       rightStyle
     }
@@ -121,7 +121,7 @@ export default {
   z-index: 1;
 }
 
-.my-spliter {
+.my-split {
   cursor: col-resize;
   position: relative;
   z-index: 1;

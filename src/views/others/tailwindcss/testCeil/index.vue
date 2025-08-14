@@ -1,8 +1,8 @@
 <!--
  * @Description: 
  * @Date: 2025-01-07 18:20:55
- * @LastEditTime: 2025-01-08 09:27:20
- * @FilePath: \jsplumb-test\src\views\others\tailwindcss\testCeil\index.vue
+ * @LastEditTime: 2025-07-03 14:01:55
+ * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\tailwindcss\testCeil\index.vue
 -->
 
 <template>
@@ -11,6 +11,8 @@
 
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
+
+
 export default {
   name: '',
   components: {

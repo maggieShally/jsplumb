@@ -1,7 +1,7 @@
 <!--
  * @Description: 联动 动态使用 grid-layout
  * @Date: 2022-07-07 11:09:33
- * @LastEditTime: 2025-02-07 11:04:32
+ * @LastEditTime: 2025-02-12 11:44:52
  * @FilePath: \webpack-teste:\others\jsplumb-test\src\views\others\linkage\index.vue
 -->
 
@@ -10,9 +10,8 @@
 
   <div ref="chartPanelRef" class="chart-panel" id="chart-panel">
 
-    <GridLayoutCom ref="gridlayoutRef" v-model:posList="layout" id="mainGrid">
+    <GridLayoutCom ref="gridLayoutRef" v-model:posList="layout" id="mainGrid">
       <template #default="{ item }">
-        <!-- :ref="getChartRefs" -->
         <LinkageCom v-if="item.type === 'chart'" :id="item.id" :mainId="mainChartId" @onGetMain="handleGetMain" @onDelete="handleDelItem">
           <ChartCom  :unitKey="item.id" placement="right" :dataViewConfig="item.dataViewConfig" :panelId="panelId" />
         </LinkageCom>
@@ -51,7 +50,7 @@ export default {
 
     const chartRefs = ref([])
     const chartPanelRef = ref(null)
-    const gridlayoutRef = ref(null)
+    const gridLayoutRef = ref(null)
     const tabsRef = ref([])
 
     const route = useRoute()
@@ -135,7 +134,7 @@ export default {
     }
 
     const handleSaveLayout = () => {
-      console.log(gridlayoutRef.value.gridlayoutRef.layout)
+      console.log(gridLayoutRef.value.gridLayoutRef.layout)
       console.log(state.chartList)
     }
 
@@ -213,11 +212,11 @@ export default {
 
     //     // 删除 外层 子元素
     //     state.chartList = state.chartList.filter(i => i.id !== id)
-    //     gridlayoutRef.value.dragend()
+    //     gridLayoutRef.value.dragend()
     //   } else if(activeChartId === 'mainGrid') {
 
     //     // 外层添加 子元素
-    //     gridlayoutRef.value.drag(e, id, unref(chartPanelRef), {
+    //     gridLayoutRef.value.drag(e, id, unref(chartPanelRef), {
     //       addItem: dragPos => {
     //         state.chartList.push({
     //           id: id,
@@ -256,7 +255,7 @@ export default {
     // const dragend = (e) => {
     //   const {  dragId } = dragInfo
     //   if(unref(allChartIds).includes(dragId)) {
-    //     gridlayoutRef.value.dragend(e)
+    //   L gridLayoutRef.value.dragend(e)
     //   } else {
     //     const { chartList } = state
     //     let preTabId = ''
@@ -340,7 +339,7 @@ export default {
 
     return {
       chartPanelRef,
-      gridlayoutRef,
+      gridLayoutRef,
       getChartRefs,
       getTabRefs,
       ...toRefs(state),

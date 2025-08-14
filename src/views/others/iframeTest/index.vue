@@ -21,10 +21,7 @@ export default {
     const approvalElRef = ref(null)
 
     const state = reactive({
-    
     })
-
-   
 
     return {
       ...toRefs(state),

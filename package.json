@@ -43,6 +43,7 @@
     "lodash": "^4.17.21",
     "save": "^2.9.0",
     "screenfull": "^5.2.0",
+    "sortablejs": "^1.15.6",
     "v-gantt-chart": "^1.6.1",
     "vue": "^3.3.8",
     "vue-codemirror": "^6.1.1",

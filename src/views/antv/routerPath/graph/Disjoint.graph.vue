@@ -481,7 +481,7 @@ export default {
       }
     }
 
-    function commandFun() { }
+    const commandFun = { }
 
     // 居中
     commandFun.center = () => {

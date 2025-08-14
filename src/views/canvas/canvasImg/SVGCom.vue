@@ -15,7 +15,7 @@
     </g>
 
     <g id="whiskers2">
-      <line x1="150" y1="150" x2="210" y2="130" style="stroke:#000;stroke-width:2" />
+      <line x1="150" y1="150" x2="210" y2="130" style="stroke:#000;stroke-width:2; stroke-dasharray: 10,4" />
       <line x1="150" y1="150" x2="210" y2="170" style="stroke:#000;stroke-width:2" />
     </g>
 
